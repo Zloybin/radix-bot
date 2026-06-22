@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+telegram:
+  bot:
+    token: "8584786589:AAEwMOBQgG0mdyhdWog75oaIzECrhLzw0XQ"
+    name: "arduino"
+
+arduino:
+  port: "COM3"
+  baud-rate: 9600

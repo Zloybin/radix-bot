@@ -24,23 +24,4 @@ public class KeyboardBuilder {
         return markup;
     }
 
-    public static ReplyKeyboardMarkup buildEngineMenu() {
-        List<KeyboardRow> keyboard = new ArrayList<>();
-
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton("⬆️ Вперед"));
-        row1.add(new KeyboardButton("⬇️ Назад"));
-        keyboard.add(row1);
-
-        KeyboardRow row2 = new KeyboardRow();
-        row2.add(new KeyboardButton("🔙 Назад в меню"));
-        keyboard.add(row2);
-
-        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup();
-        markup.setKeyboard(keyboard);
-        markup.setResizeKeyboard(true);
-        markup.setOneTimeKeyboard(false);
-
-        return markup;
-    }
 }

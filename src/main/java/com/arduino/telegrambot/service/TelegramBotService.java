@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 @Slf4j
 public class TelegramBotService extends TelegramLongPollingBot {
 
-    @Autowired
-    private ArduinoSerialService arduinoService;
+//    @Autowired
+//    private ArduinoSerialService arduinoService;
 
     @Autowired
     private AppProperties appProperties;
@@ -29,11 +29,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     private Long adminChatId = null;
 
-    @PostConstruct
-    public void init() {
-        arduinoService.setMessageListener(this::handleArduinoMessage);
-        log.info("🤖 Бот {} инициализирован", appProperties.getName());
-    }
+//    @PostConstruct
+//    public void init() {
+//        arduinoService.setMessageListener(this::handleArduinoMessage);
+//        log.info("🤖 Бот {} инициализирован", appProperties.getName());
+//    }
 
     @Override
     public String getBotUsername() {
@@ -56,11 +56,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
             log.info("📨 Сообщение от {}: {} (Текущее меню: {})", chatId, text, currentState);
 
-            if (currentState == MenuType.MAIN) {
-                handleMainMenu(chatId, text);
-            } else if (currentState == MenuType.ENGINE_CONTROL) {
-                handleEngineMenu(chatId, text);
-            }
+//            if (currentState == MenuType.MAIN) {
+//                handleMainMenu(chatId, text);
+//            } else if (currentState == MenuType.ENGINE_CONTROL) {
+//                handleEngineMenu(chatId, text);
+//            }
         }
     }
 
@@ -82,12 +82,12 @@ public class TelegramBotService extends TelegramLongPollingBot {
         switch (text) {
             case "⬆️ Вперед" -> {
                 System.out.println("🚗 Двигатель едет вперед");
-                arduinoService.sendCommand("start");
+//                arduinoService.sendCommand("start");
                 sendMessage(chatId, "✅ Двигатель едет вперед");
             }
             case "⬇️ Назад" -> {
                 System.out.println("🔙 Двигатель едет назад");
-                arduinoService.sendCommand("stop");
+//                arduinoService.sendCommand("stop");
                 sendMessage(chatId, "✅ Двигатель едет назад");
             }
             case "🔙 Назад в меню" -> {

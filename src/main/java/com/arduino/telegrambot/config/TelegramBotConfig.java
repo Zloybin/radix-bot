@@ -13,7 +13,7 @@ public class TelegramBotConfig {
 
     private final TelegramBotService telegramBotService;
 
-    // Конструктор инжектит существующий бин, а не создаёт новый
+
     public TelegramBotConfig(TelegramBotService telegramBotService) {
         this.telegramBotService = telegramBotService;
     }

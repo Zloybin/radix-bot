@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.function.Consumer;
 
-@Service
+//@Service
 @Slf4j
 public class ArduinoSerialService {
 

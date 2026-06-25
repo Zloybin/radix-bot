@@ -1,7 +1,9 @@
 package com.arduino.telegrambot.service;
 
+import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.keyboard.MenuType;
+import com.arduino.telegrambot.model.User;
 import com.arduino.telegrambot.properties.AppProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import jakarta.annotation.PostConstruct;
-import java.util.function.Consumer;
 
 @Component
 @Slf4j
@@ -25,9 +24,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private AppProperties appProperties;
 
     @Autowired
-    private UserStateService userStateService;
+    private UserDBService userDBService;
 
-    private Long adminChatId = null;
 
 //    @PostConstruct
 //    public void init() {
@@ -48,13 +46,32 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
+
             String text = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
-            this.adminChatId = chatId;
 
-            MenuType currentState = userStateService.getUserState(chatId);
+            var user = userDBService.getOrDefault(chatId);
 
-            log.info("📨 Сообщение от {}: {} (Текущее меню: {})", chatId, text, currentState);
+            if ("/start".equals(text)){
+
+                UserState.FREE.name().equals(user.getState()) ?
+                //  отправляем стартовое меню :
+                //  сообщение "У вас осталось невыполненное задание". Опции: перейти к заданию, сбросить задание;
+
+            } else {
+
+                var state = user.getState();
+                if (UserState.FREE.equals(state)) {
+                    //  Неверный ввод. У вас нет задания. Для того чтобы начать задание нажмите кнопку
+                }else {
+                    // обработка ответа -> отправка результата
+                }
+            }
+
+
+
+
+//            log.info("📨 Сообщение от {}: {} (Текущее меню: {})", chatId, text, currentState);
 
 //            if (currentState == MenuType.MAIN) {
 //                handleMainMenu(chatId, text);

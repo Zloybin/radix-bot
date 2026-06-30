@@ -81,46 +81,46 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
-    private void handleMainMenu(long chatId, String text) {
-        switch (text) {
-            case "/start" -> {
-                userStateService.setUserState(chatId, MenuType.MAIN);
-                sendMessageWithKeyboard(chatId, "Привет! Выберите действие:", KeyboardBuilder.buildMainMenu());
-            }
-            case "🔧 Управление двигателем" -> {
-                userStateService.setUserState(chatId, MenuType.ENGINE_CONTROL);
-                sendMessageWithKeyboard(chatId, "Управление двигателем:", KeyboardBuilder.buildEngineMenu());
-            }
-            default -> sendMessageWithKeyboard(chatId, "Неизвестная команда. Используйте /start", KeyboardBuilder.buildMainMenu());
-        }
-    }
+//    private void handleMainMenu(long chatId, String text) {
+//        switch (text) {
+//            case "/start" -> {
+//                userStateService.setUserState(chatId, MenuType.MAIN);
+//                sendMessageWithKeyboard(chatId, "Привет! Выберите действие:", KeyboardBuilder.buildMainMenu());
+//            }
+//            case "🔧 Управление двигателем" -> {
+//                userStateService.setUserState(chatId, MenuType.ENGINE_CONTROL);
+//                sendMessageWithKeyboard(chatId, "Управление двигателем:", KeyboardBuilder.buildEngineMenu());
+//            }
+//            default -> sendMessageWithKeyboard(chatId, "Неизвестная команда. Используйте /start", KeyboardBuilder.buildMainMenu());
+//        }
+//    }
 
-    private void handleEngineMenu(long chatId, String text) {
-        switch (text) {
-            case "⬆️ Вперед" -> {
-                System.out.println("🚗 Двигатель едет вперед");
+//    private void handleEngineMenu(long chatId, String text) {
+//        switch (text) {
+//            case "⬆️ Вперед" -> {
+//                System.out.println("🚗 Двигатель едет вперед");
 //                arduinoService.sendCommand("start");
-                sendMessage(chatId, "✅ Двигатель едет вперед");
-            }
-            case "⬇️ Назад" -> {
-                System.out.println("🔙 Двигатель едет назад");
+//                sendMessage(chatId, "✅ Двигатель едет вперед");
+//            }
+//            case "⬇️ Назад" -> {
+//                System.out.println("🔙 Двигатель едет назад");
 //                arduinoService.sendCommand("stop");
-                sendMessage(chatId, "✅ Двигатель едет назад");
-            }
-            case "🔙 Назад в меню" -> {
-                userStateService.setUserState(chatId, MenuType.MAIN);
-                sendMessageWithKeyboard(chatId, "Главное меню:", KeyboardBuilder.buildMainMenu());
-            }
-            default -> sendMessageWithKeyboard(chatId, "Неизвестная команда:", KeyboardBuilder.buildEngineMenu());
-        }
-    }
-
-    private void handleArduinoMessage(String message) {
-        if (adminChatId != null && message.startsWith("STATUS:")) {
-            String readableStatus = message.replace("STATUS:", "🤖 ");
-            sendMessage(adminChatId, readableStatus);
-        }
-    }
+//                sendMessage(chatId, "✅ Двигатель едет назад");
+//            }
+//            case "🔙 Назад в меню" -> {
+//                userStateService.setUserState(chatId, MenuType.MAIN);
+//                sendMessageWithKeyboard(chatId, "Главное меню:", KeyboardBuilder.buildMainMenu());
+//            }
+//            default -> sendMessageWithKeyboard(chatId, "Неизвестная команда:", KeyboardBuilder.buildEngineMenu());
+//        }
+//    }
+//
+//    private void handleArduinoMessage(String message) {
+//        if (adminChatId != null && message.startsWith("STATUS:")) {
+//            String readableStatus = message.replace("STATUS:", "🤖 ");
+//            sendMessage(adminChatId, readableStatus);
+//        }
+//    }
 
     private void sendMessage(long chatId, String text) {
         SendMessage message = new SendMessage();

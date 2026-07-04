@@ -74,6 +74,53 @@ public class RadConverter {
                 if (entry.getValue().equals(c)) {
                     decimal = (int) (entry.getKey() * Math.pow(16, i));
                 }
+            }
+
+            return decimal;
+
+        }).sum();
+
+    }
+
+    public static String convertBinaryToHex(int binary) {
+        StringBuilder answer = new StringBuilder();
+        while (binary > 0) {
+
+            var binaryValue = String.valueOf(Math.abs(binary));
+            int hexValue;
+            var stringBuilder = new StringBuilder();
+            if (binaryValue.length() > 4) {
+                hexValue = Integer.parseInt(stringBuilder.append(binaryValue.substring(binaryValue.length() - 4, binaryValue.length())).toString());
+            } else {
+                hexValue = Integer.parseInt(stringBuilder.append(binaryValue).toString());
+            }
+            int result = 0;
+            for (int i = 0; i < stringBuilder.length(); i++) {
+                int bit = hexValue % 10;
+                if (bit != 0) {
+                    result += Math.pow(2, i);
+                }
+                hexValue /= 10;
+            }
+            stringBuilder.setLength(0);
+            Character c = HEX_CODE_MAP.get(result);
+            answer.insert(0, c);
+            binary /= 10000;
+        }
+        return answer.toString();
+    }
+
+    public static int convertHexToBinary(String hex) {
+
+        return IntStream.range(0, hex.length()).map(i -> {
+            char c = hex.charAt(hex.length() - 1 - i);
+
+            int decimal = 0;
+
+            for (Map.Entry<Integer, Character> entry : HEX_CODE_MAP.entrySet()) {
+                if (entry.getValue().equals(c)) {
+                    decimal = (int) (entry.getKey() * Math.pow(16, i));
+                }
 
             }
 

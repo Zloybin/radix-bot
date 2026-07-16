@@ -90,7 +90,7 @@ public class RadConverter {
             int hexValue;
             var stringBuilder = new StringBuilder();
             if (binaryValue.length() > 4) {
-                hexValue = Integer.parseInt(stringBuilder.append(binaryValue.substring(binaryValue.length() - 4, binaryValue.length())).toString());
+                hexValue = Integer.parseInt(stringBuilder.append(binaryValue.substring(binaryValue.length() - 4)).toString());
             } else {
                 hexValue = Integer.parseInt(stringBuilder.append(binaryValue).toString());
             }
@@ -98,7 +98,7 @@ public class RadConverter {
             for (int i = 0; i < stringBuilder.length(); i++) {
                 int bit = hexValue % 10;
                 if (bit != 0) {
-                    result += Math.pow(2, i);
+                    result += (int) Math.pow(2, i);
                 }
                 hexValue /= 10;
             }
@@ -110,9 +110,9 @@ public class RadConverter {
         return answer.toString();
     }
 
-    public static int convertHexToBinary(String hex) {
+    public static String convertHexToBinary(String hex) {
 
-        return IntStream.range(0, hex.length()).map(i -> {
+        int dec = IntStream.range(0, hex.length()).map(i -> {
             char c = hex.charAt(hex.length() - 1 - i);
 
             int decimal = 0;
@@ -127,6 +127,8 @@ public class RadConverter {
             return decimal;
 
         }).sum();
+
+        return convertDecimalToBinary(dec);
 
     }
 }

@@ -1,6 +1,5 @@
 package com.arduino.telegrambot.converter;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -26,7 +25,7 @@ public class RadConverter {
     );
 
 
-    public static String convertDecimalToBinary(int decimal) {
+    public String convertDecimalToBinary(int decimal) {
         var stringBuilder = new StringBuilder();
         while (decimal > 0) {
             stringBuilder.append(decimal % 2);
@@ -35,7 +34,7 @@ public class RadConverter {
         return stringBuilder.reverse().toString();
     }
 
-    public static String convertBinaryToDecimal(int binary) {
+    public String convertBinaryToDecimal(int binary) {
 
         var binaryValue = String.valueOf(Math.abs(binary));
         double result = 0;
@@ -50,20 +49,20 @@ public class RadConverter {
         return String.valueOf(result);
     }
 
-    public static String convertDecimalToHex(int decimal) {
+    public String convertDecimalToHex(int decimal) {
 
         StringBuilder hex = new StringBuilder();
 
         while (decimal > 0) {
             int rest = decimal % 16;
             Character c = HEX_CODE_MAP.get(rest);
-            hex.append(c);
+            hex.insert(0, c);
             decimal /= 16;
         }
         return hex.toString();
     }
 
-    public static int convertHexToDecimal(String hex) {
+    public int convertHexToDecimal(String hex) {
 
         return IntStream.range(0, hex.length()).map(i -> {
             char c = hex.charAt(hex.length() - 1 - i);
@@ -82,7 +81,7 @@ public class RadConverter {
 
     }
 
-    public static String convertBinaryToHex(int binary) {
+    public String convertBinaryToHex(int binary) {
         StringBuilder answer = new StringBuilder();
         while (binary > 0) {
 
@@ -110,7 +109,7 @@ public class RadConverter {
         return answer.toString();
     }
 
-    public static String convertHexToBinary(String hex) {
+    public String convertHexToBinary(String hex) {
 
         int dec = IntStream.range(0, hex.length()).map(i -> {
             char c = hex.charAt(hex.length() - 1 - i);

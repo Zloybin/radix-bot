@@ -53,7 +53,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
             var user = userDBService.getOrDefault(chatId);
 
             if ("/start".equals(text)){
-
+/*
                 UserState.FREE.name().equals(user.getState()) ?
                 //  отправляем стартовое меню :
                 //  сообщение "У вас осталось невыполненное задание". Опции: перейти к заданию, сбросить задание;
@@ -65,7 +65,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                     //  Неверный ввод. У вас нет задания. Для того чтобы начать задание нажмите кнопку
                 }else {
                     // обработка ответа -> отправка результата
-                }
+                }*/
             }
 
 

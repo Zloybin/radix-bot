@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.service;
 
 import com.arduino.telegrambot.enummeration.UserState;
+import com.arduino.telegrambot.handle.Dispatcher;
 import com.arduino.telegrambot.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.keyboard.MenuType;
 import com.arduino.telegrambot.model.User;
@@ -14,7 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;;
+import org.thymeleaf.context.Context;
 
 @Component
 @Slf4j
@@ -31,6 +32,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Autowired
+    private Dispatcher dispatcher;
 
 //    @PostConstruct
 //    public void init() {
@@ -51,20 +55,26 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
+            if(update.getMessage().getText().startsWith("/")){
+                dispatcher.dispatch(update);
+
+            }else{
+
+            }
 
             String text = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
 //            var user = userDBService.getOrDefault(chatId);
 
-            if ("/start".equals(text)){
+//            if ("/start".equals(text)){
 
-                Context context = new Context();
-
-                context.setVariable("userName", "Иван");
-                context.setVariable("balance", 1500);
-                String test = templateEngine.process("test", context);
-                sendMessage(chatId, test);
+//                Context context = new Context();
+//
+//            context.setVariable("userName", "Иван");
+//            context.setVariable("balance", 1500);
+//            String test = templateEngine.process("test", context);
+//            sendMessage(chatId, test);
 /*
                 UserState.FREE.name().equals(user.getState()) ?
                 //  отправляем стартовое меню :
@@ -78,7 +88,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 }else {
                     // обработка ответа -> отправка результата
                 }*/
-            }
+//            }
 
 
 
@@ -133,6 +143,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 //            sendMessage(adminChatId, readableStatus);
 //        }
 //    }
+
 
     private void sendMessage(long chatId, String text) {
         SendMessage message = new SendMessage();

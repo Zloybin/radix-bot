@@ -9,9 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;;
 
 @Component
 @Slf4j
@@ -26,6 +29,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private UserDBService userDBService;
 
+    @Autowired
+    private TemplateEngine templateEngine;
 
 //    @PostConstruct
 //    public void init() {
@@ -50,9 +55,16 @@ public class TelegramBotService extends TelegramLongPollingBot {
             String text = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            var user = userDBService.getOrDefault(chatId);
+//            var user = userDBService.getOrDefault(chatId);
 
             if ("/start".equals(text)){
+
+                Context context = new Context();
+
+                context.setVariable("userName", "Иван");
+                context.setVariable("balance", 1500);
+                String test = templateEngine.process("test", context);
+                sendMessage(chatId, test);
 /*
                 UserState.FREE.name().equals(user.getState()) ?
                 //  отправляем стартовое меню :
@@ -126,6 +138,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
         message.setText(text);
+        message.setParseMode(ParseMode.MARKDOWN);
         try {
             execute(message);
         } catch (TelegramApiException e) {

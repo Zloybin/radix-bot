@@ -16,10 +16,8 @@ import org.springframework.context.annotation.FilterType;
         pattern = "org.telegram.telegrambots.meta.*"
 ))
 public class Application {
-    @Autowired
-    private static AnswerValidator answerValidator = new AnswerValidator( new RadConverter());
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-        System.out.println(answerValidator.validateAnswer("DECHEX17", "11"));
     }
 }

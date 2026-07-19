@@ -19,8 +19,9 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // 🔹 Только базовая библиотека Telegram
     implementation 'org.telegram:telegrambots:6.9.7.1'
+
+    implementation 'org.thymeleaf:thymeleaf:3.1.5.RELEASE'
 
     implementation 'com.fazecast:jSerialComm:2.11.0'
 
@@ -32,4 +33,9 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+configurations.all {
+    exclude group: 'com.fasterxml.jackson.module',
+            module: 'jackson-module-jaxb-annotations'
 }

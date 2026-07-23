@@ -1,11 +1,9 @@
-package com.arduino.telegrambot.service;
+package com.arduino.telegrambot;
 
-import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.handle.Dispatcher;
-import com.arduino.telegrambot.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.keyboard.MenuType;
-import com.arduino.telegrambot.model.User;
+import com.arduino.telegrambot.dispatcher.Dispatcher;
+import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.properties.AppProperties;
+import com.arduino.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,8 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 @Component
 @Slf4j
@@ -28,19 +24,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private AppProperties appProperties;
 
     @Autowired
-    private UserDBService userDBService;
-
-    @Autowired
-    private TemplateEngine templateEngine;
+    private UserService userService;
 
     @Autowired
     private Dispatcher dispatcher;
-
-//    @PostConstruct
-//    public void init() {
-//        arduinoService.setMessageListener(this::handleArduinoMessage);
-//        log.info("🤖 Бот {} инициализирован", appProperties.getName());
-//    }
 
     @Override
     public String getBotUsername() {
@@ -54,53 +41,29 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
+        var userRequestBuilder = UserRequest.builder();
+
         if (update.hasMessage() && update.getMessage().hasText()) {
-            if(update.getMessage().getText().startsWith("/")){
-                dispatcher.dispatch(update);
-
-            }else{
-
-            }
-
-            String text = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-
-//            var user = userDBService.getOrDefault(chatId);
-
-//            if ("/start".equals(text)){
-
-//                Context context = new Context();
-//
-//            context.setVariable("userName", "Иван");
-//            context.setVariable("balance", 1500);
-//            String test = templateEngine.process("test", context);
-//            sendMessage(chatId, test);
-/*
-                UserState.FREE.name().equals(user.getState()) ?
-                //  отправляем стартовое меню :
-                //  сообщение "У вас осталось невыполненное задание". Опции: перейти к заданию, сбросить задание;
-
-            } else {
-
-                var state = user.getState();
-                if (UserState.FREE.equals(state)) {
-                    //  Неверный ввод. У вас нет задания. Для того чтобы начать задание нажмите кнопку
-                }else {
-                    // обработка ответа -> отправка результата
-                }*/
-//            }
-
-
-
-
-//            log.info("📨 Сообщение от {}: {} (Текущее меню: {})", chatId, text, currentState);
-
-//            if (currentState == MenuType.MAIN) {
-//                handleMainMenu(chatId, text);
-//            } else if (currentState == MenuType.ENGINE_CONTROL) {
-//                handleEngineMenu(chatId, text);
-//            }
+            userRequestBuilder.chatId(update.getMessage().getChatId())
+                    .request(update.getMessage().getText());
+        } else if (update.hasCallbackQuery()) {
+            userRequestBuilder.chatId(update.getCallbackQuery().getMessage().getChatId())
+                    .request(update.getCallbackQuery().getData());
+        }else {
+            throw new RuntimeException("Неисправное состояние объекта класса update.");
         }
+
+        var userRequest = userRequestBuilder.build();
+
+        if(!userService.isUserExist(userRequest.getChatId())){
+            var chatId = userRequest.getChatId();
+            userService.buildAndPutDefaultUser(chatId);
+        }
+
+        dispatcher.dispatch(userRequest);
+
+
     }
 
 //    private void handleMainMenu(long chatId, String text) {

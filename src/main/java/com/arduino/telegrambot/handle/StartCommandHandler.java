@@ -1,11 +1,11 @@
 package com.arduino.telegrambot.handle;
 
-import com.arduino.telegrambot.service.TelegramBotService;
+import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.TemplateEngine;
 
@@ -19,22 +19,26 @@ public class StartCommandHandler implements UpdateHandler {
     @Autowired
     private TelegramService telegramService;
 
+    @Autowired
+    private KeyboardBuilder keyboardBuilder;
+
 
 
     @Override
-    public boolean isApplicable(String callback) {
-        return handlerCallback.equals(callback);
+    public boolean isApplicable(UserRequest userRequest) {
+        return handlerCallback.equals(userRequest.getRequest());
     }
 
     @Override
-    public void handle(Update update) {
+    public void handle(UserRequest userRequest) {
         Context context = new Context();
 
         context.setVariable("userName", "Иван");
         context.setVariable("balance", 1500);
         String test = engine.process("test", context);
 
+        var keyboard = keyboardBuilder.buildMainMenu();
 
-        telegramService.sendMessage(update.getMessage().getChatId(),test, ParseMode.MARKDOWN);
+        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, test, ParseMode.HTML);
     }
 }

@@ -1,8 +1,11 @@
 package com.arduino.telegrambot.converter;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Map;
 import java.util.stream.IntStream;
 
+@Component
 public class RadConverter {
     private static final Map<Integer, Character> HEX_CODE_MAP = Map.ofEntries(
             Map.entry(0, '0'),

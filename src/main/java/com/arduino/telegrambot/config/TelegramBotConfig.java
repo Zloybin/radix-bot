@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.config;
 
-import com.arduino.telegrambot.service.TelegramBotService;
+import com.arduino.telegrambot.TelegramBotService;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;

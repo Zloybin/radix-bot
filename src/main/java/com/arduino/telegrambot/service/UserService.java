@@ -2,17 +2,26 @@ package com.arduino.telegrambot.service;
 
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.model.User;
-import org.springframework.stereotype.Service;
+import com.arduino.telegrambot.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Service
-public class UserDBService {
-
+@Component
+public class UserService {
     private static final Map<Long, User> userDataBase = new ConcurrentHashMap<>();
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     // User
+
+    public boolean isUserExist(Long chatId) {
+        return userDataBase.get(chatId) != null;
+    }
 
     public void putUser(Long chatId, User user) {
         userDataBase.put(chatId, user);
@@ -35,23 +44,16 @@ public class UserDBService {
         user.setState(userState);
     }
 
-    public UserState getUserState(Long chatId) {
-        if (userDataBase.get(chatId) == null) {
-            throw new IllegalArgumentException(String.format("Нет пользователя с таким id: %s", chatId));
-        }
-        return userDataBase.get(chatId).getState();
-    }
-
 
     // Default user
 
-    private static User buildAndPutDefaultUser(Long chatId) {
+    public User buildAndPutDefaultUser(Long chatId) {
         var deafaultUser = buildDefaultUser(chatId);
         userDataBase.put(chatId, deafaultUser);
         return deafaultUser;
     }
 
-    private static User buildDefaultUser(Long chatId) {
+    public User buildDefaultUser(Long chatId) {
         return User.builder()
                 .id(chatId)
                 .state(UserState.FREE)

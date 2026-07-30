@@ -49,7 +49,7 @@ public class RadConverter {
             }
             binary /= 10;
         }
-        return String.valueOf(result);
+        return String.valueOf(Math.round(result));
     }
 
     public String convertDecimalToHex(int decimal) {

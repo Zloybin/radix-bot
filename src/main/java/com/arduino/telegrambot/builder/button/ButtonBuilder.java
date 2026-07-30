@@ -4,9 +4,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 public interface ButtonBuilder {
 
+    InlineKeyboardButton buildMainMenuButton();
+
     InlineKeyboardButton buildRadConverterStartButton();
     InlineKeyboardButton buildGiveAnswerButton();
     InlineKeyboardButton buildCancelTaskButton();
-    InlineKeyboardButton buildMainMenuButton();
     InlineKeyboardButton buildNewTaskButton();
 }

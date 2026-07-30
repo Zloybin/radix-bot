@@ -72,7 +72,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row1.add(newTask);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row1.add(main);
+        row2.add(main);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);

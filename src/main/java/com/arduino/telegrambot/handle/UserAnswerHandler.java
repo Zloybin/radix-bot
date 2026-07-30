@@ -52,7 +52,7 @@ public class UserAnswerHandler implements UpdateHandler{
         context.setVariable("userAnswer", result.getUserAnswer());
         String message = engine.process("user_result_message", context);
 
-        var keyboard = keyboardBuilder.buildBackToMainMenu();
+        var keyboard = keyboardBuilder.buildCompletedTaskMenu();
         user.setState(UserState.FREE);
         userService.putUser(user.getId(), user);
 

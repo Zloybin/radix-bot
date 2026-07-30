@@ -16,10 +16,34 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildGiveAnswerButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Дать ответ!");
+        button.setCallbackData("giveAnswer");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCancelTaskButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Сбросить текущее задание");
+        button.setCallbackData("cancelTask");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildMainMenuButton() {
         var button = new InlineKeyboardButton();
         button.setText("Главное меню");
         button.setCallbackData("/start");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildNewTaskButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Новое задание");
+        button.setCallbackData("newTask");
         return button;
     }
 }

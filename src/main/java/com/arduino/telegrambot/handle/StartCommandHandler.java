@@ -31,11 +31,8 @@ public class StartCommandHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
-        Context context = new Context();
 
-        context.setVariable("userName", "Иван");
-        context.setVariable("balance", 1500);
-        String test = engine.process("test", context);
+        String test = engine.process("greetings", new Context());
 
         var keyboard = keyboardBuilder.buildMainMenu();
 

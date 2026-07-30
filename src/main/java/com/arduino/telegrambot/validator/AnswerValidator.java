@@ -6,8 +6,9 @@ import com.arduino.telegrambot.model.TaskResult;
 import lombok.RequiredArgsConstructor;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class AnswerValidator {
 
@@ -36,11 +37,11 @@ public class AnswerValidator {
         } else if (NumberSystem.HEX.equals(source) && NumberSystem.BIN.equals(target)) {
             rightAnswer = radConverter.convertHexToBinary(taskValue);
         } else if (NumberSystem.BIN.equals(source) && NumberSystem.DEC.equals(target)) {
-            var decimal = Integer.valueOf(taskValue);
-            rightAnswer = radConverter.convertBinaryToDecimal(decimal);
+            var binary = Integer.valueOf(taskValue);
+            rightAnswer = radConverter.convertBinaryToDecimal(binary);
         } else if (NumberSystem.BIN.equals(source) && NumberSystem.HEX.equals(target)) {
-            var decimal = Integer.valueOf(taskValue);
-            rightAnswer = radConverter.convertBinaryToHex(decimal);
+            var binary = Integer.valueOf(taskValue);
+            rightAnswer = radConverter.convertBinaryToHex(binary);
         } else {
             throw new IllegalArgumentException(String.format("Определен неправильная конвертация: невозможно конвкртировать из %s в %s.", source, target));
         }

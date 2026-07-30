@@ -22,8 +22,9 @@ public class DispatcherImpl implements Dispatcher {
     public void dispatch(UserRequest userRequest) {
 
         for (UpdateHandler handler : handlers) {
-            if (handler.isApplicable(userRequest.getRequest())){
+            if (handler.isApplicable(userRequest)){
                 handler.handle(userRequest);
+                break;
             }
         }
 

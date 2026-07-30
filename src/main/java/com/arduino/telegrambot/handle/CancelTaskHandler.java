@@ -2,8 +2,6 @@ package com.arduino.telegrambot.handle;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.NumberSystem;
-import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.model.User;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
@@ -11,14 +9,11 @@ import com.arduino.telegrambot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Component
-public class RadConverterHandler implements UpdateHandler {
-
-    private final String handlerCallback = "radConverter";
+public class CancelTaskHandler implements UpdateHandler{
 
     @Autowired
     private TaskService taskService;
@@ -35,34 +30,16 @@ public class RadConverterHandler implements UpdateHandler {
     @Autowired
     private TelegramService telegramService;
 
-
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return handlerCallback.equals(userRequest.getRequest());
+        return "cancelTask".equals(userRequest.getRequest());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.getUser(userRequest.getChatId());
-
-        String task;
-        String template;
-        switch (user.getState()) {
-            case UserState.FREE ->  {
-                task = taskService.generateTask();
-                template = "task";
-                user.setState(UserState.TASK);
-                user.setTask(task);
-            }
-            case UserState.TASK -> {
-                task = user.getTask();
-                template = "uncompleted_task";
-            }
-
-            default -> throw new RuntimeException("Неопределнное значение статуса пользователя.");
-        }
-
-
+        var task = taskService.generateTask();
+        user.setTask(task);
 
         Context context = new Context();
 
@@ -70,7 +47,7 @@ public class RadConverterHandler implements UpdateHandler {
         context.setVariable("drain", NumberSystem.valueOf(task.substring(3, 6)).getTitle());
         context.setVariable("task", task.substring(6));
 
-        String text = engine.process(template, context);
+        String text = engine.process("task", context);
 
         var keyboard = keyboardBuilder.buildRadConverterMenu();
 

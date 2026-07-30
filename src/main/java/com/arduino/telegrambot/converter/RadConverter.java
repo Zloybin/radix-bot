@@ -85,7 +85,7 @@ public class RadConverter {
     }
 
     public String convertBinaryToHex(int binary) {
-        StringBuilder answer = new StringBuilder();
+        var answer = new StringBuilder();
         while (binary > 0) {
 
             var binaryValue = String.valueOf(Math.abs(binary));

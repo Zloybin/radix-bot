@@ -1,8 +1,12 @@
 package com.arduino.telegrambot;
 
 import com.arduino.telegrambot.dispatcher.Dispatcher;
+import com.arduino.telegrambot.enummeration.AnswerType;
+import com.arduino.telegrambot.enummeration.TaskLevel;
+import com.arduino.telegrambot.model.Task;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.properties.AppProperties;
+import com.arduino.telegrambot.repository.TaskRepository;
 import com.arduino.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private Dispatcher dispatcher;
 
+    @Autowired
+    private TaskRepository taskRepository;
+
     @Override
     public String getBotUsername() {
         return appProperties.getName();
@@ -41,7 +48,23 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        var task = Task.builder()
+                .title("dscsdc")
+                .taskNumber(1)
+                .selfTaskNumber(1)
+                .taskLevel(TaskLevel.BEGINNER)
+                .taskLetter('a')
+                .hasImage(false)
+                .pageNumber(1)
+                .answerType(AnswerType.SHORT)
+                .answer("zxdscsdc")
+                .pageLink("sdcscs")
+                .taskText("csdcsdc")
+                .build();
 
+
+        var save = taskRepository.save(task);
+        System.out.println(save);
         var userRequestBuilder = UserRequest.builder();
 
         if (update.hasMessage() && update.getMessage().hasText()) {
@@ -50,13 +73,13 @@ public class TelegramBotService extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             userRequestBuilder.chatId(update.getCallbackQuery().getMessage().getChatId())
                     .request(update.getCallbackQuery().getData());
-        }else {
+        } else {
             throw new RuntimeException("Неисправное состояние объекта класса update.");
         }
 
         var userRequest = userRequestBuilder.build();
 
-        if(!userService.isUserExist(userRequest.getChatId())){
+        if (!userService.isUserExist(userRequest.getChatId())) {
             var chatId = userRequest.getChatId();
             userService.buildAndPutDefaultUser(chatId);
         }

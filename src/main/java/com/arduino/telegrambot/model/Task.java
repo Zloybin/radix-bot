@@ -3,9 +3,14 @@ package com.arduino.telegrambot.model;
 import com.arduino.telegrambot.enummeration.AnswerType;
 import com.arduino.telegrambot.enummeration.TaskLevel;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "tasks")
+@Setter
+@Getter
+@Builder
+@ToString
 public class Task {
 
     @Id

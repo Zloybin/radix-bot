@@ -18,12 +18,18 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildMainMenu() {
 
-        var button = buttonBuilder.buildRadConverterStartButton();
+        var radConverterButton = buttonBuilder.buildRadConverterStartButton();
+        var physTaskButton = buttonBuilder.buildNewPhysTaskButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(radConverterButton);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(physTaskButton);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
-        var row = new ArrayList<InlineKeyboardButton>();
-        row.add(button);
-        rows.add(row);
+        rows.add(row1);
+        rows.add(row2);
         return new InlineKeyboardMarkup(rows);
     }
 

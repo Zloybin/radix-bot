@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<b th:text="'📚 ' + ${title}">📚 Название</b>
+
+<b>Задание №:</b> <b th:text="${taskNumber}">7</b>
+<b>Системный номер:</b> <b th:text="${selfTaskNumber}">20</b>
+<b>Уровень:</b> <b th:text="${taskLevel}">INITIAL</b>
+
+━━━━━━━━━━━━━━
+
+<b th:text="${taskText}">Текст задания</b>
+
+━━━━━━━━━━━━━━
+
+📖 <b th:text="'Страница: ' + ${pageNumber}">Страница: 70</b>

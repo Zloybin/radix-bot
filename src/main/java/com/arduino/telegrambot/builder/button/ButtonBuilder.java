@@ -10,4 +10,5 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildGiveAnswerButton();
     InlineKeyboardButton buildCancelTaskButton();
     InlineKeyboardButton buildNewTaskButton();
+    InlineKeyboardButton buildNewPhysTaskButton();
 }

@@ -45,4 +45,12 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         button.setCallbackData("radConverter");
         return button;
     }
+
+    @Override
+    public InlineKeyboardButton buildNewPhysTaskButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Новая задача по физике");
+        button.setCallbackData("physTask");
+        return button;
+    }
 }

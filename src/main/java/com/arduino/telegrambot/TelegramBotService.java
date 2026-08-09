@@ -48,23 +48,13 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        var task = Task.builder()
-                .title("dscsdc")
-                .taskNumber(1)
-                .selfTaskNumber(1)
-                .taskLevel(TaskLevel.BEGINNER)
-                .taskLetter('a')
-                .hasImage(false)
-                .pageNumber(1)
-                .answerType(AnswerType.SHORT)
-                .answer("zxdscsdc")
-                .pageLink("sdcscs")
-                .taskText("csdcsdc")
-                .build();
 
 
-        var save = taskRepository.save(task);
-        System.out.println(save);
+        var list = taskRepository.findAll();
+        for (Task task : list) {
+            System.out.println(task);
+        }
+
         var userRequestBuilder = UserRequest.builder();
 
         if (update.hasMessage() && update.getMessage().hasText()) {

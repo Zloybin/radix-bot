@@ -11,6 +11,8 @@ import lombok.*;
 @Getter
 @Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
 
     @Id
@@ -49,6 +51,6 @@ public class Task {
     @Column(name = "page_link", nullable = false)
     private String pageLink;
 
-    @Column(name = "task_text", nullable = false)
+    @Column(name = "task_text", columnDefinition = "TEXT", nullable = false)
     private String taskText;
 }

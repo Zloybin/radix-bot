@@ -1,10 +1,10 @@
 package com.arduino.telegrambot.enummeration;
 
 public enum TaskLevel {
-    BEGINNER ("Начальный"),
-    INTERMEDIATE("Средний"),
-    COMPETENT("Достаточный"),
-    ADVANCED("Высокий");
+    INITIAL ("Начальный"),
+    MIDDLE("Средний"),
+    SUFFICIENT("Достаточный"),
+    HIGH("Высокий");
 
     private final String title;
 

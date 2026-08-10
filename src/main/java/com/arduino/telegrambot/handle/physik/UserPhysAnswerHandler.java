@@ -33,12 +33,12 @@ public class UserPhysAnswerHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return UserState.WAIT_USER_PHYS_ANSWER.equals(userService.getUser(userRequest.getChatId()).getState());
+        return UserState.WAIT_USER_PHYS_ANSWER.equals(userService.findById(userRequest.getChatId()).getState());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.getUser(userRequest.getChatId());
+        var user = userService.findById(userRequest.getChatId());
         var userAnswer = userRequest.getRequest();
 
         var result = answerValidator.validatePhysAnswer((long) user.getPhysTask(), userAnswer);
@@ -53,7 +53,7 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         var keyboard = keyboardBuilder.buildCompletedTaskMenu();
         user.setPhysTask(0);
         user.setState(UserState.FREE);
-        userService.putUser(user.getId(), user);
+        userService.save(user);
 
         telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, message, ParseMode.HTML);
     }

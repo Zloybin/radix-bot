@@ -38,9 +38,9 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.getUser(userRequest.getChatId());
+        var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.WAIT_USER_PHYS_ANSWER);
-        userService.putUser(user.getId(), user);
+        userService.save(user);
         var taskId = user.getPhysTask();
 
         var physTask = taskRepository.findById((long) taskId).get();

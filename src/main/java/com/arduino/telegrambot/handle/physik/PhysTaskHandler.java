@@ -47,7 +47,7 @@ public class PhysTaskHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
 
         int randomTaskId;
-        var user = userService.getUser(userRequest.getChatId());
+        var user = userService.findById(userRequest.getChatId());
         if(user.getPhysTask() == 0){
             randomTaskId = new Random().nextInt((int) taskRepository.count());
         }else{
@@ -55,7 +55,7 @@ public class PhysTaskHandler implements UpdateHandler {
         }
 
         user.setPhysTask(randomTaskId);
-        userService.putUser(user.getId(), user);
+        userService.save(user);
 
         var physTask = taskRepository.findById((long) randomTaskId).get();
 

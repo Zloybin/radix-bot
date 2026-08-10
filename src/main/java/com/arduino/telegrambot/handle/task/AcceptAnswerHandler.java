@@ -35,9 +35,9 @@ public class AcceptAnswerHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.getUser(userRequest.getChatId());
+        var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.WAIT_USER_RAD_ANSWER);
-        userService.putUser(user.getId(), user);
+        userService.save(user);
         var task = user.getTask();
 
         Context context = new Context();

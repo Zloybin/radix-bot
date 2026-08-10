@@ -38,7 +38,7 @@ public class CancelTaskHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.getUser(userRequest.getChatId());
+        var user = userService.findById(userRequest.getChatId());
         var task = taskService.generateTask();
         user.setTask(task);
 

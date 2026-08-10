@@ -43,7 +43,7 @@ public class CancelPhysTaskHandler implements UpdateHandler {
         int randomTaskId = new Random().nextInt((int) taskRepository.count());
         var physTask = taskRepository.findById((long) randomTaskId).get();
 
-        var user = userService.getUser(userRequest.getChatId());
+        var user = userService.findById(userRequest.getChatId());
         user.setPhysTask(randomTaskId);
 
         Context context = new Context();

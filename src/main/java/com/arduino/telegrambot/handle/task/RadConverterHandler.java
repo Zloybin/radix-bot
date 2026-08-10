@@ -42,7 +42,7 @@ public class RadConverterHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.getUser(userRequest.getChatId());
+        var user = userService.findById(userRequest.getChatId());
 
         String task;
         String template;

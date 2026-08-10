@@ -5,53 +5,43 @@ import com.arduino.telegrambot.model.User;
 import com.arduino.telegrambot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+@Service
 public class UserService {
-    private static final Map<Long, User> userDataBase = new ConcurrentHashMap<>();
 
     @Autowired
     private UserRepository userRepository;
 
-
     // User
 
-    public boolean isUserExist(Long chatId) {
-        return userDataBase.get(chatId) != null;
+    public boolean existById(Long chatId) {
+        return userRepository.existsById(chatId);
     }
 
-    public void putUser(Long chatId, User user) {
-        userDataBase.put(chatId, user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
-    public User getUser(Long chatId) {
-        return userDataBase.get(chatId);
+    public User findById(Long chatId) {
+        Optional<User> optionalUser = userRepository.findById(chatId);
+        if(optionalUser.isPresent()){
+            return optionalUser.get();
+        }else {
+            throw new IllegalArgumentException(String.format("Пользователя с id: %d не существует.", chatId));
+        }
     }
 
-    public User getOrDefault(Long chatId) {
-        var user = getUser(chatId);
-        return user == null ? buildAndPutDefaultUser(chatId) : user;
-    }
-
-
-    // User state
-
-    public void setUserState(Long chatId, UserState userState) {
-        var user = getUser(chatId);
-        user.setState(userState);
-    }
-
+//    public User findByIdOrDefault(Long chatId) {
+//        Optional<User> optionalUser = userRepository.findById(chatId);
+//        return optionalUser.orElseGet(() -> buildDefaultUser(chatId));
+//    }
 
     // Default user
-
-    public User buildAndPutDefaultUser(Long chatId) {
-        var deafaultUser = buildDefaultUser(chatId);
-        userDataBase.put(chatId, deafaultUser);
-        return deafaultUser;
-    }
 
     public User buildDefaultUser(Long chatId) {
         return User.builder()

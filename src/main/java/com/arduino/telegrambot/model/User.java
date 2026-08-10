@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User {
-    long id;
-    UserState state;
-    String task;
+    private long id;
+    private UserState state;
+    private String task;
+    private int physTask;
 }

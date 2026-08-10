@@ -57,6 +57,28 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
+    public InlineKeyboardMarkup buildPhysTaskMenu() {
+        var accept = buttonBuilder.buildGiveAnswerPhysButton();
+        var cancel = buttonBuilder.buildCancelTaskPhysButton();
+        var main = buttonBuilder.buildMainMenuButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(accept);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(cancel);
+
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(main);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        rows.add(row3);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
     public InlineKeyboardMarkup buildBackToMainMenu() {
         var main = buttonBuilder.buildMainMenuButton();
 

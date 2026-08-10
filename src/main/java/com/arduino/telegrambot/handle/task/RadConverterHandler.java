@@ -1,9 +1,9 @@
-package com.arduino.telegrambot.handle;
+package com.arduino.telegrambot.handle.task;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.NumberSystem;
 import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.model.User;
+import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
@@ -11,7 +11,6 @@ import com.arduino.telegrambot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 

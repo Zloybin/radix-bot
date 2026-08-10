@@ -1,12 +1,9 @@
-package com.arduino.telegrambot.handle;
+package com.arduino.telegrambot.handle.physik;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.NumberSystem;
-import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.model.Task;
+import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.repository.TaskRepository;
-import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +15,13 @@ import org.thymeleaf.context.Context;
 import java.util.Random;
 
 @Component
-public class PhysTaskHandler implements UpdateHandler{
-
-    private final String handlerCallback = "physTask";
-
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private UserService userService;
+public class CancelPhysTaskHandler implements UpdateHandler {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TemplateEngine engine;
@@ -42,57 +34,30 @@ public class PhysTaskHandler implements UpdateHandler{
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return handlerCallback.equals(userRequest.getRequest());
+        return "cancelPhysTask".equals(userRequest.getRequest());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.getUser(userRequest.getChatId());
 
         int randomTaskId = new Random().nextInt((int) taskRepository.count());
-
         var physTask = taskRepository.findById((long) randomTaskId).get();
 
-//        Task task;
-//        String template;
-//        switch (user.getState()) {
-//            case UserState.FREE ->  {
-//                task = taskService.generateTask();
-//                template = "task";
-//                user.setState(UserState.TASK);
-//                user.setTask(task);
-//            }
-//            case UserState.TASK -> {
-//                task = user.getTask();
-//                template = "uncompleted_task";
-//            }
-//
-//            default -> throw new RuntimeException("Неопределнное значение статуса пользователя.");
-//        }
-
-
-
-
+        var user = userService.getUser(userRequest.getChatId());
+        user.setPhysTask(randomTaskId);
 
         Context context = new Context();
-
         context.setVariable("title", physTask.getTitle());
-
         context.setVariable("taskNumber", physTask.getTaskNumber());
-
         context.setVariable("selfTaskNumber", physTask.getSelfTaskNumber());
-
         context.setVariable("taskLevel", physTask.getTaskLevel());
-
         context.setVariable("taskText", physTask.getTaskText());
-
         context.setVariable("pageNumber", physTask.getPageNumber());
 
         String text = engine.process("phys_task_message", context);
 
-        var keyboard = keyboardBuilder.buildRadConverterMenu();
+        var keyboard = keyboardBuilder.buildPhysTaskMenu();
 
         telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
-
     }
 }

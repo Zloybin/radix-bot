@@ -31,10 +31,26 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildGiveAnswerPhysButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Дать ответ");
+        button.setCallbackData("givePhysAnswer");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildCancelTaskButton() {
         var button = new InlineKeyboardButton();
         button.setText("Сбросить текущее задание");
         button.setCallbackData("cancelTask");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCancelTaskPhysButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Сбросить текущее задание");
+        button.setCallbackData("cancelPhysTask");
         return button;
     }
 

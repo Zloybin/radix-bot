@@ -1,9 +1,8 @@
-package com.arduino.telegrambot.handle;
+package com.arduino.telegrambot.handle.physik;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.model.TaskResult;
-import com.arduino.telegrambot.model.User;
+import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
@@ -11,12 +10,11 @@ import com.arduino.telegrambot.validator.AnswerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Component
-public class UserAnswerHandler implements UpdateHandler{
+public class UserPhysAnswerHandler implements UpdateHandler {
 
     @Autowired
     private UserService userService;
@@ -35,7 +33,7 @@ public class UserAnswerHandler implements UpdateHandler{
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return UserState.WAIT_USER_RAD_ANSWER.equals(userService.getUser(userRequest.getChatId()).getState());
+        return UserState.WAIT_USER_PHYS_ANSWER.equals(userService.getUser(userRequest.getChatId()).getState());
     }
 
     @Override
@@ -43,7 +41,7 @@ public class UserAnswerHandler implements UpdateHandler{
         var user = userService.getUser(userRequest.getChatId());
         var userAnswer = userRequest.getRequest();
 
-        var result = answerValidator.validateAnswer(user.getTask(), userAnswer);
+        var result = answerValidator.validatePhysAnswer((long) user.getPhysTask(), userAnswer);
 
         Context context = new Context();
 
@@ -53,6 +51,7 @@ public class UserAnswerHandler implements UpdateHandler{
         String message = engine.process("user_result_message", context);
 
         var keyboard = keyboardBuilder.buildCompletedTaskMenu();
+        user.setPhysTask(0);
         user.setState(UserState.FREE);
         userService.putUser(user.getId(), user);
 

@@ -50,10 +50,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
 
-        var list = taskRepository.findAll();
-        for (Task task : list) {
-            System.out.println(task);
-        }
+//        var list = taskRepository.findAll();
+//        for (Task task : list) {
+//            System.out.println(task);
+//        }
 
         var userRequestBuilder = UserRequest.builder();
 

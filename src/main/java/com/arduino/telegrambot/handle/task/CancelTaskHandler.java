@@ -1,7 +1,8 @@
-package com.arduino.telegrambot.handle;
+package com.arduino.telegrambot.handle.task;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.NumberSystem;
+import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
@@ -13,7 +14,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 @Component
-public class CancelTaskHandler implements UpdateHandler{
+public class CancelTaskHandler implements UpdateHandler {
 
     @Autowired
     private TaskService taskService;

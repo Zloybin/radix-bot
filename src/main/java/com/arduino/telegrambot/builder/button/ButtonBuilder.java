@@ -8,7 +8,9 @@ public interface ButtonBuilder {
 
     InlineKeyboardButton buildRadConverterStartButton();
     InlineKeyboardButton buildGiveAnswerButton();
+    InlineKeyboardButton buildGiveAnswerPhysButton();
     InlineKeyboardButton buildCancelTaskButton();
+    InlineKeyboardButton buildCancelTaskPhysButton();
     InlineKeyboardButton buildNewTaskButton();
     InlineKeyboardButton buildNewPhysTaskButton();
 }

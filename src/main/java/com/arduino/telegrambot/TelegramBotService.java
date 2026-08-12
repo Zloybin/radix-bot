@@ -1,22 +1,22 @@
 package com.arduino.telegrambot;
 
 import com.arduino.telegrambot.dispatcher.Dispatcher;
-import com.arduino.telegrambot.enummeration.AnswerType;
-import com.arduino.telegrambot.enummeration.TaskLevel;
-import com.arduino.telegrambot.model.Task;
-import com.arduino.telegrambot.model.User;
+import com.arduino.telegrambot.entity.Result;
+import com.arduino.telegrambot.entity.Task;
+import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.properties.AppProperties;
-import com.arduino.telegrambot.repository.TaskRepository;
+import com.arduino.telegrambot.repository.ResultRepository;
+import com.arduino.telegrambot.repository.UserRepository;
+import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -31,6 +31,12 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private Dispatcher dispatcher;
 
+    @Autowired
+    private ResultRepository resultRepository;
+
+    @Autowired
+    private TaskService taskService;
+
     @Override
     public String getBotUsername() {
         return appProperties.getName();
@@ -43,6 +49,18 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
+        Task task = taskService.findById(1L);
+
+        var result = Result.builder()
+                .result(true)
+                .userAnswer("answer")
+                .task(task)
+                .build();
+
+        Result updatedResult = resultRepository.save(result);
+        System.out.println(updatedResult.getTask());
+
 
         var userRequestBuilder = UserRequest.builder();
 

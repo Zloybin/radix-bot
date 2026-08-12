@@ -1,16 +1,20 @@
-package com.arduino.telegrambot.model;
+package com.arduino.telegrambot.entity;
 
 import com.arduino.telegrambot.enummeration.UserState;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Builder
-@Getter
-@Setter
+import java.util.Set;
+
+
 @Entity
 @Table(name = "users")
-@AllArgsConstructor
+@Setter
+@Getter
+@Builder
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -24,4 +28,8 @@ public class User {
 
     @Column
     private int physTask;
+
+    @OneToMany
+    @JoinColumn(name = "tasks", referencedColumnName = "id")
+    private Set<Task> tasks;
 }

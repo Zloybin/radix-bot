@@ -1,15 +1,12 @@
 package com.arduino.telegrambot.service;
 
 import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.model.User;
+import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class UserService {

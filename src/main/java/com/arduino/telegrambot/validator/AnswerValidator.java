@@ -2,11 +2,9 @@ package com.arduino.telegrambot.validator;
 
 import com.arduino.telegrambot.converter.RadConverter;
 import com.arduino.telegrambot.enummeration.NumberSystem;
-import com.arduino.telegrambot.model.Task;
-import com.arduino.telegrambot.model.TaskResult;
+import com.arduino.telegrambot.model.RadTaskResult;
 import com.arduino.telegrambot.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +18,7 @@ public class AnswerValidator {
     @Autowired
     private final TaskRepository taskRepository;
 
-    public TaskResult validateAnswer(String task, String answer) {
+    public RadTaskResult validateAnswer(String task, String answer) {
 
 //        validateTask
 
@@ -54,21 +52,21 @@ public class AnswerValidator {
         boolean result = rightAnswer.equals(answer);
 
 
-        return TaskResult.builder()
+        return RadTaskResult.builder()
                 .result(result)
                 .userAnswer(answer)
                 .rightAnswer(rightAnswer)
                 .build();
     }
 
-    public TaskResult validatePhysAnswer(Long taskId, String answer) {
+    public RadTaskResult validatePhysAnswer(Long taskId, String answer) {
 
 //        validateTask
 
         var task = taskRepository.findById(taskId).get();
         var rightAnswer = task.getAnswer();
 
-        return TaskResult.builder()
+        return RadTaskResult.builder()
                 .result(answer.equals(rightAnswer))
                 .userAnswer(answer)
                 .rightAnswer(rightAnswer)

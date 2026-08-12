@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.model;
+package com.arduino.telegrambot.entity;
 
 import com.arduino.telegrambot.enummeration.AnswerType;
 import com.arduino.telegrambot.enummeration.TaskLevel;

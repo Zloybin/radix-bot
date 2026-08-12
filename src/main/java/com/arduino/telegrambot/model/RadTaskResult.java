@@ -7,7 +7,7 @@ import lombok.ToString;
 @Builder
 @Getter
 @ToString
-public class TaskResult {
+public class RadTaskResult {
     private boolean result;
     private String userAnswer;
     private String rightAnswer;

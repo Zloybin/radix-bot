@@ -1,20 +1,23 @@
 package com.arduino.telegrambot.service;
 
 import com.arduino.telegrambot.converter.RadConverter;
+import com.arduino.telegrambot.entity.Task;
+import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.NumberSystem;
+import com.arduino.telegrambot.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class TaskService {
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     public static final int BOUND = 129;
     private Random random = new Random();
@@ -50,5 +53,14 @@ public class TaskService {
         return sourceSys.name() + drainSys.name() + taskValue;
     }
 
+
+    public Task findById(Long id){
+        Optional<Task> optionalUsTask = taskRepository.findById(id);
+        if(optionalUsTask.isPresent()){
+            return optionalUsTask.get();
+        }else {
+            throw new IllegalArgumentException(String.format("Задания с id: %d не существует.", id));
+        }
+    }
 
 }

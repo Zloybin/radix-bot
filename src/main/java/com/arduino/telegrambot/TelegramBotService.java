@@ -31,12 +31,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private Dispatcher dispatcher;
 
-    @Autowired
-    private ResultRepository resultRepository;
-
-    @Autowired
-    private TaskService taskService;
-
     @Override
     public String getBotUsername() {
         return appProperties.getName();
@@ -49,18 +43,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
-        Task task = taskService.findById(1L);
-
-        var result = Result.builder()
-                .result(true)
-                .userAnswer("answer")
-                .task(task)
-                .build();
-
-        Result updatedResult = resultRepository.save(result);
-        System.out.println(updatedResult.getTask());
-
 
         var userRequestBuilder = UserRequest.builder();
 
@@ -80,14 +62,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
         if (!userService.existById(chatId)){
             var user = userService.buildDefaultUser(chatId);
             User save = userService.save(user);
-            System.out.println();
+            System.out.println(String.format("User с id:%d был зарегестрирован и добавлен в БД.", save.getId()));
         }
 
-        System.out.println(userService.existById(chatId));
-
-
         dispatcher.dispatch(userRequest);
-
 
     }
 }

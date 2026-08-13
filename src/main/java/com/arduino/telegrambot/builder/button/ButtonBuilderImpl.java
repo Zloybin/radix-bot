@@ -69,4 +69,20 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         button.setCallbackData("physTask");
         return button;
     }
+
+    @Override
+    public InlineKeyboardButton buildCorrectingResultTrueButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("✅");
+        button.setCallbackData("changeToTrue");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCorrectingResultFalseButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("❌");
+        button.setCallbackData("changeToFalse");
+        return button;
+    }
 }

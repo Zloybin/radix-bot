@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.validator;
 
 import com.arduino.telegrambot.converter.RadConverter;
+import com.arduino.telegrambot.entity.Result;
 import com.arduino.telegrambot.enummeration.NumberSystem;
 import com.arduino.telegrambot.model.RadTaskResult;
 import com.arduino.telegrambot.repository.TaskRepository;
@@ -59,17 +60,15 @@ public class AnswerValidator {
                 .build();
     }
 
-    public RadTaskResult validatePhysAnswer(Long taskId, String answer) {
-
-//        validateTask
+    public Result validatePhysAnswer(Long taskId, String answer) {
 
         var task = taskRepository.findById(taskId).get();
         var rightAnswer = task.getAnswer();
 
-        return RadTaskResult.builder()
+        return Result.builder()
                 .result(answer.equals(rightAnswer))
                 .userAnswer(answer)
-                .rightAnswer(rightAnswer)
+                .task(task)
                 .build();
     }
 }

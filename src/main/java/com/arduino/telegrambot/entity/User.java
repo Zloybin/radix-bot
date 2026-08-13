@@ -21,6 +21,7 @@ public class User {
     private long id;
 
     @Column
+    @Enumerated(value = EnumType.STRING)
     private UserState state;
 
     @Column
@@ -29,7 +30,7 @@ public class User {
     @Column
     private int physTask;
 
-    @OneToMany
-    @JoinColumn(name = "tasks", referencedColumnName = "id")
-    private Set<Task> tasks;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Set<Result> results;
 }

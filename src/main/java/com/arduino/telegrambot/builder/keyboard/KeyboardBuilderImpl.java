@@ -109,6 +109,32 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public InlineKeyboardMarkup buildCompletedPhysTaskMenu() {
+
+        var correctTrue = buttonBuilder.buildCorrectingResultTrueButton();
+        var correctFalse = buttonBuilder.buildCorrectingResultFalseButton();
+        var newTask = buttonBuilder.buildNewTaskButton();
+        var main = buttonBuilder.buildMainMenuButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(correctTrue);
+        row1.add(correctFalse);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(newTask);
+
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(main);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        rows.add(row3);
+
+        return new InlineKeyboardMarkup(rows);
+
+    }
 
 
 }

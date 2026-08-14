@@ -58,7 +58,7 @@ public class UserPhysAnswerHandler implements UpdateHandler {
 
         String message = engine.process("user_result_message", context);
 
-        var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
+        var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenu();
 
         user.setPhysTask(0);
         user.setState(UserState.FREE);

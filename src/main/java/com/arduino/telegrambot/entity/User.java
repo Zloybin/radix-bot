@@ -4,7 +4,7 @@ import com.arduino.telegrambot.enummeration.UserState;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -32,5 +32,5 @@ public class User {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Set<Result> results;
+    private List<Result> results;
 }

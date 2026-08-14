@@ -3,7 +3,7 @@ server:
 
 telegram:
   bot:
-    token: "1260063547:AAFhkounWyg_GhEnthttf1Zsp0UWrEHg5ck"
+    token: "8584786589:AAEwMOBQgG0mdyhdWog75oaIzECrhLzw0XQ"
     name: "arduino"
 
 arduino:

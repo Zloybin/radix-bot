@@ -40,8 +40,8 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.WAIT_USER_PHYS_ANSWER);
-        userService.save(user);
-        var taskId = user.getPhysTask();
+        var updatedUser = userService.save(user);
+        var taskId = updatedUser.getPhysTaskId();
 
         var physTask = taskRepository.findById((long) taskId).get();
 
@@ -57,7 +57,7 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
 
         var keyboard = keyboardBuilder.buildBackToMainMenu();
 
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
 
     }
 }

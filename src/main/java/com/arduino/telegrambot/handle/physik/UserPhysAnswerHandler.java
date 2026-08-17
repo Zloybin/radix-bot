@@ -45,13 +45,14 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         var userAnswer = userRequest.getRequest();
 
-        var result = answerValidator.validatePhysAnswer((long) user.getPhysTask(), userAnswer);
+        var result = answerValidator.validatePhysAnswer((long) user.getPhysTaskId(), userAnswer);
 
         resultService.save(result);
         user.getResults().add(result);
+        user.setState(UserState.FREE);
+        userService.save(user);
 
         Context context = new Context();
-
         context.setVariable("result", result.isResult());
         context.setVariable("rightAnswer", result.getTask().getAnswer());
         context.setVariable("userAnswer", result.getUserAnswer());
@@ -60,6 +61,7 @@ public class UserPhysAnswerHandler implements UpdateHandler {
 
         var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenu();
 
+        telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
         telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, message, ParseMode.HTML);
     }
 }

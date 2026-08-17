@@ -36,14 +36,13 @@ public class TaskConfirmationHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
 
-        user.setPhysTask(0);
-        user.setState(UserState.FREE);
+        user.setPhysTaskId(0);
         userService.save(user);
 
         var context = new Context();
 
-        var message = engine.process("", context);
+        var message = engine.process("confirm_phys_task_complete", context);
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard,message, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), message, keyboard, ParseMode.HTML);
     }
 }

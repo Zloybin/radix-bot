@@ -44,7 +44,7 @@ public class CancelPhysTaskHandler implements UpdateHandler {
         var physTask = taskRepository.findById((long) randomTaskId).get();
 
         var user = userService.findById(userRequest.getChatId());
-        user.setPhysTask(randomTaskId);
+        user.setPhysTaskId(randomTaskId);
 
         Context context = new Context();
         context.setVariable("title", physTask.getTitle());
@@ -54,10 +54,10 @@ public class CancelPhysTaskHandler implements UpdateHandler {
         context.setVariable("taskText", physTask.getTaskText());
         context.setVariable("pageNumber", physTask.getPageNumber());
 
-        String text = engine.process("phys_task_message", context);
+        String message = engine.process("phys_task_message", context);
 
         var keyboard = keyboardBuilder.buildPhysTaskMenu();
 
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), message, keyboard, ParseMode.HTML);
     }
 }

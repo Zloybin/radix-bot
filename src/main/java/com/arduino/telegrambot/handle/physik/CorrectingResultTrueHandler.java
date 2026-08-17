@@ -42,25 +42,31 @@ public class CorrectingResultTrueHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-        var physTask = user.getPhysTask();
+        var physTaskId = user.getPhysTaskId();
 
-        var task = taskService.findById((long) physTask);
+        var task = taskService.findById((long) physTaskId);
 
-        var results = user.getResults();
-        var actualResult = results.stream()
+        var actualResult = user.getResults().stream()
                 .filter(result -> result.getTask().getId().equals(task.getId()))
                 .findFirst();
+
         actualResult.ifPresent(result -> {
             result.setResult(true);
             resultService.save(result);
             System.out.println(String.format("Результат с id: %s был изменен на значение: true", result.getId()));
         });
 
+        user.setPhysTaskId(0);
+        userService.save(user);
+
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
+
         var context = new Context();
         context.setVariable("id", task.getId());
+        context.setVariable("result", "true");
+
         String message = engine.process("success_correct", context);
 
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, message, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), message, keyboard, ParseMode.HTML);
     }
 }

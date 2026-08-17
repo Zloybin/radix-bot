@@ -47,10 +47,14 @@ public class TelegramBotService extends TelegramLongPollingBot {
         var userRequestBuilder = UserRequest.builder();
 
         if (update.hasMessage() && update.getMessage().hasText()) {
-            userRequestBuilder.chatId(update.getMessage().getChatId())
+            userRequestBuilder
+                    .chatId(update.getMessage().getChatId())
+                    .messageId(update.getMessage().getMessageId())
                     .request(update.getMessage().getText());
         } else if (update.hasCallbackQuery()) {
-            userRequestBuilder.chatId(update.getCallbackQuery().getMessage().getChatId())
+            userRequestBuilder
+                    .chatId(update.getCallbackQuery().getMessage().getChatId())
+                    .messageId(update.getCallbackQuery().getMessage().getMessageId())
                     .request(update.getCallbackQuery().getData());
         } else {
             throw new RuntimeException("Неисправное состояние объекта класса update.");

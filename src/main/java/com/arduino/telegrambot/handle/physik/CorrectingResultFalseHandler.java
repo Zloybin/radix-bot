@@ -8,10 +8,12 @@ import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+@Component
 public class CorrectingResultFalseHandler implements UpdateHandler {
 
     @Autowired
@@ -40,7 +42,7 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-        var physTask = user.getPhysTask();
+        var physTask = user.getPhysTaskId();
         var task = taskService.findById((long) physTask);
         var results = user.getResults();
         var actualResult = results.stream()
@@ -52,11 +54,16 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
             System.out.println(String.format("Результат с id: %s был изменен на значение: false", result.getId()));
         });
 
+        user.setPhysTaskId(0);
+        userService.save(user);
+
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
+
         var context = new Context();
         context.setVariable("id", task.getId());
+        context.setVariable("result", "false");
         String message = engine.process("success_correct", context);
 
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, message, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), message, keyboard, ParseMode.HTML);
     }
 }

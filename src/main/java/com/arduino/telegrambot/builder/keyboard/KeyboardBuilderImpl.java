@@ -129,7 +129,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
-        rows.add(row1);
+        rows.add(row2);
         rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
@@ -138,7 +138,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildCompletedPhysTaskMenu() {
-        var newTask = buttonBuilder.buildNewTaskButton();
+        var newTask = buttonBuilder.buildNewPhysTaskButton();
         var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
@@ -148,6 +148,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row2.add(main);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
         rows.add(row2);
 
         return new InlineKeyboardMarkup(rows);

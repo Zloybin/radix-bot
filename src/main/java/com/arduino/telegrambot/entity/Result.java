@@ -19,6 +19,8 @@ public class Result {
 
     @Column
     private boolean result;
+
+    @Column
     private String userAnswer;
 
     @ManyToOne

@@ -46,12 +46,15 @@ public class RadConverterHandler implements UpdateHandler {
 
         String task;
         String template;
+
         switch (user.getState()) {
             case UserState.FREE ->  {
                 task = taskService.generateTask();
                 template = "task";
+
                 user.setState(UserState.TASK);
                 user.setTask(task);
+                userService.save(user);
             }
             case UserState.TASK -> {
                 task = user.getTask();
@@ -64,7 +67,6 @@ public class RadConverterHandler implements UpdateHandler {
 
 
         Context context = new Context();
-
         context.setVariable("source", NumberSystem.valueOf(task.substring(0, 3)).getTitle());
         context.setVariable("drain", NumberSystem.valueOf(task.substring(3, 6)).getTitle());
         context.setVariable("task", task.substring(6));

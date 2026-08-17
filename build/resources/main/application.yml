@@ -6,10 +6,6 @@ telegram:
     token: "1260063547:AAFhkounWyg_GhEnthttf1Zsp0UWrEHg5ck"
     name: "arduino"
 
-arduino:
-  port: "/dev/tty.usbserial-10"
-  baud-rate: 9600
-
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/demo_db

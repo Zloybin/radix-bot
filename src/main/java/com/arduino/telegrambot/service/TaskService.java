@@ -63,4 +63,12 @@ public class TaskService {
         }
     }
 
+
+    public long count() {
+        return taskRepository.count();
+    }
+
+    public int getRandomPhysTaskId(){
+        return new Random().nextInt((int) count());
+    }
 }

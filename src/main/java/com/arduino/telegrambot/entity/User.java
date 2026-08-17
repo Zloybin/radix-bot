@@ -28,7 +28,7 @@ public class User {
     private String task;
 
     @Column
-    private int physTask;
+    private int physTaskId;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

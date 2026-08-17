@@ -114,22 +114,22 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var correctTrue = buttonBuilder.buildCorrectingResultTrueButton();
         var correctFalse = buttonBuilder.buildCorrectingResultFalseButton();
-        var newTask = buttonBuilder.buildNewTaskButton();
+        var confirmButton = buttonBuilder.buildTaskConfirmationButton();
         var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(correctTrue);
-        row1.add(correctFalse);
+        row1.add(confirmButton);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(newTask);
+        row2.add(correctTrue);
+        row2.add(correctFalse);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(main);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
-        rows.add(row2);
+        rows.add(row1);
         rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);

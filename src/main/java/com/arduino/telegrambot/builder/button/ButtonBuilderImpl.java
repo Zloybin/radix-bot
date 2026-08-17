@@ -85,4 +85,12 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         button.setCallbackData("changeToFalse");
         return button;
     }
+
+    @Override
+    public InlineKeyboardButton buildTaskConfirmationButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Подтвердить прохождение упражнения");
+        button.setCallbackData("confirmTask");
+        return button;
+    }
 }

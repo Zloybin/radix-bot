@@ -15,4 +15,5 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildNewPhysTaskButton();
     InlineKeyboardButton buildCorrectingResultTrueButton();
     InlineKeyboardButton buildCorrectingResultFalseButton();
+    InlineKeyboardButton buildTaskConfirmationButton();
 }

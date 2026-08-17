@@ -1,28 +1,17 @@
 package com.arduino.telegrambot.handle.physik;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.Result;
-import com.arduino.telegrambot.entity.Task;
-import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.ResultService;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.lang.reflect.Array;
-import java.util.List;
-import java.util.Optional;
-
-@Component
 public class CorrectingResultFalseHandler implements UpdateHandler {
 
     @Autowired
@@ -45,7 +34,7 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "changeToTrue".equals(userRequest.getRequest());
+        return "changeToFalse".equals(userRequest.getRequest());
     }
 
     @Override
@@ -58,9 +47,9 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
                 .filter(result -> result.getTask().getId().equals(task.getId()))
                 .findFirst();
         actualResult.ifPresent(result -> {
-            result.setResult(true);
+            result.setResult(false);
             resultService.save(result);
-            System.out.println(String.format("Результат с id: %s был изменен на значение: true", result.getId()));
+            System.out.println(String.format("Результат с id: %s был изменен на значение: false", result.getId()));
         });
 
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();

@@ -7,6 +7,7 @@ import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.ResultService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
 import com.arduino.telegrambot.validator.AnswerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class UserPhysAnswerHandler implements UpdateHandler {
     private AnswerValidator answerValidator;
 
     @Autowired
-    private TemplateEngine engine;
+    private TemplateProcessor templateProcessor;
 
     @Autowired
     private TelegramService telegramService;
@@ -45,23 +46,17 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         var userAnswer = userRequest.getRequest();
 
-        var result = answerValidator.validatePhysAnswer((long) user.getPhysTaskId(), userAnswer);
+        var result = answerValidator.validatePhysAnswer(user.getPhysTaskId(), userAnswer);
 
         resultService.save(result);
         user.getResults().add(result);
         user.setState(UserState.FREE);
         userService.save(user);
 
-        Context context = new Context();
-        context.setVariable("result", result.isResult());
-        context.setVariable("rightAnswer", result.getTask().getAnswer());
-        context.setVariable("userAnswer", result.getUserAnswer());
-
-        String message = engine.process("user_result_message", context);
-
+        var text = templateProcessor.processUserResultMessageTemplate(result.isResult(), result.getTask().getAnswer(), result.getUserAnswer());
         var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenu();
 
         telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, message, ParseMode.HTML);
+        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
     }
 }

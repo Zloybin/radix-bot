@@ -15,18 +15,20 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildRadConverterStartButton() {
+    public InlineKeyboardButton buildBackToMainMenuButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Конверт. систем счисления");
-        button.setCallbackData("radConverter");
+        button.setText("Назад в главное меню");
+        button.setCallbackData("backToMainMenu");
         return button;
     }
 
+    //physTask
+
     @Override
-    public InlineKeyboardButton buildGiveAnswerButton() {
+    public InlineKeyboardButton buildPhysTaskStartButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Дать ответ");
-        button.setCallbackData("giveAnswer");
+        button.setText("Задачи по физике");
+        button.setCallbackData("physTask");
         return button;
     }
 
@@ -39,34 +41,10 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildCancelTaskButton() {
-        var button = new InlineKeyboardButton();
-        button.setText("Сбросить текущее задание");
-        button.setCallbackData("cancelTask");
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildCancelTaskPhysButton() {
+    public InlineKeyboardButton buildCancelPhysTaskButton() {
         var button = new InlineKeyboardButton();
         button.setText("Сбросить текущее задание");
         button.setCallbackData("cancelPhysTask");
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildNewTaskButton() {
-        var button = new InlineKeyboardButton();
-        button.setText("Новое задание");
-        button.setCallbackData("radConverter");
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildNewPhysTaskButton() {
-        var button = new InlineKeyboardButton();
-        button.setText("Новая задача по физике");
-        button.setCallbackData("physTask");
         return button;
     }
 
@@ -87,10 +65,36 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildTaskConfirmationButton() {
+    public InlineKeyboardButton buildPhysTaskConfirmationButton() {
         var button = new InlineKeyboardButton();
         button.setText("Подтвердить прохождение упражнения");
         button.setCallbackData("confirmTask");
+        return button;
+    }
+
+    //radConverter
+
+    @Override
+    public InlineKeyboardButton buildRadConverterStartButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Задачи по системам счисления");
+        button.setCallbackData("radConverter");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildGiveAnswerButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Дать ответ");
+        button.setCallbackData("giveAnswer");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCancelTaskButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Сбросить текущее задание");
+        button.setCallbackData("cancelTask");
         return button;
     }
 }

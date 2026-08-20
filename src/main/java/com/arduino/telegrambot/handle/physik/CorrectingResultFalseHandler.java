@@ -7,6 +7,7 @@ import com.arduino.telegrambot.service.ResultService;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -32,7 +33,7 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private TemplateEngine engine;
+    private TemplateProcessor templateProcessor;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -43,13 +44,15 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
         var physTask = user.getPhysTaskId();
-        var task = taskService.findById((long) physTask);
+        var task = taskService.findById(physTask);
         var results = user.getResults();
         var actualResult = results.stream()
                 .filter(result -> result.getTask().getId().equals(task.getId()))
                 .findFirst();
+        boolean updatedResultValue = false;
+
         actualResult.ifPresent(result -> {
-            result.setResult(false);
+            result.setResult(updatedResultValue);
             resultService.save(result);
             System.out.println(String.format("Результат с id: %s был изменен на значение: false", result.getId()));
         });
@@ -58,12 +61,8 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
         userService.save(user);
 
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
+        var text = templateProcessor.processSuccessCorrectTemplate(task.getId(), updatedResultValue);
 
-        var context = new Context();
-        context.setVariable("id", task.getId());
-        context.setVariable("result", "false");
-        String message = engine.process("success_correct", context);
-
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), message, keyboard, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
     }
 }

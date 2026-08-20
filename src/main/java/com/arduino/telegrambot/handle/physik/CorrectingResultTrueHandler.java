@@ -7,6 +7,7 @@ import com.arduino.telegrambot.service.ResultService;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -32,7 +33,7 @@ public class CorrectingResultTrueHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private TemplateEngine engine;
+    private TemplateProcessor templateProcessor;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -44,14 +45,15 @@ public class CorrectingResultTrueHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         var physTaskId = user.getPhysTaskId();
 
-        var task = taskService.findById((long) physTaskId);
+        var task = taskService.findById(physTaskId);
 
         var actualResult = user.getResults().stream()
                 .filter(result -> result.getTask().getId().equals(task.getId()))
                 .findFirst();
 
+        boolean updatedResultValue = true;
         actualResult.ifPresent(result -> {
-            result.setResult(true);
+            result.setResult(updatedResultValue);
             resultService.save(result);
             System.out.println(String.format("Результат с id: %s был изменен на значение: true", result.getId()));
         });
@@ -60,13 +62,8 @@ public class CorrectingResultTrueHandler implements UpdateHandler {
         userService.save(user);
 
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
+        var text = templateProcessor.processSuccessCorrectTemplate(task.getId(), updatedResultValue);
 
-        var context = new Context();
-        context.setVariable("id", task.getId());
-        context.setVariable("result", "true");
-
-        String message = engine.process("success_correct", context);
-
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), message, keyboard, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
     }
 }

@@ -43,13 +43,13 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
         var updatedUser = userService.save(user);
         var taskId = updatedUser.getPhysTaskId();
 
-        var physTask = taskRepository.findById((long) taskId).get();
+        var physTask = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException(String.format("Задание по физике с id: %d нет в БД.", taskId)));
 
         Context context = new Context();
         context.setVariable("title", physTask.getTitle());
         context.setVariable("taskNumber", physTask.getTaskNumber());
         context.setVariable("selfTaskNumber", physTask.getSelfTaskNumber());
-        context.setVariable("taskLevel", physTask.getTaskLevel());
+        context.setVariable("taskLevel", physTask.getTaskLevel().getTitle());
         context.setVariable("taskText", physTask.getTaskText());
         context.setVariable("pageNumber", physTask.getPageNumber());
 

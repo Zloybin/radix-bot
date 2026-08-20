@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.builder.keyboard;
 
 import com.arduino.telegrambot.builder.button.ButtonBuilder;
+import com.arduino.telegrambot.builder.button.procesor.ButtonProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -15,11 +16,14 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Autowired
     private ButtonBuilder buttonBuilder;
 
+    @Autowired
+    private ButtonProcessor buttonProcessor;
+
     @Override
     public InlineKeyboardMarkup buildMainMenu() {
 
         var radConverterButton = buttonBuilder.buildRadConverterStartButton();
-        var physTaskButton = buttonBuilder.buildNewPhysTaskButton();
+        var physTaskButton = buttonBuilder.buildPhysTaskStartButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(radConverterButton);
@@ -32,6 +36,21 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         rows.add(row2);
         return new InlineKeyboardMarkup(rows);
     }
+
+    @Override
+    public InlineKeyboardMarkup buildBackToMainMenu() {
+        var main = buttonBuilder.buildMainMenuButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(main);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    //radTask
 
     @Override
     public InlineKeyboardMarkup buildRadConverterMenu() {
@@ -57,9 +76,30 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
+    public InlineKeyboardMarkup buildCompletedTaskMenu() {
+        var radTaskButton = buttonBuilder.buildRadConverterStartButton();
+        var newRadTaskButton = buttonProcessor.renameButton(radTaskButton, "Новое задание по сист. счисления");
+        var main = buttonBuilder.buildMainMenuButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(newRadTaskButton);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(main);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    //physTask
+
+    @Override
     public InlineKeyboardMarkup buildPhysTaskMenu() {
         var accept = buttonBuilder.buildGiveAnswerPhysButton();
-        var cancel = buttonBuilder.buildCancelTaskPhysButton();
+        var cancel = buttonBuilder.buildCancelPhysTaskButton();
         var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
@@ -79,42 +119,11 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildBackToMainMenu() {
-        var main = buttonBuilder.buildMainMenuButton();
-
-        var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(main);
-
-        var rows = new ArrayList<List<InlineKeyboardButton>>();
-        rows.add(row1);
-
-        return new InlineKeyboardMarkup(rows);
-    }
-
-    @Override
-    public InlineKeyboardMarkup buildCompletedTaskMenu() {
-        var newTask = buttonBuilder.buildNewTaskButton();
-        var main = buttonBuilder.buildMainMenuButton();
-
-        var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(newTask);
-
-        var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(main);
-
-        var rows = new ArrayList<List<InlineKeyboardButton>>();
-        rows.add(row1);
-        rows.add(row2);
-
-        return new InlineKeyboardMarkup(rows);
-    }
-
-    @Override
     public InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenu() {
 
         var correctTrue = buttonBuilder.buildCorrectingResultTrueButton();
         var correctFalse = buttonBuilder.buildCorrectingResultFalseButton();
-        var confirmButton = buttonBuilder.buildTaskConfirmationButton();
+        var confirmButton = buttonBuilder.buildPhysTaskConfirmationButton();
         var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
@@ -138,7 +147,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildCompletedPhysTaskMenu() {
-        var newTask = buttonBuilder.buildNewPhysTaskButton();
+        var newTask = buttonBuilder.buildPhysTaskStartButton();
         var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();

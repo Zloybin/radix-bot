@@ -6,6 +6,7 @@ import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
 import com.arduino.telegrambot.validator.AnswerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,7 @@ public class UserAnswerHandler implements UpdateHandler {
     private AnswerValidator answerValidator;
 
     @Autowired
-    private TemplateEngine engine;
+    private TemplateProcessor templateProcessor;
 
     @Autowired
     private TelegramService telegramService;
@@ -43,17 +44,12 @@ public class UserAnswerHandler implements UpdateHandler {
 
         var result = answerValidator.validateAnswer(user.getTask(), userAnswer);
 
-        Context context = new Context();
-
-        context.setVariable("result", result.isResult());
-        context.setVariable("rightAnswer", result.getRightAnswer());
-        context.setVariable("userAnswer", result.getUserAnswer());
-        String message = engine.process("user_result_message", context);
-
-        var keyboard = keyboardBuilder.buildCompletedTaskMenu();
         user.setState(UserState.FREE);
         userService.save(user);
 
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, message, ParseMode.HTML);
+        var text = templateProcessor.processUserResultMessageTemplate(result.isResult(), result.getRightAnswer(), result.getUserAnswer());
+        var keyboard = keyboardBuilder.buildCompletedTaskMenu();
+
+        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
     }
 }

@@ -23,7 +23,7 @@ public class Task {
     private String title;
 
     @Column(name = "task_number", nullable = false)
-    private int taskNumber;
+    private long taskNumber;
 
     @Column(name = "self_task_number", nullable = false)
     private int selfTaskNumber;

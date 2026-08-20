@@ -8,6 +8,7 @@ import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -17,16 +18,11 @@ import org.thymeleaf.context.Context;
 @Component
 public class RadConverterHandler implements UpdateHandler {
 
-    private final String handlerCallback = "radConverter";
-
-    @Autowired
-    private TaskService taskService;
-
     @Autowired
     private UserService userService;
 
     @Autowired
-    private TemplateEngine engine;
+    private TemplateProcessor templateProcessor;
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
@@ -37,42 +33,19 @@ public class RadConverterHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return handlerCallback.equals(userRequest.getRequest());
+        return "radConverter".equals(userRequest.getRequest());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
+        String task = user.getTask();
 
-        String task;
-        String template;
+        String source = NumberSystem.valueOf(task.substring(0, 3)).getTitle();
+        String target = NumberSystem.valueOf(task.substring(3, 6)).getTitle();
+        String taskNumber = task.substring(6);
 
-        switch (user.getState()) {
-            case UserState.FREE ->  {
-                task = taskService.generateTask();
-                template = "task";
-
-                user.setState(UserState.TASK);
-                user.setTask(task);
-                userService.save(user);
-            }
-            case UserState.TASK -> {
-                task = user.getTask();
-                template = "uncompleted_task";
-            }
-
-            default -> throw new RuntimeException("Неопределнное значение статуса пользователя.");
-        }
-
-
-
-        Context context = new Context();
-        context.setVariable("source", NumberSystem.valueOf(task.substring(0, 3)).getTitle());
-        context.setVariable("drain", NumberSystem.valueOf(task.substring(3, 6)).getTitle());
-        context.setVariable("task", task.substring(6));
-
-        String text = engine.process(template, context);
-
+        var text = templateProcessor.processRadTaskTemplate(source, target, taskNumber);
         var keyboard = keyboardBuilder.buildRadConverterMenu();
 
         telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);

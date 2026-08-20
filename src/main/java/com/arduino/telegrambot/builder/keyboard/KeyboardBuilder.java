@@ -5,10 +5,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 public interface KeyboardBuilder {
     InlineKeyboardMarkup buildMainMenu();
-    InlineKeyboardMarkup buildRadConverterMenu();
-    InlineKeyboardMarkup buildPhysTaskMenu();
     InlineKeyboardMarkup buildBackToMainMenu();
+
+    //radTask
+    InlineKeyboardMarkup buildRadConverterMenu();
     InlineKeyboardMarkup buildCompletedTaskMenu();
+
+    //physTask
+    InlineKeyboardMarkup buildPhysTaskMenu();
     InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenu();
     InlineKeyboardMarkup buildCompletedPhysTaskMenu();
 

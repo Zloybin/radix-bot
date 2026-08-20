@@ -7,6 +7,7 @@ import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -23,7 +24,7 @@ public class CancelTaskHandler implements UpdateHandler {
     private UserService userService;
 
     @Autowired
-    private TemplateEngine engine;
+    private TemplateProcessor templateProcessor;
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
@@ -42,13 +43,11 @@ public class CancelTaskHandler implements UpdateHandler {
         var task = taskService.generateTask();
         user.setTask(task);
 
-        Context context = new Context();
+        String source = NumberSystem.valueOf(task.substring(0, 3)).getTitle();
+        String target = NumberSystem.valueOf(task.substring(3, 6)).getTitle();
+        String taskNumber = task.substring(6);
 
-        context.setVariable("source", NumberSystem.valueOf(task.substring(0, 3)).getTitle());
-        context.setVariable("drain", NumberSystem.valueOf(task.substring(3, 6)).getTitle());
-        context.setVariable("task", task.substring(6));
-
-        String text = engine.process("task", context);
+        var text = templateProcessor.processRadTaskTemplate(source, target, taskNumber);
 
         var keyboard = keyboardBuilder.buildRadConverterMenu();
 

@@ -6,6 +6,7 @@ import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.repository.TaskRepository;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -24,7 +25,7 @@ public class CancelPhysTaskHandler implements UpdateHandler {
     private UserService userService;
 
     @Autowired
-    private TemplateEngine engine;
+    private TemplateProcessor templateProcessor;
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
@@ -40,24 +41,24 @@ public class CancelPhysTaskHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
 
-        int randomTaskId = new Random().nextInt((int) taskRepository.count());
-        var physTask = taskRepository.findById((long) randomTaskId).get();
+        long randomTaskId = new Random().nextLong(taskRepository.count());
+        var physTask = taskRepository.findById(randomTaskId).get();
 
         var user = userService.findById(userRequest.getChatId());
         user.setPhysTaskId(randomTaskId);
+        userService.save(user);
 
-        Context context = new Context();
-        context.setVariable("title", physTask.getTitle());
-        context.setVariable("taskNumber", physTask.getTaskNumber());
-        context.setVariable("selfTaskNumber", physTask.getSelfTaskNumber());
-        context.setVariable("taskLevel", physTask.getTaskLevel());
-        context.setVariable("taskText", physTask.getTaskText());
-        context.setVariable("pageNumber", physTask.getPageNumber());
+        var title = physTask.getTitle();
+        var taskNumber = physTask.getTaskNumber();
+        var selfTaskNumber = physTask.getSelfTaskNumber();
+        var taskLevel = physTask.getTaskLevel().getTitle();
+        var taskText = physTask.getTaskText();
+        var pageNumber = physTask.getPageNumber();
 
-        String message = engine.process("phys_task_message", context);
+        var text = templateProcessor.processPhysTaskTemplate(title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
 
         var keyboard = keyboardBuilder.buildPhysTaskMenu();
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), message, keyboard, ParseMode.HTML);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
     }
 }

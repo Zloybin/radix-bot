@@ -39,7 +39,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildBackToMainMenu() {
-        var main = buttonBuilder.buildMainMenuButton();
+        var main = buttonBuilder.buildBackToMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(main);
@@ -98,23 +98,28 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildPhysTaskMenu() {
+        var openSource = buttonBuilder.buildOpenSourceFileButton();
         var accept = buttonBuilder.buildGiveAnswerPhysButton();
         var cancel = buttonBuilder.buildCancelPhysTaskButton();
         var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(accept);
+        row1.add(openSource);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(cancel);
+        row2.add(accept);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(main);
+        row3.add(cancel);
+
+        var row4 = new ArrayList<InlineKeyboardButton>();
+        row4.add(main);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
         return new InlineKeyboardMarkup(rows);
     }
 

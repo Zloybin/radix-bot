@@ -10,7 +10,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildMainMenuButton() {
         var button = new InlineKeyboardButton();
         button.setText("Главное меню");
-        button.setCallbackData("/start");
+        button.setCallbackData(" start");
         return button;
     }
 
@@ -29,6 +29,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var button = new InlineKeyboardButton();
         button.setText("Задачи по физике");
         button.setCallbackData("physTask");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildOpenSourceFileButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83D\uDCD6");
+        button.setUrl("https://drive.google.com/file/d/1xJ_ywA8fZktF9U_N-iDKmL5wavw-GlDV/view?usp=sharing");
         return button;
     }
 

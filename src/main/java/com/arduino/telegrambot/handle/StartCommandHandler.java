@@ -7,12 +7,12 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.TemplateEngine;
+
+import java.util.List;
 
 @Component
 public class StartCommandHandler implements UpdateHandler {
-    private final String handlerCallback = "/start";
+    private final List<String> handlerCallbacks = List.of("/start", "start");
 
     @Autowired
     private TemplateProcessor templateProcessor;
@@ -27,7 +27,7 @@ public class StartCommandHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return handlerCallback.equals(userRequest.getRequest());
+        return handlerCallbacks.contains(userRequest.getRequest());
     }
 
     @Override
@@ -36,6 +36,10 @@ public class StartCommandHandler implements UpdateHandler {
         var text = templateProcessor.processGreetingsTemplate();
         var keyboard = keyboardBuilder.buildMainMenu();
 
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+        if ("/start".equals(userRequest.getRequest())) {
+            telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+        } else {
+            telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        }
     }
 }

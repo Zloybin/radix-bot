@@ -10,6 +10,7 @@ public interface ButtonBuilder {
 
     //physTask
     InlineKeyboardButton buildPhysTaskStartButton();
+    InlineKeyboardButton buildOpenSourceFileButton();
     InlineKeyboardButton buildGiveAnswerPhysButton();
     InlineKeyboardButton buildCancelPhysTaskButton();
     InlineKeyboardButton buildCorrectingResultTrueButton();

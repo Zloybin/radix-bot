@@ -53,7 +53,6 @@ public class TaskService {
         return sourceSys.name() + drainSys.name() + taskValue;
     }
 
-
     public Task findById(Long id){
         Optional<Task> optionalUsTask = taskRepository.findById(id);
         if(optionalUsTask.isPresent()){
@@ -62,7 +61,6 @@ public class TaskService {
             throw new IllegalArgumentException(String.format("Задания с id: %d не существует.", id));
         }
     }
-
 
     public long count() {
         return taskRepository.count();

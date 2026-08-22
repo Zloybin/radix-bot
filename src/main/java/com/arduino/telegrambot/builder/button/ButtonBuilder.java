@@ -9,6 +9,7 @@ public interface ButtonBuilder {
 
 
     //physTask
+    InlineKeyboardButton buildPhysTaskMenuButton();
     InlineKeyboardButton buildPhysTaskStartButton();
     InlineKeyboardButton buildOpenSourceFileButton();
     InlineKeyboardButton buildGiveAnswerPhysButton();

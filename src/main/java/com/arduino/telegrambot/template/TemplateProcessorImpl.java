@@ -17,6 +17,17 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
+    public String processUserProfileTemplate(String userName, long tasksCount, long completedTaskCount) {
+        var context = new Context();
+
+        context.setVariable("userName", userName);
+        context.setVariable("tasksCount", tasksCount);
+        context.setVariable("completedTaskCount", completedTaskCount);
+
+        return engine.process("user_profile", context);
+    }
+
+    @Override
     public String processRadTaskTemplate(String source, String target, String task) {
         Context context = new Context();
         context.setVariable("source", source);

@@ -12,6 +12,7 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildCompletedTaskMenu();
 
     //physTask
+    InlineKeyboardMarkup buildPhysTaskMainMenu();
     InlineKeyboardMarkup buildPhysTaskMenu();
     InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenu();
     InlineKeyboardMarkup buildCompletedPhysTaskMenu();

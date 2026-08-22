@@ -23,7 +23,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     public InlineKeyboardMarkup buildMainMenu() {
 
         var radConverterButton = buttonBuilder.buildRadConverterStartButton();
-        var physTaskButton = buttonBuilder.buildPhysTaskStartButton();
+        var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(radConverterButton);
@@ -94,7 +94,27 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+
+
     //physTask
+
+    @Override
+    public InlineKeyboardMarkup buildPhysTaskMainMenu() {
+        var newTask = buttonBuilder.buildPhysTaskStartButton();
+        var main = buttonBuilder.buildBackToMainMenuButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(newTask);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(main);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+
+        return new InlineKeyboardMarkup(rows);
+    }
 
     @Override
     public InlineKeyboardMarkup buildPhysTaskMenu() {

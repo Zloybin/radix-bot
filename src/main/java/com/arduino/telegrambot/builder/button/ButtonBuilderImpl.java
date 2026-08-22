@@ -22,12 +22,20 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         return button;
     }
 
+    @Override
+    public InlineKeyboardButton buildPhysTaskMenuButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Задачи по физике");
+        button.setCallbackData("physTaskMenu");
+        return button;
+    }
+
     //physTask
 
     @Override
     public InlineKeyboardButton buildPhysTaskStartButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Задачи по физике");
+        button.setText("Решать задачу");
         button.setCallbackData("physTask");
         return button;
     }

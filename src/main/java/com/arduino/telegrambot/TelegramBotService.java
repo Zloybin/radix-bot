@@ -46,12 +46,19 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
         var userRequestBuilder = UserRequest.builder();
 
+        String name;
+
         if (update.hasMessage() && update.getMessage().hasText()) {
+            name = update.getMessage().getFrom().getUserName();
+
             userRequestBuilder
                     .chatId(update.getMessage().getChatId())
                     .messageId(update.getMessage().getMessageId())
                     .request(update.getMessage().getText());
+
         } else if (update.hasCallbackQuery()) {
+            name = update.getCallbackQuery().getFrom().getUserName();
+
             userRequestBuilder
                     .chatId(update.getCallbackQuery().getMessage().getChatId())
                     .messageId(update.getCallbackQuery().getMessage().getMessageId())
@@ -64,7 +71,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
         Long chatId = userRequest.getChatId();
         if (!userService.existById(chatId)){
-            var user = userService.buildDefaultUser(chatId);
+            var user = userService.buildDefaultUser(chatId, name);
             User save = userService.save(user);
             System.out.println(String.format("User с id:%d был зарегестрирован и добавлен в БД.", save.getId()));
         }

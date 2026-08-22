@@ -40,9 +40,10 @@ public class UserService {
 
     // Default user
 
-    public User buildDefaultUser(Long chatId) {
+    public User buildDefaultUser(Long chatId, String name) {
         return User.builder()
                 .id(chatId)
+                .name(name)
                 .state(UserState.FREE)
                 .build();
     }

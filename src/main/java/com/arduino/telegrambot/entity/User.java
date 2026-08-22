@@ -28,6 +28,9 @@ public class User {
     private String task;
 
     @Column
+    private String name;
+
+    @Column
     private long physTaskId;
 
     @OneToMany(fetch = FetchType.EAGER)

@@ -16,6 +16,7 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildPhysTaskMenu();
     InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenu();
     InlineKeyboardMarkup buildCompletedPhysTaskMenu();
+    InlineKeyboardMarkup buildInfoResultButton(boolean result);
 
 
 }

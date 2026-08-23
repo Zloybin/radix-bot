@@ -81,6 +81,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildInfoButton(String text) {
+        var button = new InlineKeyboardButton();
+        button.setText(text);
+        button.setCallbackData("info");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildCorrectingResultTrueButton() {
         var button = new InlineKeyboardButton();
         button.setText("✅");
@@ -99,7 +107,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildPhysTaskConfirmationButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Подтвердить прохождение упражнения");
+        button.setText("Продолжить");
         button.setCallbackData("confirmTask");
         return button;
     }

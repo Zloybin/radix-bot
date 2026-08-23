@@ -4,6 +4,7 @@ import com.arduino.telegrambot.sender.BotSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.LinkPreviewOptions;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -60,13 +61,29 @@ public class TelegramService {
     }
 
     public void editMessage(
-            Long chatId, int messageId, String text, InlineKeyboardMarkup keyboard, String parseMode) {
+            Long chatId, long messageId, String text, InlineKeyboardMarkup keyboard, String parseMode) {
 
         var editMessage = new EditMessageText();
         editMessage.setChatId(chatId);
-        editMessage.setMessageId(messageId);
+        editMessage.setMessageId((int) messageId);
         editMessage.setText(text);
         editMessage.setParseMode(parseMode);
+        editMessage.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(editMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void editKeyboard(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard) {
+
+        var editMessage = new EditMessageReplyMarkup();
+        editMessage.setChatId(chatId);
+        editMessage.setMessageId((int) messageId);
         editMessage.setReplyMarkup(keyboard);
 
         try {

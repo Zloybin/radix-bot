@@ -43,6 +43,9 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
         var updatedUser = userService.save(user);
         var taskId = updatedUser.getPhysTaskId();
 
+        user.setMessageId(userRequest.getMessageId());
+        userService.save(user);
+
         var physTask = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException(String.format("Задание по физике с id: %d нет в БД.", taskId)));
 
         Context context = new Context();

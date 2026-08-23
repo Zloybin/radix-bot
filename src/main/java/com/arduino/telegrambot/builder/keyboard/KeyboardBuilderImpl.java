@@ -162,7 +162,6 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var correctTrue = buttonBuilder.buildCorrectingResultTrueButton();
         var correctFalse = buttonBuilder.buildCorrectingResultFalseButton();
         var confirmButton = buttonBuilder.buildPhysTaskConfirmationButton();
-        var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(confirmButton);
@@ -171,13 +170,9 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row2.add(correctTrue);
         row2.add(correctFalse);
 
-        var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(main);
-
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
-        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
 
@@ -186,17 +181,33 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildCompletedPhysTaskMenu() {
         var newTask = buttonBuilder.buildPhysTaskStartButton();
-        var main = buttonBuilder.buildMainMenuButton();
+        var backToPhysTaskMenu = buttonBuilder.buildPhysTaskMenuButton();
+        var renamedBackButton = buttonProcessor.renameButton(backToPhysTaskMenu, "Осн. меню");
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(newTask);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(main);
+        row2.add(renamedBackButton);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildInfoResultButton(boolean result) {
+
+        var text = result ? "\uD83D\uDFE9 Успешно выполнено \uD83D\uDFE9" : "\uD83D\uDFE5 Провалено \uD83D\uDFE5";
+        var infoButton = buttonBuilder.buildInfoButton(text);
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(infoButton);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
 
         return new InlineKeyboardMarkup(rows);
     }

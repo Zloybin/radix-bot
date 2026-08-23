@@ -30,6 +30,9 @@ public class RadConverterHandler implements UpdateHandler {
     @Autowired
     private TelegramService telegramService;
 
+    @Autowired
+    private TaskService taskService;
+
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -39,11 +42,24 @@ public class RadConverterHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
+
         String task = user.getTask();
 
-        String source = NumberSystem.valueOf(task.substring(0, 3)).getTitle();
-        String target = NumberSystem.valueOf(task.substring(3, 6)).getTitle();
-        String taskNumber = task.substring(6);
+        if (task == null) {
+            throw new RuntimeException("radTask = null");
+        }
+
+        String taskValue;
+
+        if(task.equals("")) {
+            taskValue = taskService.generateTask();
+        }else{
+            taskValue = task;
+        }
+
+        String source = NumberSystem.valueOf(taskValue.substring(0, 3)).getTitle();
+        String target = NumberSystem.valueOf(taskValue.substring(3, 6)).getTitle();
+        String taskNumber = taskValue.substring(6);
 
         var text = templateProcessor.processRadTaskTemplate(source, target, taskNumber);
         var keyboard = keyboardBuilder.buildRadConverterMenu();

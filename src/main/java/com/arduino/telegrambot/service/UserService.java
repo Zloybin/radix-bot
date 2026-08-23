@@ -44,7 +44,9 @@ public class UserService {
         return User.builder()
                 .id(chatId)
                 .name(name)
+                .messageId(0)
                 .state(UserState.FREE)
+                .task("")
                 .build();
     }
 }

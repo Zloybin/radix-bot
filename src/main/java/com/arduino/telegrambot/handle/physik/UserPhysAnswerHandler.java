@@ -12,6 +12,7 @@ import com.arduino.telegrambot.validator.AnswerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -54,8 +55,11 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         userService.save(user);
 
         var text = templateProcessor.processUserResultMessageTemplate(result.isResult(), result.getTask().getAnswer(), result.getUserAnswer());
-        var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenu();
 
+        var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenu();
+        var infoButton = keyboardBuilder.buildInfoResultButton(result.isResult());
+
+        telegramService.editKeyboard(userRequest.getChatId(), (int) user.getMessageId(), infoButton);
         telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
         telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
     }

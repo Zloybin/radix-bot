@@ -37,6 +37,7 @@ public class TaskConfirmationHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
 
+        user.setMessageId(0);
         user.setPhysTaskId(0);
         userService.save(user);
 

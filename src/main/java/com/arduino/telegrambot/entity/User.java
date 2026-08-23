@@ -33,6 +33,9 @@ public class User {
     @Column
     private long physTaskId;
 
+    @Column
+    private long messageId;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Result> results;

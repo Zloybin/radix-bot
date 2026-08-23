@@ -83,6 +83,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildAskAiButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83E\uDDE0 Спроси ИИ");
+        button.setCallbackData("askAi");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildCorrectingResultTrueButton() {
         var button = new InlineKeyboardButton();
         button.setText("✅");

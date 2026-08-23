@@ -145,6 +145,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildPhysTaskMenu() {
         var accept = buttonBuilder.buildGiveAnswerPhysButton();
+        var askAi = buttonBuilder.buildAskAiButton();
         var cancel = buttonBuilder.buildCancelPhysTaskButton();
         var openSource = buttonBuilder.buildOpenSourceFileButton();
         var back = buttonBuilder.buildPhysTaskMenuButton();
@@ -156,16 +157,20 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row1.add(accept);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(cancel);
+        row2.add(askAi);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(renamedBack);
-        row3.add(openSource);
+        row3.add(cancel);
+
+        var row4 = new ArrayList<InlineKeyboardButton>();
+        row4.add(renamedBack);
+        row4.add(openSource);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
 
         return new InlineKeyboardMarkup(rows);
     }

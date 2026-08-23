@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.config;
 
+import com.google.genai.Client;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.TemplateEngine;
@@ -21,4 +22,11 @@ public class AppConfig {
         engine.setTemplateResolver(resolver);
         return engine;
     }
+
+    @Bean
+    public Client client() {
+        return Client.builder()
+                .build();
+    }
+
 }

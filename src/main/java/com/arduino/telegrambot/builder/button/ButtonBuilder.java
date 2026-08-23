@@ -19,6 +19,7 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildCorrectingResultFalseButton();
     InlineKeyboardButton buildPhysTaskConfirmationButton();
     InlineKeyboardButton buildInfoButton(String text);
+    InlineKeyboardButton buildAskAiButton();
 
 
     //radConverter

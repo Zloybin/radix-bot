@@ -50,6 +50,19 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
+    public String processPhysTaskWithAiTemplate(String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber, String aiAnswer) {
+        var context = new Context();
+        context.setVariable("title", title);
+        context.setVariable("taskNumber", taskNumber);
+        context.setVariable("selfTaskNumber", selfNumber);
+        context.setVariable("taskLevel", taskLevel);
+        context.setVariable("taskText", taskText);
+        context.setVariable("pageNumber", pageNumber);
+        context.setVariable("aiAnswer", aiAnswer);
+        return engine.process("phys_task_message_with_ai", context);
+    }
+
+    @Override
     public String processSuccessCorrectTemplate(long taskId, boolean result) {
         var context = new Context();
         context.setVariable("id", taskId);

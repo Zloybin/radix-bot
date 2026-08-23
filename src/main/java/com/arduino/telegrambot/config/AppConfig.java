@@ -1,5 +1,7 @@
 package com.arduino.telegrambot.config;
 
+import com.arduino.telegrambot.ai.GroqLLMService;
+import com.arduino.telegrambot.ai.LLMService;
 import com.google.genai.Client;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,11 @@ public class AppConfig {
     public Client client() {
         return Client.builder()
                 .build();
+    }
+
+    @Bean
+    public LLMService llmService() {
+        return new GroqLLMService();
     }
 
 }

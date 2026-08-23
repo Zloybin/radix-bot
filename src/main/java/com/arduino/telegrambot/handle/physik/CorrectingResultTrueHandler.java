@@ -52,23 +52,26 @@ public class CorrectingResultTrueHandler implements UpdateHandler {
                 .findFirst();
 
         boolean updatedResultValue = true;
+        var infoButton = keyboardBuilder.buildInfoResultButton(updatedResultValue);
+        var infoMessageId = user.getMessageId();
         actualResult.ifPresent(result -> {
+            if (!result.isResult()) {
+                telegramService.editKeyboard(userRequest.getChatId(), infoMessageId, infoButton);
+            }
             result.setResult(updatedResultValue);
             resultService.save(result);
             System.out.println(String.format("Результат с id: %s был изменен на значение: true", result.getId()));
         });
 
-
-        var infoMessageId = user.getMessageId();
         user.setPhysTaskId(0);
         user.setMessageId(0);
         userService.save(user);
 
-        var infoButton = keyboardBuilder.buildInfoResultButton(updatedResultValue);
+
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
         var text = templateProcessor.processSuccessCorrectTemplate(task.getId(), updatedResultValue);
 
-        telegramService.editKeyboard(userRequest.getChatId(), infoMessageId, infoButton);
+
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
     }
 }

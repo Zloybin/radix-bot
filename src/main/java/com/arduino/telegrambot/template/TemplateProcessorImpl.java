@@ -50,7 +50,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processPhysTaskWithAiTemplate(String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber, String aiAnswer) {
+    public String processPhysTaskWithAiTemplate(String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber, String aiAnswer, String userAnswer) {
         var context = new Context();
         context.setVariable("title", title);
         context.setVariable("taskNumber", taskNumber);
@@ -59,7 +59,20 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("taskText", taskText);
         context.setVariable("pageNumber", pageNumber);
         context.setVariable("aiAnswer", aiAnswer);
+        context.setVariable("userAnswer", userAnswer);
         return engine.process("phys_task_message_with_ai", context);
+    }
+
+    @Override
+    public String processPhysTaskWaitAiTemplate(String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber) {
+        var context = new Context();
+        context.setVariable("title", title);
+        context.setVariable("taskNumber", taskNumber);
+        context.setVariable("selfTaskNumber", selfNumber);
+        context.setVariable("taskLevel", taskLevel);
+        context.setVariable("taskText", taskText);
+        context.setVariable("pageNumber", pageNumber);
+        return engine.process("phys_task_message_wait_ai", context);
     }
 
     @Override
@@ -79,7 +92,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     @Override
     public String processUserResultMessageTemplate(boolean result, String rightAnswer, String userAnswer) {
         Context context = new Context();
-        context.setVariable("result", result);
+        context.setVariable("result", result ? "Правильный ответ" : "Ответы не совпадают");
         context.setVariable("rightAnswer", rightAnswer);
         context.setVariable("userAnswer", userAnswer);
 

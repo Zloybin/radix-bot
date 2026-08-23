@@ -145,7 +145,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildPhysTaskMenu() {
         var accept = buttonBuilder.buildGiveAnswerPhysButton();
-        var askAi = buttonBuilder.buildAskAiButton();
+//        var askAi = buttonBuilder.buildAskAiButton();
         var cancel = buttonBuilder.buildCancelPhysTaskButton();
         var openSource = buttonBuilder.buildOpenSourceFileButton();
         var back = buttonBuilder.buildPhysTaskMenuButton();
@@ -156,8 +156,8 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(accept);
 
-        var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(askAi);
+//        var row2 = new ArrayList<InlineKeyboardButton>();
+//        row2.add(askAi);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(cancel);
@@ -168,7 +168,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
-        rows.add(row2);
+//        rows.add(row2);
         rows.add(row3);
         rows.add(row4);
 
@@ -180,18 +180,46 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var correctTrue = buttonBuilder.buildCorrectingResultTrueButton();
         var correctFalse = buttonBuilder.buildCorrectingResultFalseButton();
-        var confirmButton = buttonBuilder.buildPhysTaskConfirmationButton();
+        var askAi = buttonBuilder.buildAskAiButton();
+//        var confirmButton = buttonBuilder.buildPhysTaskConfirmationButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(confirmButton);
+        row1.add(correctTrue);
+        row1.add(correctFalse);
+
+//        var row2 = new ArrayList<InlineKeyboardButton>();
+//        row2.add(confirmButton);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(correctTrue);
-        row2.add(correctFalse);
+        row2.add(askAi);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
+//        rows.add(row2);
         rows.add(row2);
+
+        return new InlineKeyboardMarkup(rows);
+
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenuWithoutAi() {
+
+        var correctTrue = buttonBuilder.buildCorrectingResultTrueButton();
+        var correctFalse = buttonBuilder.buildCorrectingResultFalseButton();
+//        var askAi = buttonBuilder.buildAskAiButton();
+
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(correctTrue);
+        row1.add(correctFalse);
+
+//        var row2 = new ArrayList<InlineKeyboardButton>();
+//        row2.add(askAi);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+//        rows.add(row2);
 
         return new InlineKeyboardMarkup(rows);
 

@@ -53,6 +53,8 @@ public class RadConverterHandler implements UpdateHandler {
 
         if(task.equals("")) {
             taskValue = taskService.generateTask();
+            user.setTask(taskValue);
+            userService.save(user);
         }else{
             taskValue = task;
         }

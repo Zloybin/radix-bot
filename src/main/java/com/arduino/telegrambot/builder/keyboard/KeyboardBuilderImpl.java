@@ -83,9 +83,23 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
+    public InlineKeyboardMarkup buildBackToRadConverterMenu() {
+        var radConverterButton = buttonBuilder.buildRadConverterStartButton();
+        var cancelAnswer = buttonProcessor.renameButton(radConverterButton, "\uD83D\uDEAB Отменить ответ");
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(cancelAnswer);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
     public InlineKeyboardMarkup buildCompletedTaskMenu() {
         var radTaskButton = buttonBuilder.buildRadConverterStartButton();
-        var newRadTaskButton = buttonProcessor.renameButton(radTaskButton, "Новое задание по сист. счисления");
+        var newRadTaskButton = buttonProcessor.renameButton(radTaskButton, "Новое задание");
         var main = buttonBuilder.buildMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();

@@ -18,7 +18,6 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildCorrectingResultTrueButton();
     InlineKeyboardButton buildCorrectingResultFalseButton();
     InlineKeyboardButton buildPhysTaskConfirmationButton();
-    InlineKeyboardButton buildBackToPhysTaskMenuButton();
     InlineKeyboardButton buildInfoButton(String text);
 
 

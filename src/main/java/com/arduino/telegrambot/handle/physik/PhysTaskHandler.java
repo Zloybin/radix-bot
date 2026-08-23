@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.handle.physik;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TaskService;
@@ -49,11 +50,14 @@ public class PhysTaskHandler implements UpdateHandler {
 
             randomTaskId = taskService.getRandomPhysTaskId();
             user.setPhysTaskId(randomTaskId);
-            userService.save(user);
 
         } else {
             randomTaskId = user.getPhysTaskId();
         }
+
+        user.setState(UserState.FREE);
+        userService.save(user);
+
 
         var physTask = taskService.findById(randomTaskId);
 

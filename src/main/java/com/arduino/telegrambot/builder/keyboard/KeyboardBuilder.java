@@ -9,6 +9,7 @@ public interface KeyboardBuilder {
 
     //radTask
     InlineKeyboardMarkup buildRadConverterMenu();
+    InlineKeyboardMarkup buildBackToRadConverterMenu();
     InlineKeyboardMarkup buildCompletedTaskMenu();
 
     //physTask

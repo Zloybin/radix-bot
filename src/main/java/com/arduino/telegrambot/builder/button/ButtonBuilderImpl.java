@@ -10,7 +10,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildMainMenuButton() {
         var button = new InlineKeyboardButton();
         button.setText("Главное меню");
-        button.setCallbackData(" start");
+        button.setCallbackData("start");
         return button;
     }
 
@@ -72,13 +72,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         return button;
     }
 
-    @Override
-    public InlineKeyboardButton buildBackToPhysTaskMenuButton() {
-        var button = new InlineKeyboardButton();
-        button.setText("\uD83C\uDFE0 Гл. меню");
-        button.setCallbackData("physTaskMainMenu");
-        return button;
-    }
+
 
     @Override
     public InlineKeyboardButton buildInfoButton(String text) {

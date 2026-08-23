@@ -5,6 +5,7 @@ import com.arduino.telegrambot.enummeration.NumberSystem;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
+import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
@@ -27,6 +28,9 @@ public class AcceptAnswerHandler implements UpdateHandler {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TaskService taskService;
+
     @Override
     public boolean isApplicable(UserRequest userRequest) {
         return "giveAnswer".equals(userRequest.getRequest());
@@ -37,16 +41,15 @@ public class AcceptAnswerHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.WAIT_USER_RAD_ANSWER);
         userService.save(user);
-        var task = user.getTask();
+        String task = user.getTask();
 
-        String source = NumberSystem.valueOf(task.substring(0, 3)).getTitle();
-        String target = NumberSystem.valueOf(task.substring(3, 6)).getTitle();
-        String taskNumber = task.substring(6);
+        if (task == null) {
+            throw new RuntimeException("radTask must be != null and not ''.");
+        }
 
-        var text = templateProcessor.processRadTaskTemplate(source, target, taskNumber);
-        var keyboard = keyboardBuilder.buildBackToPhysTaskMenu();
+        var keyboard = keyboardBuilder.buildBackToRadConverterMenu();
 
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+        telegramService.editKeyboard(userRequest.getChatId(), userRequest.getMessageId(), keyboard);
 
     }
 }

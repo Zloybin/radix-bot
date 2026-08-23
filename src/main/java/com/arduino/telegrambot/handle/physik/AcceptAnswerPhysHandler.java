@@ -48,19 +48,19 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
 
         var physTask = taskRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException(String.format("Задание по физике с id: %d нет в БД.", taskId)));
 
-        Context context = new Context();
-        context.setVariable("title", physTask.getTitle());
-        context.setVariable("taskNumber", physTask.getTaskNumber());
-        context.setVariable("selfTaskNumber", physTask.getSelfTaskNumber());
-        context.setVariable("taskLevel", physTask.getTaskLevel().getTitle());
-        context.setVariable("taskText", physTask.getTaskText());
-        context.setVariable("pageNumber", physTask.getPageNumber());
-
-        String text = engine.process("phys_task_message", context);
+//        Context context = new Context();
+//        context.setVariable("title", physTask.getTitle());
+//        context.setVariable("taskNumber", physTask.getTaskNumber());
+//        context.setVariable("selfTaskNumber", physTask.getSelfTaskNumber());
+//        context.setVariable("taskLevel", physTask.getTaskLevel().getTitle());
+//        context.setVariable("taskText", physTask.getTaskText());
+//        context.setVariable("pageNumber", physTask.getPageNumber());
+//
+//        String text = engine.process("phys_task_message", context);
 
         var keyboard = keyboardBuilder.buildBackToPhysTaskMenu();
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editKeyboard(userRequest.getChatId(), userRequest.getMessageId(), keyboard);
 
     }
 }

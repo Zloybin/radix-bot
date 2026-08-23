@@ -55,7 +55,7 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
 
         String text = engine.process("phys_task_message", context);
 
-        var keyboard = keyboardBuilder.buildBackToMainMenu();
+        var keyboard = keyboardBuilder.buildBackToPhysTaskMenu();
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
 

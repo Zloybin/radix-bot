@@ -24,6 +24,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var radConverterButton = buttonBuilder.buildRadConverterStartButton();
         var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
+        var ankiTaskButton = buttonBuilder.buildAnkiTaskStartButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(radConverterButton);
@@ -31,18 +32,24 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row2 = new ArrayList<InlineKeyboardButton>();
         row2.add(physTaskButton);
 
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(ankiTaskButton);
+
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+        rows.add(row3);
         return new InlineKeyboardMarkup(rows);
     }
 
     @Override
-    public InlineKeyboardMarkup buildBackToMainMenu() {
-        var main = buttonBuilder.buildBackToMainMenuButton();
+    public InlineKeyboardMarkup buildBackToPhysTaskMenu() {
+        var taskMenu = buttonBuilder.buildPhysTaskStartButton();
+
+        var cancelAnswer = buttonProcessor.renameButton(taskMenu, "\uD83D\uDEAB Отменить ответ");
 
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(main);
+        row1.add(cancelAnswer);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
@@ -57,7 +64,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var accept = buttonBuilder.buildGiveAnswerButton();
         var cancel = buttonBuilder.buildCancelTaskButton();
-        var main = buttonBuilder.buildMainMenuButton();
+        var main = buttonBuilder.buildBackToMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(accept);
@@ -101,45 +108,51 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildPhysTaskMainMenu() {
         var newTask = buttonBuilder.buildPhysTaskStartButton();
+        var statistics = buttonBuilder.buildStatisticsButton();
         var main = buttonBuilder.buildBackToMainMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(newTask);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(main);
+        row2.add(statistics);
+
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(main);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
     }
 
     @Override
     public InlineKeyboardMarkup buildPhysTaskMenu() {
-        var openSource = buttonBuilder.buildOpenSourceFileButton();
         var accept = buttonBuilder.buildGiveAnswerPhysButton();
         var cancel = buttonBuilder.buildCancelPhysTaskButton();
-        var main = buttonBuilder.buildMainMenuButton();
+        var openSource = buttonBuilder.buildOpenSourceFileButton();
+        var back = buttonBuilder.buildPhysTaskMenuButton();
+
+        var renamedBack  = buttonProcessor.renameButton(back, "⬅\uFE0F Назад");
+
 
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(openSource);
+        row1.add(accept);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(accept);
+        row2.add(cancel);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(cancel);
-
-        var row4 = new ArrayList<InlineKeyboardButton>();
-        row4.add(main);
+        row3.add(renamedBack);
+        row3.add(openSource);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
-        rows.add(row4);
+
         return new InlineKeyboardMarkup(rows);
     }
 

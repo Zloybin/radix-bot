@@ -11,8 +11,6 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 @Component
 public class AcceptAnswerHandler implements UpdateHandler {
@@ -46,7 +44,7 @@ public class AcceptAnswerHandler implements UpdateHandler {
         String taskNumber = task.substring(6);
 
         var text = templateProcessor.processRadTaskTemplate(source, target, taskNumber);
-        var keyboard = keyboardBuilder.buildBackToMainMenu();
+        var keyboard = keyboardBuilder.buildBackToPhysTaskMenu();
 
         telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
 

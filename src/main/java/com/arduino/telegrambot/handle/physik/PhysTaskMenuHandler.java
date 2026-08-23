@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.handle.physik;
 
+import com.arduino.telegrambot.builder.button.procesor.ButtonProcessor;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -25,9 +26,6 @@ public class PhysTaskMenuHandler implements UpdateHandler {
 
     @Autowired
     private TelegramService telegramService;
-
-    @Autowired
-    private ResultService resultService;
 
     @Autowired
     private TemplateProcessor templateProcessor;

@@ -17,25 +17,25 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildBackToMainMenuButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Назад в главное меню");
+        button.setText("\uD83C\uDFE0 Гл. меню");
         button.setCallbackData("backToMainMenu");
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildPhysTaskMenuButton() {
-        var button = new InlineKeyboardButton();
-        button.setText("Задачи по физике");
-        button.setCallbackData("physTaskMenu");
         return button;
     }
 
     //physTask
 
     @Override
+    public InlineKeyboardButton buildPhysTaskMenuButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("⚛\uFE0F Задачи по физике");
+        button.setCallbackData("physTaskMenu");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildPhysTaskStartButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Решать задачу");
+        button.setText("\uD83D\uDCA1 Решить задачу");
         button.setCallbackData("physTask");
         return button;
     }
@@ -49,9 +49,17 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildStatisticsButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83D\uDCCA Статистика");
+        button.setCallbackData("statistics");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildGiveAnswerPhysButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Дать ответ");
+        button.setText("\uD83D\uDE4B\uD83C\uDFFB\u200D♂\uFE0F Дать ответ");
         button.setCallbackData("givePhysAnswer");
         return button;
     }
@@ -59,8 +67,16 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildCancelPhysTaskButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Сбросить текущее задание");
+        button.setText("\uD83D\uDD01 Сбросить задачу");
         button.setCallbackData("cancelPhysTask");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildBackToPhysTaskMenuButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83C\uDFE0 Гл. меню");
+        button.setCallbackData("physTaskMainMenu");
         return button;
     }
 
@@ -93,7 +109,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildRadConverterStartButton() {
         var button = new InlineKeyboardButton();
-        button.setText("Задачи по системам счисления");
+        button.setText("\uD83D\uDD22 Системы счисления");
         button.setCallbackData("radConverter");
         return button;
     }
@@ -111,6 +127,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var button = new InlineKeyboardButton();
         button.setText("Сбросить текущее задание");
         button.setCallbackData("cancelTask");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildAnkiTaskStartButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83D\uDDC3\uFE0FКарточки Anki");
+        button.setCallbackData("anki");
         return button;
     }
 }

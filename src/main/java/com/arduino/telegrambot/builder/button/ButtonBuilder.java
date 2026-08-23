@@ -12,16 +12,21 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildPhysTaskMenuButton();
     InlineKeyboardButton buildPhysTaskStartButton();
     InlineKeyboardButton buildOpenSourceFileButton();
+    InlineKeyboardButton buildStatisticsButton();
     InlineKeyboardButton buildGiveAnswerPhysButton();
     InlineKeyboardButton buildCancelPhysTaskButton();
     InlineKeyboardButton buildCorrectingResultTrueButton();
     InlineKeyboardButton buildCorrectingResultFalseButton();
     InlineKeyboardButton buildPhysTaskConfirmationButton();
+    InlineKeyboardButton buildBackToPhysTaskMenuButton();
 
 
     //radConverter
     InlineKeyboardButton buildRadConverterStartButton();
     InlineKeyboardButton buildGiveAnswerButton();
     InlineKeyboardButton buildCancelTaskButton();
+
+    //anki
+    InlineKeyboardButton buildAnkiTaskStartButton();
 
 }

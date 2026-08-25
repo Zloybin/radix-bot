@@ -11,6 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserRepository extends CrudRepository<User, Long> {
     @Modifying
     @Transactional
-    @Query("DELETE FROM User")
+    @Query(value = "UPDATE User SET is_excluded = false WHERE id = 348274937")
     void deleteFromUser();
 }

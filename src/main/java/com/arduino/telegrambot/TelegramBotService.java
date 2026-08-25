@@ -47,6 +47,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
+        userRepository.deleteFromUser();
+
         var userRequestBuilder = UserRequest.builder();
 
         String name;

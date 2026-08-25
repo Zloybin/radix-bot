@@ -6,7 +6,11 @@ import com.arduino.telegrambot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -31,6 +35,14 @@ public class UserService {
         }else {
             throw new IllegalArgumentException(String.format("Пользователя с id: %d не существует.", chatId));
         }
+    }
+
+    public List<User> getAll() {
+
+        List<User> list = new ArrayList<>();
+        Iterable<User> iterator = userRepository.findAll();
+        iterator.forEach(list::add);
+        return list;
     }
 
 //    public User findByIdOrDefault(Long chatId) {

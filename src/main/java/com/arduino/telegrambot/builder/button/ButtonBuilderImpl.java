@@ -111,7 +111,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         String check = isExclude ? "✅" : "☑️";
 
         var button = new InlineKeyboardButton();
-        button.setText(String.format("Искл. пройденные задачи %s", check));
+        button.setText(String.format("Искл. пройденные %s", check));
         button.setCallbackData("excludeCompletedTask");
         return button;
     }

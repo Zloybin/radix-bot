@@ -69,4 +69,10 @@ public class TaskService {
     public int getRandomPhysTaskId(){
         return new Random().nextInt((int) count());
     }
+
+    public Long getRandomPhysTaskId(List<Long> completedTaskIds){
+        List<Long> uncompletedTask = taskRepository.findIdsByIdIn(completedTaskIds);
+        int randomId = random.nextInt(uncompletedTask.size() - 1);
+        return uncompletedTask.get(randomId);
+    }
 }

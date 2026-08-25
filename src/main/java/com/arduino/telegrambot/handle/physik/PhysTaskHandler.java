@@ -14,6 +14,9 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class PhysTaskHandler implements UpdateHandler {
 
@@ -46,10 +49,17 @@ public class PhysTaskHandler implements UpdateHandler {
 
         var user = userService.findById(userRequest.getChatId());
 
-        if (user.getPhysTaskId() == 0) {
 
-            randomTaskId = taskService.getRandomPhysTaskId();
-            user.setPhysTaskId(randomTaskId);
+        if (user.getPhysTaskId() == 0) {
+            if (user.isExcluded()) {
+                List<Long> completedTaskIds = new ArrayList<>();
+                user.getResults().stream().map(result -> result.getTask().getId()).distinct().forEach(completedTaskIds::add);
+                randomTaskId = taskService.getRandomPhysTaskId(completedTaskIds);
+                user.setPhysTaskId(randomTaskId);
+            } else {
+                randomTaskId = taskService.getRandomPhysTaskId();
+                user.setPhysTaskId(randomTaskId);
+            }
 
         } else {
             randomTaskId = user.getPhysTaskId();

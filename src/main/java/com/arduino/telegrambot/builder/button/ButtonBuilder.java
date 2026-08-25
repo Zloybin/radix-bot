@@ -20,6 +20,9 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildPhysTaskConfirmationButton();
     InlineKeyboardButton buildInfoButton(String text);
     InlineKeyboardButton buildAskAiButton();
+    InlineKeyboardButton buildSettingButton();
+    InlineKeyboardButton buildFilterButton();
+    InlineKeyboardButton buildExcludeCompletedTaskButton(boolean isExclude);
 
 
     //radConverter

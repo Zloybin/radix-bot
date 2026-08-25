@@ -31,6 +31,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private Dispatcher dispatcher;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public String getBotUsername() {
         return appProperties.getName();

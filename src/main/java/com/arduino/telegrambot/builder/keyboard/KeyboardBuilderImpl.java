@@ -116,12 +116,12 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
 
-
     //physTask
 
     @Override
     public InlineKeyboardMarkup buildPhysTaskMainMenu() {
         var newTask = buttonBuilder.buildPhysTaskStartButton();
+        var setting = buttonBuilder.buildSettingButton();
         var statistics = buttonBuilder.buildStatisticsButton();
         var main = buttonBuilder.buildBackToMainMenuButton();
 
@@ -129,15 +129,19 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row1.add(newTask);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(statistics);
+        row2.add(setting);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(main);
+        row3.add(statistics);
+
+        var row4 = new ArrayList<InlineKeyboardButton>();
+        row4.add(main);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
 
         return new InlineKeyboardMarkup(rows);
     }
@@ -150,7 +154,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var openSource = buttonBuilder.buildOpenSourceFileButton();
         var back = buttonBuilder.buildPhysTaskMenuButton();
 
-        var renamedBack  = buttonProcessor.renameButton(back, "⬅\uFE0F Назад");
+        var renamedBack = buttonProcessor.renameButton(back, "⬅\uFE0F Назад");
 
 
         var row1 = new ArrayList<InlineKeyboardButton>();
@@ -223,6 +227,31 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         return new InlineKeyboardMarkup(rows);
 
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildSettingMenu(boolean isExclude) {
+        var exclude = buttonBuilder.buildExcludeCompletedTaskButton(isExclude);
+        var filter = buttonBuilder.buildFilterButton();
+        var physMenu = buttonBuilder.buildPhysTaskMenuButton();
+        var backToPhysMenu = buttonProcessor.renameButton(physMenu, "⬅️ Назад");
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(exclude);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(filter);
+
+
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(backToPhysMenu);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        rows.add(row3);
+
+        return new InlineKeyboardMarkup(rows);
     }
 
     @Override

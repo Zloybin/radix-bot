@@ -47,6 +47,7 @@ public class UserService {
                 .messageId(0)
                 .state(UserState.FREE)
                 .task("")
+                .isExcluded(false)
                 .build();
     }
 }

@@ -36,6 +36,9 @@ public class User {
     @Column
     private long messageId;
 
+    @Column
+    private boolean isExcluded;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Result> results;

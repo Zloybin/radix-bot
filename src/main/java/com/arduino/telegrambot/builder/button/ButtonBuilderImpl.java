@@ -91,6 +91,32 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildSettingButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("🎚️Настройки");
+        button.setCallbackData("settingPhys");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildFilterButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83D\uDD0E Фильтр");
+        button.setCallbackData("filterPhys");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildExcludeCompletedTaskButton(boolean isExclude) {
+        String check = isExclude ? "✅" : "☑️";
+
+        var button = new InlineKeyboardButton();
+        button.setText(String.format("Искл. пройденные задачи %s", check));
+        button.setCallbackData("excludeCompletedTask");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildCorrectingResultTrueButton() {
         var button = new InlineKeyboardButton();
         button.setText("✅");

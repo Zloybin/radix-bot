@@ -4,6 +4,7 @@ import com.arduino.telegrambot.converter.RadConverter;
 import com.arduino.telegrambot.entity.Task;
 import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.NumberSystem;
+import com.arduino.telegrambot.enummeration.Section;
 import com.arduino.telegrambot.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.jvnet.hk2.annotations.Service;
@@ -74,5 +75,9 @@ public class TaskService {
         List<Long> uncompletedTask = taskRepository.findIdsByIdIn(completedTaskIds);
         int randomId = random.nextInt(uncompletedTask.size() - 1);
         return uncompletedTask.get(randomId);
+    }
+
+    public int getSectionTaskCount(Section section) {
+        return taskRepository.countBySection(section);
     }
 }

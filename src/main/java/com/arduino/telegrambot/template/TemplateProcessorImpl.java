@@ -1,9 +1,12 @@
 package com.arduino.telegrambot.template;
 
+import com.arduino.telegrambot.model.SectionProgress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.util.List;
 
 @Component
 public class TemplateProcessorImpl implements TemplateProcessor{
@@ -98,6 +101,13 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("userAnswer", userAnswer);
 
         return engine.process("user_result_message", context);
+    }
+
+    @Override
+    public String processStatisticTemplate(List<SectionProgress> sectionProgresses) {
+        Context context = new Context();
+        context.setVariable("sections", sectionProgresses);
+        return engine.process("statistic", context);
     }
 
 }

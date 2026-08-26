@@ -1,0 +1,12 @@
+<b>📊 Прогресс по разделам</b>
+
+<blockquote expandable th:each="section : ${sections}">
+<b th:text="${section.section}">Механика движения</b>
+<b th:text="${section.progressBar}">🟪🟪🟪🟪🟪🟪🟪🟪🟧🟧🟧⬜⬜⬜⬜⬜⬜⬜</b>
+
+<b th:text="'Общее количество задач: ' + ${section.totalTasks}">Общее количество задач: 18</b>
+<b th:text="'Решено: ' + ${section.completedTasks}">Решено: 11</b>
+<b th:text="'Провалено: ' + ${section.failedTasks}">Провалено: 3</b>
+
+━━━━━━━━━━━━━━━━━━
+</blockquote>

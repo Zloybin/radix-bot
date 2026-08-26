@@ -57,6 +57,21 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public InlineKeyboardMarkup buildBackToPhysTaskMenuFromStatistic() {
+        var taskMenu = buttonBuilder.buildPhysTaskMenuButton();
+
+        var cancelAnswer = buttonProcessor.renameButton(taskMenu, "⬅️ Назад");
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(cancelAnswer);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
     //radTask
 
     @Override

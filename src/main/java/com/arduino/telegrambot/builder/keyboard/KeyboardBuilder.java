@@ -20,6 +20,5 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildInfoResultButton(boolean result);
     InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenuWithoutAi();
     InlineKeyboardMarkup buildSettingMenu(boolean isExclude);
-
-
+    InlineKeyboardMarkup buildBackToPhysTaskMenuFromStatistic();
 }

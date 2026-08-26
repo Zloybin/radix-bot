@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.entity;
 
 import com.arduino.telegrambot.enummeration.AnswerType;
+import com.arduino.telegrambot.enummeration.Section;
 import com.arduino.telegrambot.enummeration.TaskLevel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +19,10 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
+    @Column(name = "section")
+    @Enumerated(EnumType.STRING)
+    private Section section;
 
     @Column(name = "title", nullable = false)
     private String title;

@@ -38,8 +38,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processPhysTaskTemplate(String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber) {
+    public String processPhysTaskTemplate(String section, String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber) {
         var context = new Context();
+        context.setVariable("section", section);
         context.setVariable("title", title);
         context.setVariable("taskNumber", taskNumber);
         context.setVariable("selfTaskNumber", selfNumber);

@@ -71,6 +71,7 @@ public class PhysTaskHandler implements UpdateHandler {
 
         var physTask = taskService.findById(randomTaskId);
 
+        var section = physTask.getSection().getRussianName();
         var title = physTask.getTitle();
         var taskNumber = physTask.getTaskNumber();
         var selfTaskNumber = physTask.getSelfTaskNumber();
@@ -78,7 +79,7 @@ public class PhysTaskHandler implements UpdateHandler {
         var taskText = physTask.getTaskText();
         var pageNumber = physTask.getPageNumber();
 
-        var text = templateProcessor.processPhysTaskTemplate(title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
+        var text = templateProcessor.processPhysTaskTemplate(section, title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
 
         var keyboard = keyboardBuilder.buildPhysTaskMenu();
 

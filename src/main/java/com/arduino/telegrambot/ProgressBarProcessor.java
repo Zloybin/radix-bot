@@ -21,8 +21,8 @@ public class ProgressBarProcessor {
 
         int empty = segments - purple - orange;
 
-        return "🟪".repeat(purple)
-                + "🟧".repeat(orange)
-                + "⬜".repeat(empty);
+        return "🟧".repeat(purple)
+                + "🟪".repeat(orange)
+                + " ▪︎ ".repeat(empty);
     }
 }

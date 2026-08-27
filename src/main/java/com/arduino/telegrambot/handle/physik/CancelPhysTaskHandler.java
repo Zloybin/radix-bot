@@ -50,17 +50,18 @@ public class CancelPhysTaskHandler implements UpdateHandler {
 
         long randomTaskId;
         var user = userService.findById(userRequest.getChatId());
-        userService.save(user);
 
         if (user.isExcluded()) {
             List<Long> completedTaskIds = new ArrayList<>();
             user.getResults().stream().map(result -> result.getTask().getId()).distinct().forEach(completedTaskIds::add);
             randomTaskId = taskService.getRandomPhysTaskId(completedTaskIds);
-            user.setPhysTaskId(randomTaskId);
+
         } else {
             randomTaskId = taskService.getRandomPhysTaskId();
-            user.setPhysTaskId(randomTaskId);
+
         }
+        user.setPhysTaskId(randomTaskId);
+        userService.save(user);
 
         var physTask = taskService.findById(randomTaskId);
 

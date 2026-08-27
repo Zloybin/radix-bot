@@ -2,8 +2,6 @@ package com.arduino.telegrambot.handle.physik;
 
 import com.arduino.telegrambot.ProgressBarProcessor;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.Result;
-import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.Section;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.SectionProgress;
@@ -16,7 +14,6 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +23,6 @@ public class StatisticHandler implements UpdateHandler {
 
     @Autowired
     private TelegramService telegramService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ResultService resultService;
@@ -54,7 +48,6 @@ public class StatisticHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.findById(userRequest.getChatId());
 
         List<SectionProgress> sectionProgresses = new ArrayList<>();
         for (Section section : Section.values()){

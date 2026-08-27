@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.model;
 
-import com.arduino.telegrambot.enummeration.Section;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,18 +15,22 @@ public class SectionProgress {
     private final long totalTasks;
     private final long completedTasks;
     private final long failedTasks;
+    private final int completionPercentage;
 
     public SectionProgress(
             String section,
             String progressBar,
             long totalTasks,
             long completedTasks,
-            long failedTasks
+            long failedTasks,
+            int completionPercentage
     ) {
         this.section = section;
         this.progressBar = progressBar;
         this.totalTasks = totalTasks;
         this.completedTasks = completedTasks;
         this.failedTasks = failedTasks;
+        this.completionPercentage = completionPercentage;
+
     }
 }

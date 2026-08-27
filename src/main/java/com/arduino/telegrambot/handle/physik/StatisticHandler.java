@@ -55,6 +55,7 @@ public class StatisticHandler implements UpdateHandler {
             var completedTaskCount = resultService.getCompletedTaskInSectionFromUserCount(userRequest.getChatId(), section.name());
             var failedTaskCount = resultService.getFailedTaskInSectionFromUserCount(userRequest.getChatId(), section.name());
             var progressBar = progressBarProcessor.createProgressBar(sectionTaskCount, completedTaskCount, failedTaskCount);
+            var percentage = progressBarProcessor.calculateCompletionPercentage(sectionTaskCount, completedTaskCount, failedTaskCount);
 
             var sectionProgress = SectionProgress.builder()
                     .section(section.getRussianName())
@@ -62,6 +63,7 @@ public class StatisticHandler implements UpdateHandler {
                     .completedTasks(completedTaskCount)
                     .failedTasks(failedTaskCount)
                     .progressBar(progressBar)
+                    .completionPercentage(percentage)
                     .build();
             sectionProgresses.add(sectionProgress);
         }

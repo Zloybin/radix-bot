@@ -25,4 +25,19 @@ public class ProgressBarProcessor {
                 + "🟪".repeat(orange)
                 + " ▪︎ ".repeat(empty);
     }
+
+    public int calculateCompletionPercentage(
+            long totalTasks,
+            long completedTasks,
+            long failedTasks
+    ) {
+        if (totalTasks == 0) {
+            return 0;
+        }
+
+        return (int) Math.round(
+                (double) (completedTasks + failedTasks)
+                        / totalTasks
+                        * 100);
+    }
 }

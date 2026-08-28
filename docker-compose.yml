@@ -23,6 +23,8 @@ services:
       retries: 10
 
   app:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     build:
       context: .
       dockerfile: Dockerfile

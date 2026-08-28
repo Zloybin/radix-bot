@@ -112,6 +112,21 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public InlineKeyboardMarkup buildAnkkiAnswerKeyboard(List<String> buttons) {
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+
+        for (String button : buttons) {
+            var answerButton = buttonBuilder.buildDackNameButton(button);
+            var row = new ArrayList<InlineKeyboardButton>();
+            row.add(answerButton);
+            rows.add(row);
+        }
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
     //radTask
 
     @Override

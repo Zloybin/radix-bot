@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.template;
 
+import com.arduino.telegrambot.anki.AnkiCurrentCard;
 import com.arduino.telegrambot.model.SectionProgress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -120,6 +121,13 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     public String processDecksMenuTemplate() {
         Context context = new Context();
         return engine.process("show_decks_template", context);
+    }
+
+    @Override
+    public String processFrontCardTemplate(AnkiCurrentCard currentCard) {
+        Context context = new Context();
+        context.setVariable("Front", currentCard.question());
+        return engine.process("anki_front", context);
     }
 
 }

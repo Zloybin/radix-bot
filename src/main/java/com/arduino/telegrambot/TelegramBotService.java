@@ -36,7 +36,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private Dispatcher dispatcher;
 
     @Autowired
-    private AnkiService ankiService;
+    private UserRepository userRepository;
 
     @Override
     public String getBotUsername() {
@@ -50,6 +50,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
+        userRepository.updateUserStateConstraint();
 
         var userRequestBuilder = UserRequest.builder();
 
@@ -76,6 +78,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
         var userRequest = userRequestBuilder.build();
         System.out.println(userRequest.getChatId());
+
+
 
         Long chatId = userRequest.getChatId();
         if (!userService.existById(chatId)){

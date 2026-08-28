@@ -72,6 +72,25 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public InlineKeyboardMarkup buildAnkiMenu() {
+        var showDecks = buttonBuilder.buildShowDecksButton();
+        var backToMainMenu = buttonBuilder.buildBackToMainMenuButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(showDecks);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row1.add(backToMainMenu);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+
+        return new InlineKeyboardMarkup(rows);
+
+    }
+
     //radTask
 
     @Override

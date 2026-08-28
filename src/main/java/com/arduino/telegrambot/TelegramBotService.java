@@ -51,9 +51,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        List<String> decks = ankiService.getDecks().block();
-        System.out.println(decks);
-
         var userRequestBuilder = UserRequest.builder();
 
         String name;

@@ -173,4 +173,12 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         button.setCallbackData("anki");
         return button;
     }
+
+    @Override
+    public InlineKeyboardButton buildShowDecksButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("🗃️Показать колод");
+        button.setCallbackData("showDecks");
+        return button;
+    }
 }

@@ -21,4 +21,7 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenuWithoutAi();
     InlineKeyboardMarkup buildSettingMenu(boolean isExclude);
     InlineKeyboardMarkup buildBackToPhysTaskMenuFromStatistic();
+
+    //anki
+    InlineKeyboardMarkup buildAnkiMenu();
 }

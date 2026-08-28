@@ -110,4 +110,10 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         return engine.process("statistic", context);
     }
 
+    @Override
+    public String processAnkiUserProfileTemplate() {
+        Context context = new Context();
+        return engine.process("anki_user_profile", context);
+    }
+
 }

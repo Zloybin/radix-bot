@@ -1,6 +1,5 @@
 package com.arduino.telegrambot.template;
 
-import com.arduino.telegrambot.enummeration.Section;
 import com.arduino.telegrambot.model.SectionProgress;
 
 import java.util.List;
@@ -16,5 +15,6 @@ public interface TemplateProcessor {
     String processConfirmPhysTaskTemplate();
     String processUserResultMessageTemplate(boolean result, String rightAnswer, String userAnswer);
     String processStatisticTemplate(List<SectionProgress> sectionProgresses);
+    String processAnkiUserProfileTemplate();
 
 }

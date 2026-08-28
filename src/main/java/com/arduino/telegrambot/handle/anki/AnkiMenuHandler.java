@@ -7,6 +7,8 @@ import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
 public class AnkiMenuHandler implements UpdateHandler {
@@ -27,7 +29,10 @@ public class AnkiMenuHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
-        keyboardBuilder.buildAnkiMenu();
+        var keyboard = keyboardBuilder.buildAnkiMenu();
+        var text = templateProcessor.processAnkiUserProfileTemplate();
+
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
 
     }
 }

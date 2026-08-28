@@ -17,4 +17,5 @@ public interface TemplateProcessor {
     String processStatisticTemplate(List<SectionProgress> sectionProgresses);
     String processAnkiUserProfileTemplate();
 
+    String processDecksMenuTemplate();
 }

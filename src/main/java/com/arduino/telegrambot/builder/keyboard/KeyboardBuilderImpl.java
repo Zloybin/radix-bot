@@ -91,6 +91,27 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     }
 
+    @Override
+    public InlineKeyboardMarkup buildLDecksMenu(List<String> decks) {
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        for (String deck : decks) {
+            var row = new ArrayList<InlineKeyboardButton>();
+            var deckNameButton = buttonBuilder.buildDackNameButton(deck);
+            row.add(deckNameButton);
+            rows.add(row);
+        }
+
+
+        var ankiMenu = buttonBuilder.buildAnkiTaskStartButton();
+        buttonProcessor.renameButton(ankiMenu, "⬅️ Назад");
+        var ankiRow = new ArrayList<InlineKeyboardButton>();
+        ankiRow.add(ankiMenu);
+        rows.add(ankiRow);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
     //radTask
 
     @Override

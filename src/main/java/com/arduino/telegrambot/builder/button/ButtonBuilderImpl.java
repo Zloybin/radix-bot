@@ -3,6 +3,8 @@ package com.arduino.telegrambot.builder.button;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.util.Locale;
+
 @Component
 public class ButtonBuilderImpl implements ButtonBuilder {
 
@@ -179,6 +181,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var button = new InlineKeyboardButton();
         button.setText("🗃️Показать колод");
         button.setCallbackData("showDecks");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildDackNameButton(String deckName) {
+        var button = new InlineKeyboardButton();
+        button.setText(deckName);
+        button.setCallbackData(deckName.toLowerCase());
         return button;
     }
 }

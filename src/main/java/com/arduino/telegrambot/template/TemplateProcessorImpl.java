@@ -116,4 +116,10 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         return engine.process("anki_user_profile", context);
     }
 
+    @Override
+    public String processDecksMenuTemplate() {
+        Context context = new Context();
+        return engine.process("show_decks_template", context);
+    }
+
 }

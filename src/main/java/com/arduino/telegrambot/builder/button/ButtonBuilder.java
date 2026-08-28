@@ -33,5 +33,6 @@ public interface ButtonBuilder {
     //anki
     InlineKeyboardButton buildAnkiTaskStartButton();
     InlineKeyboardButton buildShowDecksButton();
+    InlineKeyboardButton buildDackNameButton(String deckName);
 
 }

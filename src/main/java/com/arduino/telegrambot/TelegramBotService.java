@@ -1,5 +1,6 @@
 package com.arduino.telegrambot;
 
+import com.arduino.telegrambot.anki.AnkiTestController;
 import com.arduino.telegrambot.dispatcher.Dispatcher;
 import com.arduino.telegrambot.entity.Result;
 import com.arduino.telegrambot.entity.Task;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private Dispatcher dispatcher;
 
     @Autowired
-    private UserRepository userRepository;
+    private AnkiTestController ankiTestController;
 
     @Override
     public String getBotUsername() {
@@ -46,6 +48,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
+        Mono<String> stringMono = ankiTestController.testAnki();
+        System.out.println(stringMono.block());
 
         var userRequestBuilder = UserRequest.builder();
 

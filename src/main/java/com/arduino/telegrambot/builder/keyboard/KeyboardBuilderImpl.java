@@ -104,9 +104,9 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
 
         var ankiMenu = buttonBuilder.buildAnkiTaskStartButton();
-        buttonProcessor.renameButton(ankiMenu, "⬅️ Назад");
+        var backToAnkiStartMenu = buttonProcessor.renameButton(ankiMenu, "⬅️ Назад");
         var ankiRow = new ArrayList<InlineKeyboardButton>();
-        ankiRow.add(ankiMenu);
+        ankiRow.add(backToAnkiStartMenu);
         rows.add(ankiRow);
 
         return new InlineKeyboardMarkup(rows);
@@ -123,6 +123,12 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
             row.add(answerButton);
             rows.add(row);
         }
+
+        var showDecksButton = buttonBuilder.buildShowDecksButton();
+        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
+        var row = new ArrayList<InlineKeyboardButton>();
+        row.add(backToShowDeckNames);
+        rows.add(row);
 
         return new InlineKeyboardMarkup(rows);
     }

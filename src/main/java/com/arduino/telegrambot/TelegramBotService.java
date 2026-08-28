@@ -1,5 +1,6 @@
 package com.arduino.telegrambot;
 
+import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.anki.AnkiTestController;
 import com.arduino.telegrambot.dispatcher.Dispatcher;
 import com.arduino.telegrambot.entity.Result;
@@ -18,6 +19,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -34,7 +36,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private Dispatcher dispatcher;
 
     @Autowired
-    private AnkiTestController ankiTestController;
+    private AnkiService ankiService;
 
     @Override
     public String getBotUsername() {
@@ -49,8 +51,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        Mono<String> stringMono = ankiTestController.testAnki();
-        System.out.println(stringMono.block());
+        List<String> decks = ankiService.getDecks().block();
+        System.out.println(decks);
 
         var userRequestBuilder = UserRequest.builder();
 

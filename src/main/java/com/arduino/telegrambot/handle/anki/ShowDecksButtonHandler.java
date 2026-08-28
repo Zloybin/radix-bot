@@ -2,9 +2,12 @@ package com.arduino.telegrambot.handle.anki;
 
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.entity.User;
+import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TelegramService;
+import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +21,9 @@ public class ShowDecksButtonHandler implements UpdateHandler {
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TelegramService telegramService;
@@ -35,6 +41,10 @@ public class ShowDecksButtonHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
+        var user = userService.findById(userRequest.getChatId());
+        user.setState(UserState.WAIT_DECK_NAME);
+        userService.save(user);
+
         var decks = ankiService.getDecks().block();
         var text = templateProcessor.processDecksMenuTemplate();
 

@@ -48,6 +48,8 @@ public class DeckNameHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
+        var user = userService.findById(userRequest.getChatId());
+        user.setState(UserState.FREE);
 
         var isStarted = ankiService.startStudy(userRequest.getRequest()).block();
         var isShowQuestion = ankiService.showQuestion().block();
@@ -57,6 +59,7 @@ public class DeckNameHandler implements UpdateHandler {
         var keyboard = keyboardBuilder.buildAnkkiAnswerKeyboard(buttons);
 
         var text = templateProcessor.processFrontCardTemplate(currentCard);
+
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
 

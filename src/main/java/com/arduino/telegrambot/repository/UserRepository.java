@@ -28,8 +28,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
         ADD CONSTRAINT users_state_check
         CHECK (
             state IN (
-                'START',
-                'WAIT_TASK',
+                'TASK',
+                'FREE',
+                'WAIT_USER_RAD_ANSWER',
+                'WAIT_USER_PHYS_ANSWER',
                 'WAIT_DECK_NAME'
             )
         )

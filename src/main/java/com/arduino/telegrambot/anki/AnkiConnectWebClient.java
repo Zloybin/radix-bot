@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,13 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     @Override
     public Mono<List<String>> getDeckNames() {
         return invoke("deckNames", Map.of())
-                .map(json -> json.findValuesAsText(""));
+                .map(json -> {
+                    List<String> decks = new ArrayList<>();
+                    json.elements().forEachRemaining(
+                            element -> decks.add(element.asText())
+                    );
+                    return decks;
+                });
     }
 
     @Override

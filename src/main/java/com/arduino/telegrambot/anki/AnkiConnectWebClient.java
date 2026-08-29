@@ -19,7 +19,7 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     public AnkiConnectWebClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl("http://127.0.0.1:8765")
+                .baseUrl("http://host.docker.internal:8765")
                 .build();
     }
 

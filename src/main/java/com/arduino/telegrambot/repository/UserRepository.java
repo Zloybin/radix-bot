@@ -25,6 +25,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
                 'TASK',
                 'FREE',
                 'WAIT_USER_RAD_ANSWER',
+                'WAIT_ANKI_ANSWER',
                 'WAIT_USER_PHYS_ANSWER',
                 'WAIT_DECK_NAME'
             )

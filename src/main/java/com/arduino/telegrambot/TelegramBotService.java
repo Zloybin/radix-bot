@@ -29,7 +29,12 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private UserService userService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private Dispatcher dispatcher;
+
+
 
     @Override
     public String getBotUsername() {
@@ -43,6 +48,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
+        userRepository.updateUserStateConstraint();
 
         var userRequestBuilder = UserRequest.builder();
 

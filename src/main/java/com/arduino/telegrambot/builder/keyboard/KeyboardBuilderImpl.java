@@ -133,11 +133,11 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
             rows.add(row);
         }
 
-        var showDecksButton = buttonBuilder.buildShowDecksButton();
-        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
-        var row = new ArrayList<InlineKeyboardButton>();
-        row.add(backToShowDeckNames);
-        rows.add(row);
+//        var showDecksButton = buttonBuilder.buildShowDecksButton();
+//        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
+//        var row = new ArrayList<InlineKeyboardButton>();
+//        row.add(backToShowDeckNames);
+//        rows.add(row);
 
         return new InlineKeyboardMarkup(rows);
     }

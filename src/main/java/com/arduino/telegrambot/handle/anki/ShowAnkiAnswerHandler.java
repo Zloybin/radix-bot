@@ -44,12 +44,12 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.WAIT_ANKI_ANSWER);
         userService.save(user);
-
         var currentCard = ankiService.getCurrentCard().block();
+
         var text = templateProcessor.processBackCardTemplate(currentCard);
 
         var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(currentCard.buttons());
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.MARKDOWN);
+        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.HTML);
 
     }
 }

@@ -1,10 +1,17 @@
-<b th:text="${Front}">Вопрос</b>
+<b>📝 Вопрос</b>
 
------------
+<blockquote th:text="${question}">
+    Текст вопроса
+</blockquote>
 
-<b th:text="${DisplayTags}">Теги</b>
+━━━━━━━━━━━━━━━━━━
 
------------
+💡 <b>Ответ</b>
 
-<b th:text="${Back}">Теги</b>
+<blockquote th:text="${answer}">
+    Ответ на вопрос
+</blockquote>
 
+━━━━━━━━━━━━━━━━━━
+
+🏷 <b>Теги:</b> <i th:text="${tags}">physics mechanics</i>

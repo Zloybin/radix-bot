@@ -138,8 +138,8 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("Front", question);
-        context.setVariable("DisplayTags", tags);
+        context.setVariable("question", question);
+        context.setVariable("tags", tags);
         return engine.process("anki_front", context);
     }
 
@@ -161,9 +161,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("Front", question);
-        context.setVariable("DisplayTags", tags);
-        context.setVariable("Back", answer);
+        context.setVariable("question", question);
+        context.setVariable("tags", tags);
+        context.setVariable("answer", answer);
         return engine.process("anki_back", context);
     }
 

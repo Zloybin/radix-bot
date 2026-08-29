@@ -191,4 +191,12 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         button.setCallbackData(deckName.toLowerCase());
         return button;
     }
+
+    @Override
+    public InlineKeyboardButton buildShowAnswerButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Показать ответ");
+        button.setCallbackData("showAnkiAnswer");
+        return button;
+    }
 }

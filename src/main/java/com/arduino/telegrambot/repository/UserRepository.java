@@ -12,12 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE User u SET u.state = :state WHERE u.id = :userId")
-    int updateState(@Param("userId") Long userId,
-                    @Param("state") UserState state);
-
     @Modifying
     @Transactional
     @Query(value = """

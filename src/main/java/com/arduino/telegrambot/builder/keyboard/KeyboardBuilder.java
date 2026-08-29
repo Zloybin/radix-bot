@@ -28,5 +28,6 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildAnkiMenu();
     InlineKeyboardMarkup buildLDecksMenu(List<String> decks);
 
-    InlineKeyboardMarkup buildAnkkiAnswerKeyboard(List<String> buttons);
+    InlineKeyboardMarkup buildAnkiAnswerKeyboard(List<Integer> buttons);
+    InlineKeyboardMarkup buildAnkiShowAnswerKeyboard();
 }

@@ -17,10 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @Slf4j
@@ -35,9 +31,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private Dispatcher dispatcher;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Override
     public String getBotUsername() {
         return appProperties.getName();
@@ -50,8 +43,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
-        userRepository.updateUserStateConstraint();
 
         var userRequestBuilder = UserRequest.builder();
 

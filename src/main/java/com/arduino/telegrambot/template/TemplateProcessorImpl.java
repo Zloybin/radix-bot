@@ -2,6 +2,7 @@ package com.arduino.telegrambot.template;
 
 import com.arduino.telegrambot.anki.AnkiCurrentCard;
 import com.arduino.telegrambot.model.SectionProgress;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
@@ -125,9 +126,45 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
     @Override
     public String processFrontCardTemplate(AnkiCurrentCard currentCard) {
+
+        var question = Jsoup.parse(currentCard.question())
+                .select(".question")
+                .text();
+
+
+        var tags = Jsoup.parse(currentCard.question())
+                .select(".tags")
+                .text();
+
         Context context = new Context();
-        context.setVariable("Front", currentCard.question());
+
+        context.setVariable("Front", question);
+        context.setVariable("DisplayTags", tags);
         return engine.process("anki_front", context);
+    }
+
+    @Override
+    public String processBackCardTemplate(AnkiCurrentCard currentCard) {
+
+        var question = Jsoup.parse(currentCard.question())
+                .select(".question")
+                .text();
+
+
+        var tags = Jsoup.parse(currentCard.question())
+                .select(".tags")
+                .text();
+
+        var answer = Jsoup.parse(currentCard.answer())
+                .select(".answer")
+                .text();
+
+        Context context = new Context();
+
+        context.setVariable("Front", question);
+        context.setVariable("DisplayTags", tags);
+        context.setVariable("Back", answer);
+        return engine.process("anki_back", context);
     }
 
 }

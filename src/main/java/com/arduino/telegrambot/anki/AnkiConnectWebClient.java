@@ -6,6 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     public AnkiConnectWebClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl("http://host.docker.internal:8765")
+                .baseUrl("http://127.0.0.1:8765")
                 .build();
     }
 
@@ -101,7 +102,7 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                         json.get("cardId").asLong(),
                         json.get("question").asText(),
                         json.get("answer").asText(),
-                        json.findValuesAsText("buttons"),
+                        readIntegerList(json.get("buttons")),
                         json.findValuesAsText("nextReviews")
                 ));
     }
@@ -156,10 +157,21 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
         if (error != null && !error.isNull()) {
             return Mono.error(
-                    new AnkiConnectException()
+                    new AnkiConnectException(error.asText())
             );
         }
 
         return Mono.just(response.get("result"));
+    }
+
+    private List<Integer> readIntegerList(JsonNode node) {
+
+        List<Integer> result = new ArrayList<>();
+
+        node.forEach(element ->
+                result.add(element.asInt())
+        );
+
+        return result;
     }
 }

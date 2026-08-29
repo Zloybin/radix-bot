@@ -18,6 +18,8 @@ repositories {
 
 dependencies {
 
+    implementation 'org.jsoup:jsoup:1.17.2'
+
     //AI
     implementation 'com.google.genai:google-genai:1.66.0'
 

@@ -2,6 +2,7 @@ package com.arduino.telegrambot.builder.keyboard;
 
 import com.arduino.telegrambot.builder.button.ButtonBuilder;
 import com.arduino.telegrambot.builder.button.procesor.ButtonProcessor;
+import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -81,7 +82,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row1.add(showDecks);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row1.add(backToMainMenu);
+        row2.add(backToMainMenu);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
@@ -113,12 +114,20 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildAnkkiAnswerKeyboard(List<String> buttons) {
+    public InlineKeyboardMarkup buildAnkiAnswerKeyboard(List<Integer> buttons) {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
 
-        for (String button : buttons) {
-            var answerButton = buttonBuilder.buildDackNameButton(button);
+        for (Integer button : buttons) {
+            String buttonText = "";
+            for (AnkiAnswer value : AnkiAnswer.values()) {
+                if (value.getValue() == button) {
+                    buttonText = value.name();
+                    break;
+                }
+            }
+
+            var answerButton = buttonBuilder.buildDackNameButton(buttonText);
             var row = new ArrayList<InlineKeyboardButton>();
             row.add(answerButton);
             rows.add(row);
@@ -129,6 +138,24 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row = new ArrayList<InlineKeyboardButton>();
         row.add(backToShowDeckNames);
         rows.add(row);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildAnkiShowAnswerKeyboard() {
+        var showAnswerButton = buttonBuilder.buildShowAnswerButton();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(showAnswerButton);
+
+        var showDecksButton = buttonBuilder.buildShowDecksButton();
+        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(backToShowDeckNames);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
 
         return new InlineKeyboardMarkup(rows);
     }

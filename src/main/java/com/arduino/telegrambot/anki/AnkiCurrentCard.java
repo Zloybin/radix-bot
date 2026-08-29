@@ -6,7 +6,7 @@ public record AnkiCurrentCard(
         long cardId,
         String question,
         String answer,
-        List<String> buttons,
+        List<Integer> buttons,
         List<String> nextReviews
 ) {
 }

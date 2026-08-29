@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.anki;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -19,7 +20,7 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     public AnkiConnectWebClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl("http://host.docker.internal:8765")
+                .baseUrl("http://127.0.0.1:8765")
                 .build();
     }
 
@@ -130,24 +131,32 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         return invoke(
                 "guiAnswerCard",
                 Map.of("ease", ease)
-        ).map(JsonNode::asBoolean);
+        )
+                .doOnNext(json ->
+                        System.out.println("guiAnswerCard result: " + json)
+                ).map(JsonNode::asBoolean);
     }
 
     private Mono<JsonNode> invoke(
             String action,
             Map<String, Object> params
     ) {
-
         Map<String, Object> request = Map.of(
                 "action", action,
-                "version", API_VERSION,
+                "version", 6,
                 "params", params
         );
 
+        System.out.println("ANKI REQUEST: " + request);
+
         return webClient.post()
+                .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(JsonNode.class)
+                .doOnNext(response ->
+                        System.out.println("ANKI RESPONSE: " + response)
+                )
                 .flatMap(this::handleResponse);
     }
 

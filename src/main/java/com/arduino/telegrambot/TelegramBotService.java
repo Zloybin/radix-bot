@@ -49,7 +49,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-//        userRepository.updateUserStateConstraint();
+        userRepository.updateUserStateConstraint();
 
         var userRequestBuilder = UserRequest.builder();
 

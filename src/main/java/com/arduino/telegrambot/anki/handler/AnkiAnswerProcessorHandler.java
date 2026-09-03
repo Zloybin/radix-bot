@@ -49,8 +49,6 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
                 currentCard = ankiService.answerAndGetNextCard(ankiAnswer.getIndex()).block();
                 break;
             }
-
-            throw new AnkiConnectException("Неверный индекс ответа.");
         }
 
         var user = userService.findById(userRequest.getChatId());

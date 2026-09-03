@@ -127,14 +127,10 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     @Override
     public String processFrontCardTemplate(AnkiCurrentCard currentCard) {
 
-        var question = Jsoup.parse(currentCard.question())
-                .select(".question")
-                .text();
+        var question = currentCard.question();
 
 
-        var tags = Jsoup.parse(currentCard.question())
-                .select(".tags")
-                .text();
+        var tags = currentCard.tags();
 
         Context context = new Context();
 
@@ -146,18 +142,12 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     @Override
     public String processBackCardTemplate(AnkiCurrentCard currentCard) {
 
-        var question = Jsoup.parse(currentCard.question())
-                .select(".question")
-                .text();
+        var question = currentCard.question();
 
 
-        var tags = Jsoup.parse(currentCard.question())
-                .select(".tags")
-                .text();
+        var tags = currentCard.tags();
 
-        var answer = Jsoup.parse(currentCard.answer())
-                .select(".answer")
-                .text();
+        var answer = currentCard.answer();
 
         Context context = new Context();
 

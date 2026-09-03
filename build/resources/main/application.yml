@@ -4,7 +4,7 @@ server:
 telegram:
   bot:
     token: "1260063547:AAFhkounWyg_GhEnthttf1Zsp0UWrEHg5ck"
-    name: "arduino"
+    name: "Jarvice"
 
 spring:
   datasource:
@@ -16,7 +16,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true

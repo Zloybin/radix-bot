@@ -1,9 +1,9 @@
-package com.arduino.telegrambot.anki.client;
+package com.arduino.telegrambot.anki;
 
-import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.jsoup.Jsoup;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,7 +22,7 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     public AnkiConnectWebClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl("http://host.docker.internal:8765")
+                .baseUrl("http://127.0.0.1:8765")
                 .build();
     }
 
@@ -101,12 +101,26 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     @Override
     public Mono<AnkiCurrentCard> getCurrentCard() {
         return invoke("guiCurrentCard", Map.of())
-                .map(json -> new AnkiCurrentCard(
-                        json.get("cardId").asLong(),
-                        json.get("question").asText(),
-                        json.get("answer").asText(),
-                        readIntegerList(json.get("buttons"))
-                ));
+                .map(json -> {
+
+                            var currentCard = new AnkiCurrentCard(
+                                    json.get("cardId").asLong(),
+                                    json.path("fields").path("Front").path("value").asText(),
+                                    json.path("fields")
+                                            .path("Back")
+                                            .path("value")
+                                            .asText(),
+
+                                    Jsoup.parse(
+                                                    json.path("fields").path("DisplayTags").path("value").asText()
+                                            ).select(".tag")
+                                            .eachText(),
+                                    readIntegerList(json.get("buttons")));
+
+                            System.out.println("***GET ANKI CARD:" + currentCard);
+                            return currentCard;
+                        }
+                );
     }
 
     @Override
@@ -167,10 +181,8 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .doOnNext(response ->
-                {
-                    var currentCard = new AnkiCurrentCard(Long.parseLong(response.get("chatId").asText()), response.get("question").asText(), response.get("answer").asText(), new ArrayList<Integer>());
-                    System.out.println("ANKI RESPONSE: " + currentCard);})
-
+                        System.out.println("ANKI RESPONSE: " + response)
+                )
                 .flatMap(this::handleResponse);
     }
 

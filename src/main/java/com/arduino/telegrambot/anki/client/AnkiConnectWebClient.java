@@ -105,8 +105,7 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                         json.get("cardId").asLong(),
                         json.get("question").asText(),
                         json.get("answer").asText(),
-                        readIntegerList(json.get("buttons")),
-                        json.findValuesAsText("nextReviews")
+                        readIntegerList(json.get("buttons"))
                 ));
     }
 
@@ -168,8 +167,10 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .doOnNext(response ->
-                        System.out.println("ANKI RESPONSE: " + response)
-                )
+                {
+                    var currentCard = new AnkiCurrentCard(Long.parseLong(response.get("chatId").asText()), response.get("question").asText(), response.get("answer").asText(), new ArrayList<Integer>());
+                    System.out.println("ANKI RESPONSE: " + currentCard);})
+
                 .flatMap(this::handleResponse);
     }
 

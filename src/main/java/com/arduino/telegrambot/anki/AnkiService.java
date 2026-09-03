@@ -63,20 +63,6 @@ public class AnkiService {
     }
 
     /**
-     * Запускает таймер карточки.
-     */
-    public Mono<Boolean> startCardTimer() {
-        return ankiClient.startCardTimer();
-    }
-
-    /**
-     * Показывает вопрос карточки.
-     */
-    public Mono<Boolean> showQuestion() {
-        return ankiClient.showQuestion();
-    }
-
-    /**
      * Показывает ответ карточки.
      */
     public Mono<Boolean> showAnswer() {

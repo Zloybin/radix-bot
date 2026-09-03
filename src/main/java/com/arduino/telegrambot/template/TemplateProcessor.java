@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.template;
 
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.model.SectionProgress;
 
 import java.util.List;
@@ -19,6 +20,6 @@ public interface TemplateProcessor {
     String processAnkiUserProfileTemplate();
 
     String processDecksMenuTemplate();
-    String processFrontCardTemplate(AnkiCurrentCard currentCard);
-    String processBackCardTemplate(AnkiCurrentCard currentCard);
+    String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats);
+    String processBackCardTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats);
 }

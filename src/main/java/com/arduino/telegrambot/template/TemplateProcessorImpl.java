@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.template;
 
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.model.SectionProgress;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processFrontCardTemplate(AnkiCurrentCard currentCard) {
+    public String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
 
         var question = currentCard.question();
 
@@ -134,13 +135,18 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
+        context.setVariable("newCount", ankiDeckStats.newCount());
+        context.setVariable("learnCount", ankiDeckStats.learnCount());
+        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+        context.setVariable("totalInDeck", ankiDeckStats.totalInDeck());
+
         context.setVariable("question", question);
         context.setVariable("tags", tags);
         return engine.process("anki_front", context);
     }
 
     @Override
-    public String processBackCardTemplate(AnkiCurrentCard currentCard) {
+    public String processBackCardTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats) {
 
         var question = currentCard.question();
 
@@ -150,6 +156,11 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         var answer = currentCard.answer();
 
         Context context = new Context();
+
+        context.setVariable("newCount", ankiDeckStats.newCount());
+        context.setVariable("learnCount", ankiDeckStats.learnCount());
+        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+        context.setVariable("totalInDeck", ankiDeckStats.totalInDeck());
 
         context.setVariable("question", question);
         context.setVariable("tags", tags);

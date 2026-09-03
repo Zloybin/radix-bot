@@ -3,6 +3,7 @@ package com.arduino.telegrambot.anki.handler;
 import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
@@ -13,8 +14,10 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class ShowAnkiAnswerHandler implements UpdateHandler {
@@ -57,7 +60,11 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
         List<Integer> buttons = currentCard.buttons();
         var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
 
-        var text = templateProcessor.processBackCardTemplate(currentCard);
+        var deckName = currentCard.deckName();
+        Map<String, AnkiDeckStats> deckStats = ankiService.getDeckStats(List.of(deckName)).block();
+        AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
+
+        var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckStats);
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.HTML);
 

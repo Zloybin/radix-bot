@@ -11,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,21 +79,19 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 "getDeckStats",
                 Map.of("decks", deckNames)
         ).map(json -> {
-            Map<String, AnkiDeckStats> result = new java.util.HashMap<>();
+            Map<String, AnkiDeckStats> result = new HashMap<>();
 
             json.fields().forEachRemaining(entry -> {
 
                 AnkiDeckStats stats =
                         new AnkiDeckStats(
-                                entry.getValue().get("deck_id").asLong(),
-                                entry.getValue().get("name").asText(),
                                 entry.getValue().get("new_count").asInt(),
                                 entry.getValue().get("learn_count").asInt(),
                                 entry.getValue().get("review_count").asInt(),
                                 entry.getValue().get("total_in_deck").asInt()
                         );
 
-                result.put(entry.getKey(), stats);
+                result.put(entry.getValue().get("name").asText(), stats);
             });
 
             return result;
@@ -106,12 +105,12 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
                             var currentCard = new AnkiCurrentCard(
                                     json.get("cardId").asLong(),
+                                    json.path("deckName").asText(),
                                     json.path("fields").path("Front").path("value").asText(),
                                     json.path("fields")
                                             .path("Back")
                                             .path("value")
                                             .asText(),
-
                                     Jsoup.parse(
                                                     json.path("fields").path("DisplayTags").path("value").asText()
                                             ).select(".tag")

@@ -8,6 +8,7 @@ import java.util.List;
 
 public record AnkiCurrentCard(
         long cardId,
+        String deckName,
         String question,
         String answer,
         List <String> tags,

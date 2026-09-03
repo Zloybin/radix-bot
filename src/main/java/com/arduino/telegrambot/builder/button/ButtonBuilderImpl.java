@@ -189,7 +189,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildDeckNameButton(String deckName) {
         var button = new InlineKeyboardButton();
         button.setText(deckName);
-        button.setCallbackData(deckName.toLowerCase());
+        button.setCallbackData(deckName);
         return button;
     }
 

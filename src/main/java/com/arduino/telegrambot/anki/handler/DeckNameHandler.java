@@ -3,7 +3,9 @@ package com.arduino.telegrambot.anki.handler;
 import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -13,6 +15,10 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class DeckNameHandler implements UpdateHandler {
@@ -55,7 +61,9 @@ public class DeckNameHandler implements UpdateHandler {
             throw new AnkiConnectException("Не получилось запустить режим Review.");
         }
 
-        var text = templateProcessor.processFrontCardTemplate(currentCard);
+        var deckStats = ankiService.getDeckStats(List.of(userRequest.getRequest())).block();
+        var ankiDeckStats = deckStats.get(currentCard.deckName());
+        var text = templateProcessor.processFrontCardTemplate(currentCard, ankiDeckStats);
         var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);

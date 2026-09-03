@@ -196,7 +196,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildAnkiAnswerButton(AnkiAnswer ankiAnswer) {
         var button = new InlineKeyboardButton();
-        button.setText(ankiAnswer.name());
+        button.setText(ankiAnswer.getButtonText());
         button.setCallbackData(String.valueOf(ankiAnswer.getIndex()));
         return button;
     }

@@ -24,7 +24,7 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildSettingMenu(boolean isExclude);
     InlineKeyboardMarkup buildBackToPhysTaskMenuFromStatistic();
 
-    //anki
+    //handler
     InlineKeyboardMarkup buildAnkiMenu();
     InlineKeyboardMarkup buildLDecksMenu(List<String> decks);
 

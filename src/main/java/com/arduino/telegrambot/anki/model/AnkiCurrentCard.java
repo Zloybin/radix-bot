@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.anki;
+package com.arduino.telegrambot.anki.model;
 
 import java.util.List;
 

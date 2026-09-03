@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.handle.anki;
+package com.arduino.telegrambot.anki.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handle.UpdateHandler;
@@ -8,7 +8,6 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
 public class AnkiMenuHandler implements UpdateHandler {
@@ -24,7 +23,7 @@ public class AnkiMenuHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "anki".equals(userRequest.getRequest());
+        return "handler".equals(userRequest.getRequest());
     }
 
     @Override

@@ -1,5 +1,8 @@
-package com.arduino.telegrambot.anki;
+package com.arduino.telegrambot.anki.client;
 
+import com.arduino.telegrambot.anki.AnkiConnectException;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -7,7 +10,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -137,13 +139,24 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 ).map(JsonNode::asBoolean);
     }
 
+    private List<Integer> readIntegerList(JsonNode node) {
+
+        List<Integer> result = new ArrayList<>();
+
+        node.forEach(element ->
+                result.add(element.asInt())
+        );
+
+        return result;
+    }
+
     private Mono<JsonNode> invoke(
             String action,
             Map<String, Object> params
     ) {
         Map<String, Object> request = Map.of(
                 "action", action,
-                "version", 6,
+                "version", API_VERSION,
                 "params", params
         );
 
@@ -171,16 +184,5 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         }
 
         return Mono.just(response.get("result"));
-    }
-
-    private List<Integer> readIntegerList(JsonNode node) {
-
-        List<Integer> result = new ArrayList<>();
-
-        node.forEach(element ->
-                result.add(element.asInt())
-        );
-
-        return result;
     }
 }

@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.builder.button;
 
+import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 public interface ButtonBuilder {
@@ -30,10 +31,11 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildGiveAnswerButton();
     InlineKeyboardButton buildCancelTaskButton();
 
-    //anki
+    //handler
     InlineKeyboardButton buildAnkiTaskStartButton();
     InlineKeyboardButton buildShowDecksButton();
     InlineKeyboardButton buildShowAnswerButton();
-    InlineKeyboardButton buildDackNameButton(String deckName);
+    InlineKeyboardButton buildDeckNameButton(String deckName);
+    InlineKeyboardButton buildAnkiAnswerButton(AnkiAnswer ankiAnswer);
 
 }

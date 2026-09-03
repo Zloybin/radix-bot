@@ -1,8 +1,10 @@
-package com.arduino.telegrambot.handle.anki;
+package com.arduino.telegrambot.anki.handler;
 
+import com.arduino.telegrambot.anki.AnkiConnectException;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.User;
+import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -12,21 +14,18 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-
-import java.util.List;
 
 @Component
-public class ShowDecksButtonHandler implements UpdateHandler {
-
-    @Autowired
-    private KeyboardBuilder keyboardBuilder;
+public class AnkiAnswerProcessorHandler implements UpdateHandler {
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private TelegramService telegramService;
+
+    @Autowired
+    private KeyboardBuilder keyboardBuilder;
 
     @Autowired
     private TemplateProcessor templateProcessor;
@@ -36,19 +35,33 @@ public class ShowDecksButtonHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "showDecks".equals(userRequest.getRequest());
+        var user = userService.findById(userRequest.getChatId());
+
+        return UserState.WAIT_ANKI_ANSWER.equals(user.getState());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
+
+        AnkiCurrentCard currentCard = null;
+        for (AnkiAnswer ankiAnswer : AnkiAnswer.values()) {
+            if(ankiAnswer.getIndex() == Integer.parseInt(userRequest.getRequest())){
+                currentCard = ankiService.answerAndGetNextCard(ankiAnswer.getIndex()).block();
+                break;
+            }
+
+            throw new AnkiConnectException("Неверный индекс ответа.");
+        }
+
         var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.WAIT_DECK_NAME);
+        user.setState(UserState.FREE);
         userService.save(user);
 
-        var decks = ankiService.getDecks().block();
-        var text = templateProcessor.processDecksMenuTemplate();
+        var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
 
-        var keyboard = keyboardBuilder.buildLDecksMenu(decks);
+        var text = templateProcessor.processFrontCardTemplate(currentCard);
+
+
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
 
     }

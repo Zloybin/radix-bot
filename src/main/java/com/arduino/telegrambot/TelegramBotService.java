@@ -1,16 +1,10 @@
 package com.arduino.telegrambot;
 
-import com.arduino.telegrambot.anki.AnkiService;
-import com.arduino.telegrambot.anki.AnkiTestController;
 import com.arduino.telegrambot.dispatcher.Dispatcher;
-import com.arduino.telegrambot.entity.Result;
-import com.arduino.telegrambot.entity.Task;
 import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.properties.AppProperties;
-import com.arduino.telegrambot.repository.ResultRepository;
 import com.arduino.telegrambot.repository.UserRepository;
-import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

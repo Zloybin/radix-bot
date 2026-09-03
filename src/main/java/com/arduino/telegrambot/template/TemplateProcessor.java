@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.template;
 
-import com.arduino.telegrambot.anki.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.model.SectionProgress;
 
 import java.util.List;

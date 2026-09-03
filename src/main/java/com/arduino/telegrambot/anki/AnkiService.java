@@ -1,5 +1,8 @@
 package com.arduino.telegrambot.anki;
 
+import com.arduino.telegrambot.anki.client.AnkiConnectClient;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 

@@ -1,9 +1,9 @@
-package com.arduino.telegrambot.handle.anki;
+package com.arduino.telegrambot.anki.handler;
 
-import com.arduino.telegrambot.anki.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -13,7 +13,8 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+
+import java.util.List;
 
 @Component
 public class ShowAnkiAnswerHandler implements UpdateHandler {
@@ -44,11 +45,20 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.WAIT_ANKI_ANSWER);
         userService.save(user);
-        var currentCard = ankiService.getCurrentCard().block();
+
+        AnkiCurrentCard currentCard;
+
+        if(ankiService.showAnswer().block()){
+            currentCard = ankiService.getCurrentCard().block();
+        }else{
+            throw new AnkiConnectException("Не получилось открыть ответ карточки.");
+        }
+
+        List<Integer> buttons = currentCard.buttons();
+        var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
 
         var text = templateProcessor.processBackCardTemplate(currentCard);
 
-        var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(currentCard.buttons());
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.HTML);
 
     }

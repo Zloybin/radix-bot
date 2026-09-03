@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.builder.button;
 
+import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -172,7 +173,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildAnkiTaskStartButton() {
         var button = new InlineKeyboardButton();
         button.setText("\uD83D\uDDC3\uFE0FКарточки Anki");
-        button.setCallbackData("anki");
+        button.setCallbackData("handler");
         return button;
     }
 
@@ -185,10 +186,18 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildDackNameButton(String deckName) {
+    public InlineKeyboardButton buildDeckNameButton(String deckName) {
         var button = new InlineKeyboardButton();
         button.setText(deckName);
         button.setCallbackData(deckName.toLowerCase());
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildAnkiAnswerButton(AnkiAnswer ankiAnswer) {
+        var button = new InlineKeyboardButton();
+        button.setText(ankiAnswer.name());
+        button.setCallbackData(String.valueOf(ankiAnswer.getIndex()));
         return button;
     }
 

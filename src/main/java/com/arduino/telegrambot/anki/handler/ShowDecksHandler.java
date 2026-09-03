@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.handle.anki;
+package com.arduino.telegrambot.anki.handler;
 
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 
 @Component
-public class DeckNameHandler implements UpdateHandler {
+public class ShowDecksHandler implements UpdateHandler {
+
+    @Autowired
+    private KeyboardBuilder keyboardBuilder;
 
     @Autowired
     private UserService userService;
@@ -22,41 +25,28 @@ public class DeckNameHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private KeyboardBuilder keyboardBuilder;
-
-    @Autowired
     private TemplateProcessor templateProcessor;
 
     @Autowired
     private AnkiService ankiService;
 
-
-
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        var user = userService.findById(userRequest.getChatId());
-        UserState state = user.getState();
-        return UserState.WAIT_DECK_NAME.equals(state);
+        return "showDecks".equals(userRequest.getRequest());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.FREE);
+        user.setState(UserState.WAIT_DECK_NAME);
         userService.save(user);
 
-        var isStarted = ankiService.startStudy(userRequest.getRequest()).block();
-        var currentCard = ankiService.getCurrentCard().block();
-        var isShowQuestion = ankiService.showQuestion().block();
+        var text = templateProcessor.processDecksMenuTemplate();
 
-        var buttons = currentCard.buttons();
-        var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
-
-        var text = templateProcessor.processFrontCardTemplate(currentCard);
-
+        var decks = ankiService.getDecks().block();
+        var keyboard = keyboardBuilder.buildLDecksMenu(decks);
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
-
 
     }
 }

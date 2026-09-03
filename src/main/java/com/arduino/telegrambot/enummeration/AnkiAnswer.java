@@ -7,13 +7,13 @@ public enum AnkiAnswer {
     GOOD(3),
     EASY(4);
 
-    private final int value;
+    private final int index;
 
-    AnkiAnswer(int value) {
-        this.value = value;
+    AnkiAnswer(int index) {
+        this.index = index;
     }
 
-    public int getValue() {
-        return value;
+    public int getIndex() {
+        return index;
     }
 }

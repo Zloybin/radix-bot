@@ -1,10 +1,9 @@
-package com.arduino.telegrambot.handle.anki;
+package com.arduino.telegrambot.anki.handler;
 
-import com.arduino.telegrambot.anki.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 
 @Component
-public class AnkiAnswerProcessorHandler implements UpdateHandler {
+public class DeckNameHandler implements UpdateHandler {
 
     @Autowired
     private UserService userService;
@@ -33,41 +32,34 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
     @Autowired
     private AnkiService ankiService;
 
+
+
     @Override
     public boolean isApplicable(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-
-        return UserState.WAIT_ANKI_ANSWER.equals(user.getState());
+        UserState state = user.getState();
+        return UserState.WAIT_DECK_NAME.equals(state);
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-
         var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.FREE);
         userService.save(user);
 
         AnkiCurrentCard currentCard = null;
-        for (AnkiAnswer value : AnkiAnswer.values()) {
-            if(value.name().equalsIgnoreCase(userRequest.getRequest())){
-                Boolean showAnswer = ankiService.showAnswer().block();
-                System.out.println("showAnswer: " + showAnswer);
 
-                currentCard = ankiService.answerAndGetNextCard(value.getValue()).block();
-                break;
-            }
+        if(ankiService.startStudy(userRequest.getRequest()).block()){
+            currentCard = ankiService.getCurrentCard().block();
+        }else{
+            throw new AnkiConnectException("Не получилось запустить режим Review.");
         }
 
-
-        var isStarted = ankiService.startStudy(userRequest.getRequest()).block();
-        var isShowQuestion = ankiService.showQuestion().block();
-
+        var text = templateProcessor.processFrontCardTemplate(currentCard);
         var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
 
-        var text = templateProcessor.processFrontCardTemplate(currentCard);
-
-
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+
 
     }
 }

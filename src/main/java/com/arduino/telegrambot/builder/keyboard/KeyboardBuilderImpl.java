@@ -98,7 +98,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         for (String deck : decks) {
             var row = new ArrayList<InlineKeyboardButton>();
-            var deckNameButton = buttonBuilder.buildDackNameButton(deck);
+            var deckNameButton = buttonBuilder.buildDeckNameButton(deck);
             row.add(deckNameButton);
             rows.add(row);
         }
@@ -114,30 +114,22 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildAnkiAnswerKeyboard(List<Integer> buttons) {
+    public InlineKeyboardMarkup buildAnkiAnswerKeyboard(List<Integer> buttonIndexes) {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
 
-        for (Integer button : buttons) {
-            String buttonText = "";
-            for (AnkiAnswer value : AnkiAnswer.values()) {
-                if (value.getValue() == button) {
-                    buttonText = value.name();
+        for (Integer buttonIndex : buttonIndexes) {
+            InlineKeyboardButton answerButton;
+            for (AnkiAnswer ankiAnswer : AnkiAnswer.values()) {
+                if (ankiAnswer.getIndex() == buttonIndex) {
+                    answerButton = buttonBuilder.buildAnkiAnswerButton(ankiAnswer);
+                    var row = new ArrayList<InlineKeyboardButton>();
+                    row.add(answerButton);
+                    rows.add(row);
                     break;
                 }
             }
-
-            var answerButton = buttonBuilder.buildDackNameButton(buttonText);
-            var row = new ArrayList<InlineKeyboardButton>();
-            row.add(answerButton);
-            rows.add(row);
         }
-
-//        var showDecksButton = buttonBuilder.buildShowDecksButton();
-//        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
-//        var row = new ArrayList<InlineKeyboardButton>();
-//        row.add(backToShowDeckNames);
-//        rows.add(row);
 
         return new InlineKeyboardMarkup(rows);
     }

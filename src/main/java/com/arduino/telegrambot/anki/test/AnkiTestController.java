@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.anki;
+package com.arduino.telegrambot.anki.test;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/anki")
+@RequestMapping("/handler")
 public class AnkiTestController {
 
     private final WebClient webClient;
@@ -32,4 +32,9 @@ public class AnkiTestController {
                 .retrieve()
                 .bodyToMono(String.class);
     }
+
+//    @GetMapping("/handler/test")
+//    public Mono<Integer> testAnki() {
+//        return ankiClient.version();
+//    }
 }

@@ -1,5 +1,6 @@
-package com.arduino.telegrambot.anki;
+package com.arduino.telegrambot.anki.client;
 
+import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,7 +23,7 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     public AnkiConnectWebClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl("http://127.0.0.1:8765")
+                .baseUrl("http://host.docker.internal:8765")
                 .build();
     }
 

@@ -41,4 +41,5 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildDuoCardsButton();
 
     InlineKeyboardButton buildStartDuoCardsButton();
+    InlineKeyboardButton buildStartWebAppButton(String word);
 }

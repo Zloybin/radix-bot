@@ -3,6 +3,7 @@ package com.arduino.telegrambot.builder.button;
 import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 
 import java.util.Locale;
 
@@ -214,6 +215,17 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var button = new InlineKeyboardButton();
         button.setText("Начать занятие");
         button.setCallbackData("startDuoCards");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildStartWebAppButton(String word) {
+        WebAppInfo webAppInfo = new WebAppInfo();
+        webAppInfo.setUrl("https://competing-ser-responsible-availability.trycloudflare.com/?word=hello");
+
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText("🎯 Открыть Youglish");
+        button.setWebApp(webAppInfo);
         return button;
     }
 

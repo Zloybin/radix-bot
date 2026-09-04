@@ -141,6 +141,11 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildAnkiShowAnswerKeyboard() {
+
+        var startWebAppButton = buttonBuilder.buildStartWebAppButton("");
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(startWebAppButton);
+
         var showAnswerButton = buttonBuilder.buildShowAnswerButton();
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(showAnswerButton);
@@ -153,6 +158,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
     }

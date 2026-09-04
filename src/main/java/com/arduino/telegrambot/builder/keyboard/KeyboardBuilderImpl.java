@@ -120,21 +120,29 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildAnkiAnswerKeyboard(List<Integer> buttonIndexes) {
-
         var rows = new ArrayList<List<InlineKeyboardButton>>();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        var row2 = new ArrayList<InlineKeyboardButton>();
 
         for (Integer buttonIndex : buttonIndexes) {
             InlineKeyboardButton answerButton;
             for (AnkiAnswer ankiAnswer : AnkiAnswer.values()) {
                 if (ankiAnswer.getIndex() == buttonIndex) {
+                    List<InlineKeyboardButton> row;
+                    if(buttonIndex <= 2){
+                        row = row1;
+                    }else{
+                        row = row2;
+                    }
                     answerButton = buttonBuilder.buildAnkiAnswerButton(ankiAnswer);
-                    var row = new ArrayList<InlineKeyboardButton>();
                     row.add(answerButton);
-                    rows.add(row);
                     break;
                 }
             }
         }
+        rows.add(row1);
+        rows.add(row2);
 
         return new InlineKeyboardMarkup(rows);
     }

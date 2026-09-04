@@ -26,6 +26,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var radConverterButton = buttonBuilder.buildRadConverterStartButton();
         var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
         var ankiTaskButton = buttonBuilder.buildAnkiTaskStartButton();
+        var duoCards = buttonBuilder.buildDuoCardsButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(radConverterButton);
@@ -36,10 +37,14 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(ankiTaskButton);
 
+        var row4 = new ArrayList<InlineKeyboardButton>();
+        row4.add(duoCards);
+
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
         return new InlineKeyboardMarkup(rows);
     }
 
@@ -141,6 +146,24 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row1.add(showAnswerButton);
 
         var showDecksButton = buttonBuilder.buildShowDecksButton();
+        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(backToShowDeckNames);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildDuoCardsMenuKeyboard() {
+        var startDuoCards = buttonBuilder.buildStartDuoCardsButton();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(startDuoCards);
+
+        var showDecksButton = buttonBuilder.buildMainMenuButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
         var row2 = new ArrayList<InlineKeyboardButton>();
         row2.add(backToShowDeckNames);

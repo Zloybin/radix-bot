@@ -202,6 +202,22 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildDuoCardsButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("🦉 DuoCards");
+        button.setCallbackData("duoCards");
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildStartDuoCardsButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("Начать занятие");
+        button.setCallbackData("startDuoCards");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildShowAnswerButton() {
         var button = new InlineKeyboardButton();
         button.setText("Показать ответ");

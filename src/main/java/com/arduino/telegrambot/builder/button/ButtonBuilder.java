@@ -38,4 +38,7 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildDeckNameButton(String deckName);
     InlineKeyboardButton buildAnkiAnswerButton(AnkiAnswer ankiAnswer);
 
+    InlineKeyboardButton buildDuoCardsButton();
+
+    InlineKeyboardButton buildStartDuoCardsButton();
 }

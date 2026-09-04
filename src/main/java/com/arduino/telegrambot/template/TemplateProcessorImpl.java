@@ -138,7 +138,6 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("newCount", ankiDeckStats.newCount());
         context.setVariable("learnCount", ankiDeckStats.learnCount());
         context.setVariable("reviewCount", ankiDeckStats.reviewCount());
-        context.setVariable("totalInDeck", ankiDeckStats.totalInDeck());
 
         context.setVariable("question", question);
         context.setVariable("tags", tags);
@@ -160,7 +159,6 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("newCount", ankiDeckStats.newCount());
         context.setVariable("learnCount", ankiDeckStats.learnCount());
         context.setVariable("reviewCount", ankiDeckStats.reviewCount());
-        context.setVariable("totalInDeck", ankiDeckStats.totalInDeck());
 
         context.setVariable("question", question);
         context.setVariable("tags", tags);

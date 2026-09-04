@@ -1,12 +1,6 @@
-<b>📊 Состояние карт в колоде</b>
-
-🆕 <b th:text="${newCount}">12</b>  📖 <b th:text="${learnCount}">5</b>  🔄 <b th:text="${reviewCount}">37</b>
-
-━━━━━━━━━━━━━━━━━━
-
 <b>📝 Вопрос</b>
 
-<blockquote th:text="${question}">
+<blockquote expandable th:text="${question}">
     Текст вопроса
 </blockquote>
 
@@ -17,6 +11,12 @@
 <blockquote th:text="${answer}">
     Ответ на вопрос
 </blockquote>
+
+━━━━━━━━━━━━━━━━━━
+
+<b>📊 Состояние карт в колоде</b>
+
+🆕 <b th:text="${newCount}">12</b>  📖 <b th:text="${learnCount}">5</b>  🔄 <b th:text="${reviewCount}">37</b>
 
 ━━━━━━━━━━━━━━━━━━
 

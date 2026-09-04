@@ -155,7 +155,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
             for (AnkiAnswer ankiAnswer : AnkiAnswer.values()) {
                 if (ankiAnswer.getIndex() == buttonIndex) {
                     List<InlineKeyboardButton> row;
-                    if(buttonIndex % 2 != 0){
+                    if(buttonIndex <= 2){
                         row = row2;
                     }else{
                         row = row3;

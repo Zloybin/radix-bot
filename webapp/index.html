@@ -6,25 +6,46 @@
     <title>YouGlish Test</title>
 
     <style>
-        body {
+        html, body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
             background: #f0f2f5;
             font-family: system-ui;
+            overflow: hidden;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
+            height: 100vh;
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 10px 20px;
         }
 
         h1 {
             text-align: center;
+            margin: 5px 0 10px;
+            flex-shrink: 0;
         }
 
         #widget-1 {
             width: 100%;
-            min-height: 400px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .powered-by {
+            text-align: center;
+            margin: 8px 0 0;
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -37,7 +58,7 @@
 
     <div id="widget-1"></div>
 
-    <p style="text-align:center">
+    <p class="powered-by">
         Powered by
         <a href="https://youglish.com" target="_blank">
             YouGlish.com
@@ -55,17 +76,16 @@
     document.getElementById("word").textContent = "🎯 " + word;
 
 
-    // Эта функция будет вызвана YouGlish
-    // после загрузки widget.js
     function onYouglishAPIReady() {
 
         console.log("YouGlish API готов");
 
         const widget = new YG.Widget("widget-1", {
 
-            width: 640,
+            width: "100%",
 
-            height: 400,
+            // Высота будет соответствовать доступному пространству
+            height: window.innerHeight - 100,
 
             components: 255,
 
@@ -87,9 +107,7 @@
 
         });
 
-        // Ищем слово
         widget.fetch(word, "german");
-
     }
 
 </script>

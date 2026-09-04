@@ -169,7 +169,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row2 = new ArrayList<InlineKeyboardButton>();
         row2.add(startWebAppButton);
 
-        var showDecksButton = buttonBuilder.buildShowDecksButton();
+        var showDecksButton = buttonBuilder.buildDuoCardsButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(backToShowDeckNames);

@@ -30,6 +30,7 @@ public interface KeyboardBuilder {
 
     InlineKeyboardMarkup buildAnkiAnswerKeyboard(List<Integer> buttons);
     InlineKeyboardMarkup buildAnkiShowAnswerKeyboard();
+    InlineKeyboardMarkup buildAnkiShowAnswerDuoCardsKeyboard(String word);
 
     InlineKeyboardMarkup buildDuoCardsMenuKeyboard();
 }

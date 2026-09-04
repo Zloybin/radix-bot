@@ -44,7 +44,8 @@ public class StartDuoCardsHandler implements UpdateHandler {
             var cardStats = ankiService.getDeckStats(List.of("Deutsch")).block();
             var ankiDeckStats = cardStats.get("Deutsch");
             var text = templateProcessor.processFrontCardTemplate(currentCard, ankiDeckStats);
-            var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
+            var question = currentCard.question();
+            var keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(question);
             telegramService
                     .editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
         }else{

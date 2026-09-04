@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 @Component
@@ -221,7 +223,10 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildStartWebAppButton(String word) {
         WebAppInfo webAppInfo = new WebAppInfo();
-        webAppInfo.setUrl("https://competing-ser-responsible-availability.trycloudflare.com/?word=hello");
+
+        String url = /*"https://app.radixbot.eu.org/?word="*/"https://competing-ser-responsible-availability.trycloudflare.com/?word=" +
+                URLEncoder.encode(word, StandardCharsets.UTF_8);
+        webAppInfo.setUrl(url);
 
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText("🎯 Открыть Youglish");

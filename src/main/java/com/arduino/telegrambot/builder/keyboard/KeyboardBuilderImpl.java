@@ -142,7 +142,26 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildAnkiShowAnswerKeyboard() {
 
-        var startWebAppButton = buttonBuilder.buildStartWebAppButton("");
+        var showAnswerButton = buttonBuilder.buildShowAnswerButton();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(showAnswerButton);
+
+        var showDecksButton = buttonBuilder.buildShowDecksButton();
+        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(backToShowDeckNames);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildAnkiShowAnswerDuoCardsKeyboard(String word) {
+
+        var startWebAppButton = buttonBuilder.buildStartWebAppButton(word);
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(startWebAppButton);
 

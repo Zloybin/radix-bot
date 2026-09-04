@@ -1,71 +1,104 @@
-<!-- youglish-widget.html -->
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouGlish - произношение</title>
+    <title>YouGlish Test</title>
+
     <style>
-        body { margin: 0; padding: 0; background: #f0f2f5; font-family: system-ui; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        h1 { font-size: 18px; color: #333; text-align: center; margin-bottom: 10px; }
-        .word-badge {
-            background: #0088cc;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            display: inline-block;
-            margin: 0 auto 15px;
-            font-size: 16px;
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+            font-family: system-ui;
         }
-        .footer { text-align: center; margin-top: 10px; font-size: 12px; color: #666; }
-        .footer a { color: #0088cc; text-decoration: none; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #widget-1 {
+            width: 100%;
+            min-height: 400px;
+        }
     </style>
 </head>
+
 <body>
+
 <div class="container">
-    <div style="text-align: center;">
-        <div class="word-badge" id="wordDisplay">🔍 Загрузка...</div>
-    </div>
 
-    <!-- Виджет YouGlish -->
-    <div id="youglish-widget"></div>
+    <h1 id="word">Загрузка...</h1>
 
-    <!-- Подпись (обязательно по правилам YouGlish) -->
-    <div class="footer">
-        Powered by <a href="https://youglish.com" target="_blank">YouGlish.com</a>
-    </div>
+    <div id="widget-1"></div>
+
+    <p style="text-align:center">
+        Powered by
+        <a href="https://youglish.com" target="_blank">
+            YouGlish.com
+        </a>
+    </p>
+
 </div>
 
 <script>
-    // Функция получения слова из URL
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param) || 'hello';
+
+    // Получаем word из URL
+    const params = new URLSearchParams(window.location.search);
+    const word = params.get("word") || "hello";
+
+    document.getElementById("word").textContent = "🎯 " + word;
+
+
+    // Эта функция будет вызвана YouGlish
+    // после загрузки widget.js
+    function onYouglishAPIReady() {
+
+        console.log("YouGlish API готов");
+
+        const widget = new YG.Widget("widget-1", {
+
+            width: 640,
+
+            height: 400,
+
+            components: 255,
+
+            events: {
+
+                onPlayerReady: function () {
+                    console.log("YouGlish player ready");
+                },
+
+                onFetchDone: function (event) {
+                    console.log("Fetch done:", event);
+                },
+
+                onError: function (event) {
+                    console.error("YouGlish error:", event);
+                }
+
+            }
+
+        });
+
+        // Ищем слово
+        widget.fetch(word, "english");
+
     }
 
-    const searchWord = getQueryParam('word');
-    document.getElementById('wordDisplay').textContent = `🎯 ${searchWord}`;
-
-    // Создаём ссылку-виджет (по инструкции YouGlish [citation:5])
-    const widgetContainer = document.getElementById('youglish-widget');
-    const widgetLink = document.createElement('a');
-    widgetLink.id = 'yg-widget-0';
-    widgetLink.className = 'youglish-widget';
-    widgetLink.setAttribute('data-query', searchWord);
-    widgetLink.setAttribute('data-lang', 'english');
-    widgetLink.setAttribute('data-components', '8415'); // Компоненты: кнопки + список видео
-    widgetLink.setAttribute('data-bkg-color', 'theme_light');
-    widgetLink.href = 'https://youglish.com';
-    widgetLink.textContent = 'Visit YouGlish.com';
-    widgetContainer.appendChild(widgetLink);
-
-    // Загружаем скрипт виджета
-    const script = document.createElement('script');
-    script.src = 'https://youglish.com/public/emb/widget.js';
-    script.async = true;
-    script.charset = 'utf-8';
-    document.body.appendChild(script);
 </script>
+
+<script
+        src="https://youglish.com/public/emb/widget.js"
+        async
+        charset="utf-8">
+</script>
+
 </body>
 </html>

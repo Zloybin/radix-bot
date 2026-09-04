@@ -1,6 +1,6 @@
 <b>📝 Вопрос</b>
 
-<blockquote th:text="${question}">
+<blockquote expandable th:utext="${question}">
     Текст вопроса
 </blockquote>
 
@@ -8,8 +8,10 @@
 
 <b>Карты:</b> 🆕 <b th:text="${newCount}">12</b>  📖 <b th:text="${learnCount}">5</b>  🔄 <b th:text="${reviewCount}">37</b>
 
-<th:block th:if="${#strings.isNotEmpty(tags)}">
+<th:block th:if="${tags != null and !tags.isEmpty()}">
 
-    🏷 <b>Теги:</b> <i th:text="${tags}">physics mechanics</i>
+    ━━━━━━━━━━━━━━━━━━
+
+    🏷 <b>Теги:</b> <i th:text="${#strings.listJoin(tags, ', ')}">physics, mechanics</i>
 
 </th:block>

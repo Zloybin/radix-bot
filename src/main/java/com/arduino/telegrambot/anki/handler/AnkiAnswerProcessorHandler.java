@@ -69,7 +69,7 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
         InlineKeyboardMarkup keyboard;
 
         if("Deutsch".equals(deckName)){
-            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(deckName);
+            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
         }else{
             keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
         }

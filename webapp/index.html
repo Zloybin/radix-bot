@@ -1,124 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
+    <title>YouGlish Test</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+            font-family: system-ui;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #widget-1 {
+            width: 100%;
+            min-height: 400px;
+        }
+    </style>
 </head>
 
 <body>
 
-<h1 id="status">Загрузка...</h1>
+<div class="container">
+
+    <h1 id="word">Загрузка...</h1>
+
+    <div id="widget-1"></div>
+
+    <p style="text-align:center">
+        Powered by
+        <a href="https://youglish.com" target="_blank">
+            YouGlish.com
+        </a>
+    </p>
+
+</div>
 
 <script>
-    document.getElementById("status").textContent =
-        "JavaScript работает";
+
+    // Получаем word из URL
+    const params = new URLSearchParams(window.location.search);
+    const word = params.get("word") || "hello";
+
+    document.getElementById("word").textContent = "🎯 " + word;
+
+
+    // Эта функция будет вызвана YouGlish
+    // после загрузки widget.js
+    function onYouglishAPIReady() {
+
+        console.log("YouGlish API готов");
+
+        const widget = new YG.Widget("widget-1", {
+
+            width: 640,
+
+            height: 400,
+
+            components: 255,
+
+            events: {
+
+                onPlayerReady: function () {
+                    console.log("YouGlish player ready");
+                },
+
+                onFetchDone: function (event) {
+                    console.log("Fetch done:", event);
+                },
+
+                onError: function (event) {
+                    console.error("YouGlish error:", event);
+                }
+
+            }
+
+        });
+
+        // Ищем слово
+        widget.fetch(word, "english");
+
+    }
+
+</script>
+
+<script
+        src="https://youglish.com/public/emb/widget.js"
+        async
+        charset="utf-8">
 </script>
 
 </body>
 </html>
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="ru">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>YouGlish Test</title>-->
-
-<!--    <style>-->
-<!--        body {-->
-<!--            margin: 0;-->
-<!--            padding: 20px;-->
-<!--            background: #f0f2f5;-->
-<!--            font-family: system-ui;-->
-<!--        }-->
-
-<!--        .container {-->
-<!--            max-width: 800px;-->
-<!--            margin: 0 auto;-->
-<!--        }-->
-
-<!--        h1 {-->
-<!--            text-align: center;-->
-<!--        }-->
-
-<!--        #widget-1 {-->
-<!--            width: 100%;-->
-<!--            min-height: 400px;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-
-<!--<body>-->
-
-<!--<div class="container">-->
-
-<!--    <h1 id="word">Загрузка...</h1>-->
-
-<!--    <div id="widget-1"></div>-->
-
-<!--    <p style="text-align:center">-->
-<!--        Powered by-->
-<!--        <a href="https://youglish.com" target="_blank">-->
-<!--            YouGlish.com-->
-<!--        </a>-->
-<!--    </p>-->
-
-<!--</div>-->
-
-<!--<script>-->
-
-<!--    // Получаем word из URL-->
-<!--    const params = new URLSearchParams(window.location.search);-->
-<!--    const word = params.get("word") || "hello";-->
-
-<!--    document.getElementById("word").textContent = "🎯 " + word;-->
-
-
-<!--    // Эта функция будет вызвана YouGlish-->
-<!--    // после загрузки widget.js-->
-<!--    function onYouglishAPIReady() {-->
-
-<!--        console.log("YouGlish API готов");-->
-
-<!--        const widget = new YG.Widget("widget-1", {-->
-
-<!--            width: 640,-->
-
-<!--            height: 400,-->
-
-<!--            components: 255,-->
-
-<!--            events: {-->
-
-<!--                onPlayerReady: function () {-->
-<!--                    console.log("YouGlish player ready");-->
-<!--                },-->
-
-<!--                onFetchDone: function (event) {-->
-<!--                    console.log("Fetch done:", event);-->
-<!--                },-->
-
-<!--                onError: function (event) {-->
-<!--                    console.error("YouGlish error:", event);-->
-<!--                }-->
-
-<!--            }-->
-
-<!--        });-->
-
-<!--        // Ищем слово-->
-<!--        widget.fetch(word, "english");-->
-
-<!--    }-->
-
-<!--</script>-->
-
-<!--<script-->
-<!--        src="https://youglish.com/public/emb/widget.js"-->
-<!--        async-->
-<!--        charset="utf-8">-->
-<!--</script>-->
-
-<!--</body>-->
-<!--</html>-->

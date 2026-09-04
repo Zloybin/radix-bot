@@ -2,6 +2,7 @@ package com.arduino.telegrambot;
 
 import com.arduino.telegrambot.dispatcher.Dispatcher;
 import com.arduino.telegrambot.entity.User;
+import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.properties.AppProperties;
 import com.arduino.telegrambot.repository.UserRepository;
@@ -69,6 +70,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
         var userRequest = userRequestBuilder.build();
         Long chatId = userRequest.getChatId();
+
+        User userT = userService.findById(userRequest.getChatId());
+        userT.setState(UserState.FREE);
+
+        userService.save(userT);
         if (!userService.existById(chatId)){
             var user = userService.buildDefaultUser(chatId, name);
             User save = userService.save(user);

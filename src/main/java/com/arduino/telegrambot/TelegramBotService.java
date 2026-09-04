@@ -6,11 +6,15 @@ import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.properties.AppProperties;
 import com.arduino.telegrambot.repository.UserRepository;
 import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.youglish.YouglishService;
+import com.arduino.telegrambot.youglish.model.YouglishResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.List;
 
 @Component
 @Slf4j
@@ -21,9 +25,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private Dispatcher dispatcher;

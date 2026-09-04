@@ -1,0 +1,71 @@
+<!-- youglish-widget.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouGlish - произношение</title>
+    <style>
+        body { margin: 0; padding: 0; background: #f0f2f5; font-family: system-ui; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { font-size: 18px; color: #333; text-align: center; margin-bottom: 10px; }
+        .word-badge {
+            background: #0088cc;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0 auto 15px;
+            font-size: 16px;
+        }
+        .footer { text-align: center; margin-top: 10px; font-size: 12px; color: #666; }
+        .footer a { color: #0088cc; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div style="text-align: center;">
+        <div class="word-badge" id="wordDisplay">🔍 Загрузка...</div>
+    </div>
+
+    <!-- Виджет YouGlish -->
+    <div id="youglish-widget"></div>
+
+    <!-- Подпись (обязательно по правилам YouGlish) -->
+    <div class="footer">
+        Powered by <a href="https://youglish.com" target="_blank">YouGlish.com</a>
+    </div>
+</div>
+
+<script>
+    // Функция получения слова из URL
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param) || 'hello';
+    }
+
+    const searchWord = getQueryParam('word');
+    document.getElementById('wordDisplay').textContent = `🎯 ${searchWord}`;
+
+    // Создаём ссылку-виджет (по инструкции YouGlish [citation:5])
+    const widgetContainer = document.getElementById('youglish-widget');
+    const widgetLink = document.createElement('a');
+    widgetLink.id = 'yg-widget-0';
+    widgetLink.className = 'youglish-widget';
+    widgetLink.setAttribute('data-query', searchWord);
+    widgetLink.setAttribute('data-lang', 'english');
+    widgetLink.setAttribute('data-components', '8415'); // Компоненты: кнопки + список видео
+    widgetLink.setAttribute('data-bkg-color', 'theme_light');
+    widgetLink.href = 'https://youglish.com';
+    widgetLink.textContent = 'Visit YouGlish.com';
+    widgetContainer.appendChild(widgetLink);
+
+    // Загружаем скрипт виджета
+    const script = document.createElement('script');
+    script.src = 'https://youglish.com/public/emb/widget.js';
+    script.async = true;
+    script.charset = 'utf-8';
+    document.body.appendChild(script);
+</script>
+</body>
+</html>

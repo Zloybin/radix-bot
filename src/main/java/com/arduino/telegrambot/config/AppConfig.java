@@ -5,6 +5,7 @@ import com.arduino.telegrambot.ai.LLMService;
 import com.google.genai.Client;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -34,6 +35,11 @@ public class AppConfig {
     @Bean
     public LLMService llmService() {
         return new GroqLLMService();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }

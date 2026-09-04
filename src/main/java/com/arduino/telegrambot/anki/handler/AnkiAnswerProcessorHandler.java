@@ -67,14 +67,27 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
         AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
 
         InlineKeyboardMarkup keyboard;
+        String text;
 
-        if("Deutsch".equals(deckName)){
-            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
-        }else{
-            keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
+
+        if((ankiDeckStats.newCount() == 0) &&(ankiDeckStats.reviewCount() == 0)){
+
+            text = templateProcessor.processCompletedDeckTemplate(currentCard);
+            if("Deutsch".equals(deckName)){
+                keyboard = keyboardBuilder.buildBackToDuoCardsMenuKeyboard();
+            }else{
+                keyboard = keyboardBuilder.buildBackToAnkiDecksMenu();
+            }
+
+        }else {
+            text = templateProcessor.processFrontCardTemplate(currentCard, ankiDeckStats);
+            if("Deutsch".equals(deckName)){
+                keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
+            }else{
+                keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
+            }
         }
 
-        var text = templateProcessor.processFrontCardTemplate(currentCard, ankiDeckStats);
 
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);

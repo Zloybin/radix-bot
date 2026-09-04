@@ -34,4 +34,8 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildAnkiShowAnswerDuoCardsKeyboard(String word);
 
     InlineKeyboardMarkup buildDuoCardsMenuKeyboard();
+
+    InlineKeyboardMarkup buildBackToDuoCardsMenuKeyboard();
+
+    InlineKeyboardMarkup buildBackToAnkiDecksMenu();
 }

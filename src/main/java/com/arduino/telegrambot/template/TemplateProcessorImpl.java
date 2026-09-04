@@ -168,4 +168,13 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         return engine.process("anki_back", context);
     }
 
+    @Override
+    public String processCompletedDeckTemplate(AnkiCurrentCard currentCard) {
+
+        Context context = new Context();
+        context.setVariable("deckName", currentCard.deckName());
+
+        return engine.process("completed_deck_message", context);
+    }
+
 }

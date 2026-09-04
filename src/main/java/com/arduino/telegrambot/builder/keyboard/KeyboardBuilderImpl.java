@@ -225,6 +225,32 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public InlineKeyboardMarkup buildBackToDuoCardsMenuKeyboard() {
+        var duoCards = buttonBuilder.buildDuoCardsButton();
+        buttonProcessor.renameButton(duoCards, "⬅️ Назад");
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(duoCards);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildBackToAnkiDecksMenu() {
+        var duoCards = buttonBuilder.buildShowDecksButton();
+        buttonProcessor.renameButton(duoCards, "⬅️ Назад");
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(duoCards);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+
+        return new InlineKeyboardMarkup(rows);
+    }
+
     //radTask
 
     @Override

@@ -53,7 +53,7 @@ services:
 
   app:
     extra_hosts:
-      - "http://host.docker.internal:8765"
+      - "host.docker.internal:host-gateway"
 
     build:
       context: .

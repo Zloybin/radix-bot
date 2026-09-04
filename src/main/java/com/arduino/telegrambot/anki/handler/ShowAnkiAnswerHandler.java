@@ -14,6 +14,7 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -58,9 +59,18 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
         }
 
         List<Integer> buttons = currentCard.buttons();
-        var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
 
         var deckName = currentCard.deckName();
+
+        InlineKeyboardMarkup keyboardMarkup;
+
+        if ("Deutsch".equals(deckName)) {
+            String word = currentCard.question();
+            keyboardMarkup = keyboardBuilder.buildAnkiAnswerDuoCardsKeyboard(buttons, word);
+        }else{
+            keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
+        }
+
         Map<String, AnkiDeckStats> deckStats = ankiService.getDeckStats(List.of(deckName)).block();
         AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
 

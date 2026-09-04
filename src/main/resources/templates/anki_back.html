@@ -14,10 +14,12 @@
 
 ━━━━━━━━━━━━━━━━━━
 
-<b>📊 Состояние карт в колоде</b>
+<b>Карты: </b>🆕 <b th:text="${newCount}">12</b>  📖 <b th:text="${learnCount}">5</b>  🔄 <b th:text="${reviewCount}">37</b>
 
-🆕 <b th:text="${newCount}">12</b>  📖 <b th:text="${learnCount}">5</b>  🔄 <b th:text="${reviewCount}">37</b>
+<th:block th:if="${tags != null and !#strings.isEmpty(tags.trim())}">
 
-━━━━━━━━━━━━━━━━━━
+    ━━━━━━━━━━━━━━━━━━
 
-🏷 <b>Теги:</b> <i th:text="${tags}">physics mechanics</i>
+    🏷 <b>Теги:</b> <i th:text="${tags}">physics mechanics</i>
+
+</th:block>

@@ -71,14 +71,16 @@ public class TelegramBotService extends TelegramLongPollingBot {
         var userRequest = userRequestBuilder.build();
         Long chatId = userRequest.getChatId();
 
-        var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.FREE);
-        userService.save(user);
+
         if (!userService.existById(chatId)){
             var user = userService.buildDefaultUser(chatId, name);
             User save = userService.save(user);
             System.out.println(String.format("User с id:%d был зарегестрирован и добавлен в БД.", save.getId()));
         }
+
+        var user = userService.findById(userRequest.getChatId());
+        user.setState(UserState.FREE);
+        userService.save(user);
 
         dispatcher.dispatch(userRequest);
 

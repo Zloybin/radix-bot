@@ -19,7 +19,19 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
     @Override
     public String processGreetingsTemplate(){
-        return engine.process("greetings", new Context());
+
+        var context = new Context();
+        context.setVariable("duoCardsStreak", "");
+        context.setVariable("duoCardsRemaining", "");
+        context.setVariable("physicsLastDay", "");
+        context.setVariable("physicsLastDayTasks", "");
+        context.setVariable("ankiDecks", "");
+        context.setVariable("deck.name", "");
+        context.setVariable("deck.totalInDeck", "");
+        context.setVariable("deck.newCount", "");
+        context.setVariable("deck.learnCount", "");
+        context.setVariable("deck.reviewCount", "");
+        return engine.process("greetings", context);
     }
 
     @Override

@@ -1,1 +1,29 @@
-<b>Выберите задание:</b>
+<b>🏠 Главное меню</b>
+
+━━━━━━━━━━━━━━━━━━
+
+<b>📚 DuoCards</b>
+
+🔥 <b>Серия:</b> <b th:text="${duoCardsStreak}">12</b> дней
+🃏 <b>Осталось карт:</b> <b th:text="${duoCardsRemaining}">47</b>
+
+━━━━━━━━━━━━━━━━━━
+
+<b>⚛️ Физика</b>
+
+📅 <b>Последний день:</b> <span th:text="${physicsLastDay}">04.09.2026</span>
+📝 <b>Выполнено задач:</b> <b th:text="${physicsLastDayTasks}">18</b>
+
+━━━━━━━━━━━━━━━━━━
+
+<b>🗂 Anki</b>
+
+<th:block th:each="deck : ${ankiDecks}">
+
+    📚 <b th:text="${deck.name}">Physics</b>
+    🃏 <b th:text="${deck.totalInDeck}">54</b> |
+    🆕 <b th:text="${deck.newCount}">12</b>
+    📖 <b th:text="${deck.learnCount}">5</b>
+    🔄 <b th:text="${deck.reviewCount}">37</b>
+
+</th:block>

@@ -229,7 +229,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         webAppInfo.setUrl(url);
 
         InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText("🎯 Открыть Youglish");
+        button.setText("Открыть в Youglish");
         button.setWebApp(webAppInfo);
         return button;
     }

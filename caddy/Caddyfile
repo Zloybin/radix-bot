@@ -1,0 +1,3 @@
+app.radixbot.eu.org {
+    reverse_proxy webapp:80
+}

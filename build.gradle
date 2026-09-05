@@ -17,10 +17,19 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // 🔹 Только базовая библиотека Telegram
+    implementation 'org.jsoup:jsoup:1.17.2'
+
+    //AI
+    implementation 'com.google.genai:google-genai:1.66.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     implementation 'org.telegram:telegrambots:6.9.7.1'
+
+    implementation 'org.thymeleaf:thymeleaf:3.1.5.RELEASE'
 
     implementation 'com.fazecast:jSerialComm:2.11.0'
 
@@ -28,8 +37,14 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+configurations.all {
+    exclude group: 'com.fasterxml.jackson.module',
+            module: 'jackson-module-jaxb-annotations'
 }

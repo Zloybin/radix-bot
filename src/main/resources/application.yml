@@ -3,9 +3,26 @@ server:
 
 telegram:
   bot:
-    token: "8584786589:AAEwMOBQgG0mdyhdWog75oaIzECrhLzw0XQ"
-    name: "arduino"
+    token: "1260063547:AAFhkounWyg_GhEnthttf1Zsp0UWrEHg5ck"
+    name: "Jarvice"
 
-arduino:
-  port: "/dev/tty.usbserial-10"
-  baud-rate: 9600
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo_db
+    username: demo_user
+    password: demo_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+groq:
+  api-key: ${GROQ_API_KEY}
+  base-url: https://api.groq.com/openai/v1
+  model: openai/gpt-oss-20b

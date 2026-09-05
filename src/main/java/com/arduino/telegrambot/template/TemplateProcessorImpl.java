@@ -21,16 +21,16 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     public String processGreetingsTemplate(){
 
         var context = new Context();
-        context.setVariable("duoCardsStreak", "");
-        context.setVariable("duoCardsRemaining", "");
-        context.setVariable("physicsLastDay", "");
-        context.setVariable("physicsLastDayTasks", "");
-        context.setVariable("ankiDecks", "");
-        context.setVariable("deckName", "");
-        context.setVariable("deckTotalInDeck", "");
-        context.setVariable("deckNewCount", "");
-        context.setVariable("deckLearnCount", "");
-        context.setVariable("deckReviewCount", "");
+//        context.setVariable("duoCardsStreak", "");
+//        context.setVariable("duoCardsRemaining", "");
+//        context.setVariable("physicsLastDay", "");
+//        context.setVariable("physicsLastDayTasks", "");
+//        context.setVariable("ankiDecks", "");
+//        context.setVariable("deckName", "");
+//        context.setVariable("deckTotalInDeck", "");
+//        context.setVariable("deckNewCount", "");
+//        context.setVariable("deckLearnCount", "");
+//        context.setVariable("deckReviewCount", "");
         return engine.process("greetings", context);
     }
 

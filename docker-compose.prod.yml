@@ -78,6 +78,8 @@ services:
 
       ANKI_BASE_URL: ${ANKI_BASE_URL}
 
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+
     networks:
       - demo-network
 

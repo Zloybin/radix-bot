@@ -1,0 +1,124 @@
+services:
+
+  # ==========================================
+  # PostgreSQL
+  # ==========================================
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-demo
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: demo_user
+      POSTGRES_PASSWORD: demo_pass
+      POSTGRES_DB: demo_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demo_user -d demo_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+    networks:
+      - demo-network
+
+
+  # ==========================================
+  # WebApp
+  # ==========================================
+
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile
+
+    container_name: webapp-demo
+    restart: unless-stopped
+
+    networks:
+      - demo-network
+
+
+  # ==========================================
+  # Spring Boot application + Telegram Bot
+  # ==========================================
+
+  app:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: java-demo
+    restart: unless-stopped
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      webapp:
+        condition: service_started
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/demo_db
+      SPRING_DATASOURCE_USERNAME: demo_user
+      SPRING_DATASOURCE_PASSWORD: demo_pass
+
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+
+    networks:
+      - demo-network
+
+
+  # ==========================================
+  # Caddy — Reverse Proxy / HTTPS
+  # ==========================================
+
+#  caddy:
+#    image: caddy:2-alpine
+#    container_name: caddy-demo
+#    restart: unless-stopped
+#
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#
+#    volumes:
+#      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+#      - caddy_data:/data
+#      - caddy_config:/config
+#
+#    depends_on:
+#      - webapp
+#
+#    networks:
+#      - demo-network
+
+
+# ==========================================
+# Volumes
+# ==========================================
+
+volumes:
+  pgdata:
+#  caddy_data:
+#  caddy_config:
+
+
+# ==========================================
+# Network
+# ==========================================
+
+networks:
+  demo-network:
+    driver: bridge

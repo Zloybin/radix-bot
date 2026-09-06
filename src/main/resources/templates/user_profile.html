@@ -1,0 +1,29 @@
+<b>👤 Профиль пользователя</b>
+
+<b>Имя:</b> <b th:text="${userName}">Иван</b>
+
+━━━━━━━━━━━━━━
+
+<b>📚 Статистика</b>
+
+Всего заданий: <b th:text="${tasksCount}">100</b>
+Выполнено заданий: <b th:text="${completedTaskCount}">25</b>
+Осталось заданий: <b th:text="${tasksCount - completedTaskCount}">75</b>
+
+━━━━━━━━━━━━━━
+
+<b>📈 Прогресс:</b>
+<b th:with="progress=${tasksCount > 0 ? completedTaskCount * 100.0 / tasksCount : 0}"
+   th:text="${#numbers.formatDecimal(progress, 1, 1) + '% ' +
+      (progress >= 100 ? '🟢🟢🟢🟢🟢🟢🟢🟢' :
+       progress >= 90 ? '🟢🟢🟢🟢🟢🟢🟢' :
+       progress >= 80 ? '🟡🟡🟡🟡🟡🟡' :
+       progress >= 70 ? '🟡🟡🟡🟡🟡' :
+       progress >= 50 ? '🟡🟡🟡🟡' :
+       progress >= 40 ? '🟠🟠🟠🟠' :
+       progress >= 30 ? '🟠🟠🟠' :
+       progress >= 20 ? '🟠🟠' :
+       progress >= 10 ? '🔴🔴' :
+       '🔴')}">
+    25.0% 🔴🔴
+</b>

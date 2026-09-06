@@ -10,9 +10,9 @@ services:
     restart: unless-stopped
 
     environment:
-      POSTGRES_USER: demo_user
-      POSTGRES_PASSWORD: demo_pass
-      POSTGRES_DB: demo_db
+      POSTGRES_USER: ${POSTGRESQL_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRESQL_DB_NAME}
 
     ports:
       - "5432:5432"
@@ -51,33 +51,33 @@ services:
   # Spring Boot application + Telegram Bot
   # ==========================================
 
-  app:
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-    container_name: java-demo
-    restart: unless-stopped
-
-    depends_on:
-      postgres:
-        condition: service_healthy
-      webapp:
-        condition: service_started
-
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/demo_db
-      SPRING_DATASOURCE_USERNAME: demo_user
-      SPRING_DATASOURCE_PASSWORD: demo_pass
-
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
-      GROQ_API_KEY: ${GROQ_API_KEY}
-
-    networks:
-      - demo-network
+#  app:
+#    extra_hosts:
+#      - ${ANKI_BASE_URL}
+#
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#
+#    container_name: java-demo
+#    restart: unless-stopped
+#
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      webapp:
+#        condition: service_started
+#
+#    environment:
+#      SPRING_DATASOURCE_URL: ${POSTGRESQL_DB_URL}
+#      SPRING_DATASOURCE_USERNAME: ${POSTGRESQL_DB_USER}
+#      SPRING_DATASOURCE_PASSWORD: ${POSTGRESQL_DB_PASSWORD}
+#
+#      GEMINI_API_KEY: ${GEMINI_API_KEY}
+#      GROQ_API_KEY: ${GROQ_API_KEY}
+#
+#    networks:
+#      - demo-network
 
 
   # ==========================================

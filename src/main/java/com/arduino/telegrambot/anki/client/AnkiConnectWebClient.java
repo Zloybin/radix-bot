@@ -5,6 +5,7 @@ import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,12 +21,15 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     private static final int API_VERSION = 6;
 
+    @Value("${ANKI_BASE_URL}")
+    private String ankiBaseUrl;
+
     private final WebClient webClient;
+
 
     public AnkiConnectWebClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-//                .baseUrl("http://127.0.0.1:8765")
-                .baseUrl("http://host.docker.internal:8765")
+                .baseUrl(ankiBaseUrl)
                 .build();
     }
 

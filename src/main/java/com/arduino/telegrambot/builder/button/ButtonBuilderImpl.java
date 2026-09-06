@@ -235,6 +235,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildDeleteAnkiCardButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("⛔️ Удалить карточку");
+        button.setCallbackData("deleteAnkiCard");
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildShowAnswerButton() {
         var button = new InlineKeyboardButton();
         button.setText("Показать ответ");

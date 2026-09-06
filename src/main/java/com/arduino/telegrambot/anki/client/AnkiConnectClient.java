@@ -27,6 +27,7 @@ public interface AnkiConnectClient {
     Mono<AnkiCurrentCard> getCurrentCard();
 
     Mono<Boolean> startCardTimer();
+    Mono<Boolean> deleteCard(long cardId);
 
     Mono<Boolean> showQuestion();
 

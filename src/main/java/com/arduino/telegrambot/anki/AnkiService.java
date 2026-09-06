@@ -104,6 +104,10 @@ public class AnkiService {
                 });
     }
 
+    public Mono<Boolean> deleteCard(long cardId) {
+        return ankiClient.deleteCard(cardId);
+    }
+
     private void validateEase(int ease) {
 
         if (ease < 1 || ease > 4) {

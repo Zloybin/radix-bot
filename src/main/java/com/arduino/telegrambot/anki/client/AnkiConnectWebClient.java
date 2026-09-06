@@ -137,6 +137,12 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     }
 
     @Override
+    public Mono<Boolean> deleteCard(long cardId) {
+        return invoke("suspend", Map.of("cards", List.of(cardId)))
+                .map(JsonNode::asBoolean);
+    }
+
+    @Override
     public Mono<Boolean> showQuestion() {
         return invoke("guiShowQuestion", Map.of())
                 .map(JsonNode::asBoolean);

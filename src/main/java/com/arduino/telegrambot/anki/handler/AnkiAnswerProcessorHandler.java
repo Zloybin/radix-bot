@@ -52,10 +52,12 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
 //        var currentCardtest = ankiService.getCurrentCard().block();
 //        System.out.println("SHOW ANSWER: " + ankiService.showAnswer().block());
 
-        var currentCard = ankiService.getCurrentCard().block();
+        AnkiCurrentCard currentCard;
 
-        if(currentCard == null){
-            throw new AnkiConnectException("Review отключен.");
+        if(ankiService.showAnswer().block()){
+            currentCard = ankiService.getCurrentCard().block();
+        } else {
+            throw new AnkiConnectException("Не смог открыть ответ карточки, т. к. не включен режим Review");
         }
 
         var deckName = currentCard.deckName();

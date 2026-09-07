@@ -2,8 +2,6 @@ package com.arduino.telegrambot.duocards;
 
 import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
-import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -12,8 +10,6 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -41,7 +37,7 @@ public class StartDuoCardsHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         if (ankiService.startStudy("Deutsch").block()){
             var currentCard = ankiService.getCurrentCard().block();
-            var cardStats = ankiService.getDeckStats(List.of("Deutsch")).block();
+            var cardStats = ankiService.getDecksStats(List.of("Deutsch")).block();
             var ankiDeckStats = cardStats.get("Deutsch");
             var text = templateProcessor.processFrontCardTemplate(currentCard, ankiDeckStats);
             var question = currentCard.question();

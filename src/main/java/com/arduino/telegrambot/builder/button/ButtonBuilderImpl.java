@@ -175,8 +175,8 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildAnkiTaskStartButton() {
         var button = new InlineKeyboardButton();
-        button.setText("\uD83D\uDDC3\uFE0FКарточки Anki");
-        button.setCallbackData("handler");
+        button.setText("\uD83D\uDDC3\uFE0F Карточки Anki");
+        button.setCallbackData("ankiMainMenu");
         return button;
     }
 

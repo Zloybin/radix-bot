@@ -179,10 +179,10 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processCompletedDeckTemplate(AnkiCurrentCard currentCard) {
+    public String processCompletedDeckTemplate(String deckname) {
 
         Context context = new Context();
-        context.setVariable("deckName", currentCard.deckName());
+        context.setVariable("deckName", deckname);
 
         return engine.process("completed_deck_message", context);
     }

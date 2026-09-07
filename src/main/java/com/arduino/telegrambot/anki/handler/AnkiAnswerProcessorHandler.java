@@ -1,8 +1,8 @@
 package com.arduino.telegrambot.anki.handler;
 
 import com.arduino.telegrambot.anki.AnkiConnectException;
-import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.anki.AnkiService;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.AnkiAnswer;
@@ -16,14 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class AnkiAnswerProcessorHandler implements UpdateHandler {
 
+    public static final int COUNT_NULL = 0;
+    public static final String DEUTSCH = "Deutsch";
     @Autowired
     private UserService userService;
 
@@ -42,18 +42,58 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
     @Override
     public boolean isApplicable(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-
         return UserState.WAIT_ANKI_ANSWER.equals(user.getState());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
 
-        AnkiCurrentCard currentCard = null;
-        for (AnkiAnswer ankiAnswer : AnkiAnswer.values()) {
-            if(ankiAnswer.getIndex() == Integer.parseInt(userRequest.getRequest())){
-                currentCard = ankiService.answerAndGetNextCard(ankiAnswer.getIndex()).block();
-                break;
+//        System.out.println("DEUTSCH " +ankiService.startStudy(DEUTSCH).block());
+//        var currentCardtest = ankiService.getCurrentCard().block();
+//        System.out.println("SHOW ANSWER: " + ankiService.showAnswer().block());
+
+        var currentCard = ankiService.getCurrentCard().block();
+
+        if(currentCard == null){
+            throw new AnkiConnectException("Review отключен.");
+        }
+
+        var deckName = currentCard.deckName();
+
+        String text;
+        InlineKeyboardMarkup keyboard;
+        AnkiCurrentCard updatedCurrentCard;
+
+        int userAnswerIndex = getUserAnswerIndex(userRequest);
+
+        if (Boolean.FALSE.equals(ankiService.answerCard(userAnswerIndex).block())) {
+            throw new AnkiConnectException("Не получилось обработать ответ пользователя.");
+        }
+
+        var deckStats = ankiService.getDeckStats(deckName).block();
+
+        if (isAllCountsNull(deckStats)) {
+
+            text = templateProcessor.processCompletedDeckTemplate(deckName);
+
+            if (DEUTSCH.equals(deckName)) {
+                keyboard = keyboardBuilder.buildBackToDuoCardsMenuKeyboard();
+            } else {
+                keyboard = keyboardBuilder.buildBackToAnkiDecksMenu();
+            }
+
+        } else {
+
+            updatedCurrentCard = ankiService.getCurrentCard().block();
+            text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, deckStats);
+
+            if (DEUTSCH.equals(deckName)) {
+
+                //Youglish button added in keyboard
+                keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
+
+            } else {
+                keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
             }
         }
 
@@ -61,36 +101,22 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
         user.setState(UserState.FREE);
         userService.save(user);
 
-        var deckName = currentCard.deckName();
-
-        Map<String, AnkiDeckStats> deckStats = ankiService.getDeckStats(List.of(deckName)).block();
-        AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
-
-        InlineKeyboardMarkup keyboard;
-        String text;
-
-
-        if((ankiDeckStats.newCount() == 0) &&(ankiDeckStats.reviewCount() == 0)){
-
-            text = templateProcessor.processCompletedDeckTemplate(currentCard);
-            if("Deutsch".equals(deckName)){
-                keyboard = keyboardBuilder.buildBackToDuoCardsMenuKeyboard();
-            }else{
-                keyboard = keyboardBuilder.buildBackToAnkiDecksMenu();
-            }
-
-        }else {
-            text = templateProcessor.processFrontCardTemplate(currentCard, ankiDeckStats);
-            if("Deutsch".equals(deckName)){
-                keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
-            }else{
-                keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
-            }
-        }
-
-
-
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
 
+    }
+
+    private int getUserAnswerIndex(UserRequest userRequest) {
+        int userAnswerIndex = 0;
+
+        for (AnkiAnswer ankiAnswer : AnkiAnswer.values()) {
+            if (ankiAnswer.getIndex() == Integer.parseInt(userRequest.getRequest())) {
+                userAnswerIndex = ankiAnswer.getIndex();
+            }
+        }
+        return userAnswerIndex;
+    }
+
+    private static boolean isAllCountsNull(AnkiDeckStats deckStats) {
+        return deckStats.newCount() == COUNT_NULL && deckStats.learnCount() == COUNT_NULL && deckStats.reviewCount() == COUNT_NULL;
     }
 }

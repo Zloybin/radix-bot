@@ -23,5 +23,5 @@ public interface TemplateProcessor {
     String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats);
     String processBackCardTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats);
 
-    String processCompletedDeckTemplate(AnkiCurrentCard currentCard);
+    String processCompletedDeckTemplate(String deckname);
 }

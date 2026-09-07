@@ -3,7 +3,6 @@ package com.arduino.telegrambot.anki.handler;
 import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -14,11 +13,8 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Component
@@ -65,7 +61,7 @@ public class DeleteAnkiCardHandler implements UpdateHandler {
         }
 
 
-        var stats = ankiService.getDeckStats(List.of(deckName)).block();
+        var stats = ankiService.getDecksStats(List.of(deckName)).block();
         var ankiDeckStats = stats.get(deckName);
 
 

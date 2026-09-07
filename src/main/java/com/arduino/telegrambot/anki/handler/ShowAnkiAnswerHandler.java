@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -71,7 +70,7 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
             keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
         }
 
-        Map<String, AnkiDeckStats> deckStats = ankiService.getDeckStats(List.of(deckName)).block();
+        Map<String, AnkiDeckStats> deckStats = ankiService.getDecksStats(List.of(deckName)).block();
         AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
 
         var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckStats);

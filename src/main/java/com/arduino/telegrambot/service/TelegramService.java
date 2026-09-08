@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.service;
 
+import com.arduino.telegrambot.rich.TelegramRichMessageService;
 import com.arduino.telegrambot.sender.BotSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,6 +24,9 @@ public class TelegramService {
 
     @Autowired
     private BotSender botSender;
+
+    @Autowired
+    private TelegramRichMessageService telegramRichMessageService;
 
     public void sendMessage(
             Long chatId, String text, String parseMode) {
@@ -151,6 +155,13 @@ public class TelegramService {
             throw new RuntimeException(
                     "Failed to send message due to an error with the Telegram API.", e);
         }
+    }
+
+
+    public void editRichMessage(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html) {
+
+        System.out.println(telegramRichMessageService.editRichMessage(chatId, messageId, html, keyboard).block());
     }
 
     public void deleteMessage(

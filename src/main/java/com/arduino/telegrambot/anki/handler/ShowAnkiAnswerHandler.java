@@ -68,7 +68,7 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
 
         var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckStats);
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboardMarkup, text);
 
     }
 }

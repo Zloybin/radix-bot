@@ -89,6 +89,6 @@ public class DeckNameHandler implements UpdateHandler {
         text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
         keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }
 }

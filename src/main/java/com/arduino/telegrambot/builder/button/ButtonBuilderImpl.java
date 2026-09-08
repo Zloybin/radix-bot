@@ -175,8 +175,8 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     @Override
     public InlineKeyboardButton buildAnkiTaskStartButton() {
         var button = new InlineKeyboardButton();
-        button.setText("\uD83D\uDDC3\uFE0FКарточки Anki");
-        button.setCallbackData("handler");
+        button.setText("\uD83D\uDDC3\uFE0F Карточки Anki");
+        button.setCallbackData("ankiMainMenu");
         return button;
     }
 
@@ -231,6 +231,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText("Открыть в Youglish");
         button.setWebApp(webAppInfo);
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildDeleteAnkiCardButton() {
+        var button = new InlineKeyboardButton();
+        button.setText("⛔️ Удалить карточку");
+        button.setCallbackData("deleteAnkiCard");
         return button;
     }
 

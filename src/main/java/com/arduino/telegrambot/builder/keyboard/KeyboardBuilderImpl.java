@@ -188,14 +188,19 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(showAnswerButton);
 
+        var deleteAnkiCardButton = buttonBuilder.buildDeleteAnkiCardButton();
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(deleteAnkiCardButton);
+
         var showDecksButton = buttonBuilder.buildShowDecksButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
-        var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(backToShowDeckNames);
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(backToShowDeckNames);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
     }
@@ -211,15 +216,20 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row2 = new ArrayList<InlineKeyboardButton>();
         row2.add(startWebAppButton);
 
+        var deleteAnkiCardButton = buttonBuilder.buildDeleteAnkiCardButton();
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(deleteAnkiCardButton);
+
         var showDecksButton = buttonBuilder.buildDuoCardsButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
-        var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(backToShowDeckNames);
+        var row4 = new ArrayList<InlineKeyboardButton>();
+        row4.add(backToShowDeckNames);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
 
         return new InlineKeyboardMarkup(rows);
     }

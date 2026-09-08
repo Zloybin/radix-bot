@@ -42,4 +42,6 @@ public interface ButtonBuilder {
 
     InlineKeyboardButton buildStartDuoCardsButton();
     InlineKeyboardButton buildStartWebAppButton(String word);
+
+    InlineKeyboardButton buildDeleteAnkiCardButton();
 }

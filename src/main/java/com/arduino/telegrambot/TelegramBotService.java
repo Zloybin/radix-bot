@@ -66,6 +66,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
         var userRequest = userRequestBuilder.build();
         Long chatId = userRequest.getChatId();
 
+//        User userT = userService.findById(userRequest.getChatId());
+//        userT.setState(UserState.FREE);
+//        userService.save(userT);
+
 
         if (!userService.existById(chatId)){
             var user = userService.buildDefaultUser(chatId, name);

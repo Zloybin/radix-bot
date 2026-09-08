@@ -42,10 +42,16 @@ public class AnkiService {
     /**
      * Получает статистику указанных колод.
      */
-    public Mono<Map<String, AnkiDeckStats>> getDeckStats(
+    public Mono<Map<String, AnkiDeckStats>> getDecksStats(
             List<String> deckNames
     ) {
         return ankiClient.getDeckStats(deckNames);
+    }
+
+    public Mono<AnkiDeckStats> getDeckStats(
+            String deckName
+    ) {
+        return ankiClient.getDeckStats(List.of(deckName)).map(deckNames -> deckNames.get(deckName));
     }
 
     /**
@@ -102,6 +108,10 @@ public class AnkiService {
 
                     return ankiClient.getCurrentCard();
                 });
+    }
+
+    public Mono<Boolean> deleteCard(long cardId) {
+        return ankiClient.deleteCard(cardId);
     }
 
     private void validateEase(int ease) {

@@ -3,9 +3,7 @@ package com.arduino.telegrambot.anki.handler;
 import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -15,10 +13,10 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class DeckNameHandler implements UpdateHandler {
@@ -39,7 +37,6 @@ public class DeckNameHandler implements UpdateHandler {
     private AnkiService ankiService;
 
 
-
     @Override
     public boolean isApplicable(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
@@ -53,21 +50,48 @@ public class DeckNameHandler implements UpdateHandler {
         user.setState(UserState.FREE);
         userService.save(user);
 
-        AnkiCurrentCard currentCard = null;
+        //        System.out.println("DEUTSCH " +ankiService.startStudy(DEUTSCH).block());
+        //        var currentCardtest = ankiService.getCurrentCard().block();
+        //        System.out.println("SHOW ANSWER: " + ankiService.showAnswer().block());
 
-        if(ankiService.startStudy(userRequest.getRequest()).block()){
-            currentCard = ankiService.getCurrentCard().block();
-        }else{
-            throw new AnkiConnectException("Не получилось запустить режим Review.");
+        AnkiCurrentCard currentCard;
+        InlineKeyboardMarkup keyboard;
+        String text;
+
+        String requestedDeckName = userRequest.getRequest();
+        System.out.println(String.format("Включаем Review для колоды: %s.", requestedDeckName));
+
+        try {
+
+            if (ankiService.startStudy(requestedDeckName).block()) {
+                currentCard = ankiService.getCurrentCard().block();
+            } else {
+                throw new AnkiConnectException(String.format("Не получилось открыть колоду: %s", requestedDeckName));
+            }
+
+        } catch (AnkiConnectException e) {
+            if ("Gui review is not currently active.".equals(e.getMessage())) {
+
+                text = templateProcessor.processCompletedDeckTemplate(requestedDeckName);
+
+                if ("Deutsch".equals(requestedDeckName)) {
+                    keyboard = keyboardBuilder.buildBackToDuoCardsMenuKeyboard();
+                } else {
+                    keyboard = keyboardBuilder.buildBackToAnkiDecksMenu();
+                }
+
+                telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+                return;
+
+            } else {
+                throw new AnkiConnectException(e.getMessage());
+            }
         }
 
-        var deckStats = ankiService.getDeckStats(List.of(userRequest.getRequest())).block();
-        var ankiDeckStats = deckStats.get(currentCard.deckName());
-        var text = templateProcessor.processFrontCardTemplate(currentCard, ankiDeckStats);
-        var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
+        var deckStats = ankiService.getDeckStats(currentCard.deckName()).block();
+        text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
+        keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
-
-
     }
 }

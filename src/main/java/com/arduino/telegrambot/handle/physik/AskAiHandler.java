@@ -43,7 +43,7 @@ public class AskAiHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "askAi".equals(userRequest.getRequest());
+        return "askAi".equals(userRequest.getHandler());
     }
 
     @Override

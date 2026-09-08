@@ -38,7 +38,7 @@ public class DeleteAnkiCardHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "deleteAnkiCard".equals(userRequest.getRequest());
+        return "deleteAnkiCard".equals(userRequest.getHandler());
     }
 
     @Override

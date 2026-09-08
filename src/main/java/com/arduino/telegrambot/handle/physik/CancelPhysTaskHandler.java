@@ -1,7 +1,6 @@
 package com.arduino.telegrambot.handle.physik;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.Task;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.repository.TaskRepository;
@@ -12,12 +11,9 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Component
 public class CancelPhysTaskHandler implements UpdateHandler {
@@ -42,7 +38,7 @@ public class CancelPhysTaskHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "cancelPhysTask".equals(userRequest.getRequest());
+        return "cancelPhysTask".equals(userRequest.getHandler());
     }
 
     @Override

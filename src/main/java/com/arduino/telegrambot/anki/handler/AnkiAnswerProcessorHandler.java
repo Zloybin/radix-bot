@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.util.List;
-
 @Component
 public class AnkiAnswerProcessorHandler implements UpdateHandler {
 
@@ -41,8 +39,7 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        var user = userService.findById(userRequest.getChatId());
-        return UserState.WAIT_ANKI_ANSWER.equals(user.getState());
+        return "ankiAnswer".equals(userRequest.getHandler());
     }
 
     @Override

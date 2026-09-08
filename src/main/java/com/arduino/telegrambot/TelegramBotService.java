@@ -1,10 +1,11 @@
 package com.arduino.telegrambot;
 
 import com.arduino.telegrambot.dispatcher.Dispatcher;
+import com.arduino.telegrambot.entity.Callback;
 import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.properties.AppProperties;
+import com.arduino.telegrambot.service.CallbackService;
 import com.arduino.telegrambot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Autowired
     private Dispatcher dispatcher;
+
+    @Autowired
+    private CallbackService callbackService;
 
 
 
@@ -50,15 +54,19 @@ public class TelegramBotService extends TelegramLongPollingBot {
             userRequestBuilder
                     .chatId(update.getMessage().getChatId())
                     .messageId(update.getMessage().getMessageId())
-                    .request(update.getMessage().getText());
+                    .handler(update.getMessage().getText());
 
         } else if (update.hasCallbackQuery()) {
             name = update.getCallbackQuery().getFrom().getUserName();
+            var hash = update.getCallbackQuery().getData().toString();
+
+            var callback = callbackService.findById(Long.parseLong(hash));
 
             userRequestBuilder
                     .chatId(update.getCallbackQuery().getMessage().getChatId())
                     .messageId(update.getCallbackQuery().getMessage().getMessageId())
-                    .request(update.getCallbackQuery().getData());
+                    .handler(callback.getHandler())
+                    .request(callback.getRequest());
         } else {
             throw new RuntimeException("Неисправное состояние объекта класса update.");
         }

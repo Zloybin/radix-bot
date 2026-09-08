@@ -9,8 +9,6 @@ import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 @Component
 public class BackToMainMenuHandler implements UpdateHandler{
@@ -29,7 +27,7 @@ public class BackToMainMenuHandler implements UpdateHandler{
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "backToMainMenu".equals(userRequest.getRequest());
+        return "backToMainMenu".equals(userRequest.getHandler());
     }
 
     @Override

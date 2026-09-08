@@ -9,7 +9,6 @@ import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.ResultService;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
-import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +42,7 @@ public class StatisticHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "statistics".equals(userRequest.getRequest());
+        return "statistics".equals(userRequest.getHandler());
     }
 
     @Override

@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.util.List;
-
 @Component
 public class StartDuoCardsHandler implements UpdateHandler {
 
@@ -33,12 +31,12 @@ public class StartDuoCardsHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "startDuoCards".equals(userRequest.getRequest());
+        return "startDuoCards".equals(userRequest.getHandler());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-        AnkiCurrentCard currentCard = null;
+        AnkiCurrentCard currentCard;
         InlineKeyboardMarkup keyboard;
         String text;
 

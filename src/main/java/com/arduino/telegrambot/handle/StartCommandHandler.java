@@ -1,7 +1,6 @@
 package com.arduino.telegrambot.handle;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TelegramService;
@@ -33,7 +32,7 @@ public class StartCommandHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return handlerCallbacks.contains(userRequest.getRequest());
+        return handlerCallbacks.contains(userRequest.getHandler());
     }
 
     @Override
@@ -42,7 +41,7 @@ public class StartCommandHandler implements UpdateHandler {
         var text = templateProcessor.processGreetingsTemplate();
         var keyboard = keyboardBuilder.buildMainMenu();
 
-        if ("/start".equals(userRequest.getRequest())) {
+        if ("/start".equals(userRequest.getHandler())) {
             var user = userService.findById(userRequest.getChatId());
             user.setState(UserState.FREE);
             telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);

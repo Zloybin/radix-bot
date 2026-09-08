@@ -9,9 +9,7 @@ import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 @Component
 public class AcceptAnswerPhysHandler implements UpdateHandler {
@@ -33,7 +31,7 @@ public class AcceptAnswerPhysHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "givePhysAnswer".equals(userRequest.getRequest());
+        return "givePhysAnswer".equals(userRequest.getHandler());
     }
 
     @Override

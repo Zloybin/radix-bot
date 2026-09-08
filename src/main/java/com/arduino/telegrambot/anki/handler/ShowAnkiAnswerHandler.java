@@ -39,7 +39,7 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "showAnkiAnswer".equals(userRequest.getRequest());
+        return "showAnkiAnswer".equals(userRequest.getHandler());
     }
 
     @Override

@@ -12,9 +12,6 @@ import com.arduino.telegrambot.validator.AnswerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 @Component
 public class UserPhysAnswerHandler implements UpdateHandler {
@@ -45,7 +42,7 @@ public class UserPhysAnswerHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-        var userAnswer = userRequest.getRequest();
+        var userAnswer = userRequest.getHandler();
 
         var result = answerValidator.validatePhysAnswer(user.getPhysTaskId(), userAnswer);
 

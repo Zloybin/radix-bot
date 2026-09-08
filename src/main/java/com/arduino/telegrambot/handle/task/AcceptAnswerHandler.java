@@ -1,7 +1,6 @@
 package com.arduino.telegrambot.handle.task;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.NumberSystem;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -11,7 +10,6 @@ import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 
 @Component
 public class AcceptAnswerHandler implements UpdateHandler {
@@ -33,7 +31,7 @@ public class AcceptAnswerHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "giveAnswer".equals(userRequest.getRequest());
+        return "giveAnswer".equals(userRequest.getHandler());
     }
 
     @Override

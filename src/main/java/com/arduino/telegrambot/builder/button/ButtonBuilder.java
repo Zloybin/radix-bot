@@ -35,8 +35,10 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildAnkiTaskStartButton();
     InlineKeyboardButton buildShowDecksButton();
     InlineKeyboardButton buildShowAnswerButton();
+    InlineKeyboardButton buildShowAnswerDuocardsButton();
     InlineKeyboardButton buildDeckNameButton(String deckName);
     InlineKeyboardButton buildAnkiAnswerButton(AnkiAnswer ankiAnswer);
+    InlineKeyboardButton buildAnswerDuocardsButton(AnkiAnswer ankiAnswer);
 
     InlineKeyboardButton buildDuoCardsButton();
 

@@ -6,6 +6,7 @@ import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
+import com.arduino.telegrambot.piper.PiperTtsService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class StartDuoCardsHandler implements UpdateHandler {
 
     @Autowired
     private TemplateProcessor templateProcessor;
+
+    @Autowired
+    private PiperTtsService piperTtsService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -56,8 +60,9 @@ public class StartDuoCardsHandler implements UpdateHandler {
             text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
             var question = currentCard.question();
             keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(question);
+            var audio = piperTtsService.synthesize(currentCard.question()).block();
             telegramService
-                    .editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+                    .sendAudio(userRequest.getChatId(), text, audio, keyboard, ParseMode.HTML);
         }else{
             throw new AnkiConnectException("не получилось запустить Review режим в колоде Deutsch.");
         }

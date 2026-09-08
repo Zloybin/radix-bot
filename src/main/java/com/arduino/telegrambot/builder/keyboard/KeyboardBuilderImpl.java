@@ -98,7 +98,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildLDecksMenu(List<String> decks) {
+    public InlineKeyboardMarkup buildDecksMenu(List<String> decks) {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         for (String deck : decks) {
@@ -168,7 +168,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
                     }else{
                         row = row3;
                     }
-                    answerButton = buttonBuilder.buildAnkiAnswerButton(ankiAnswer);
+                    answerButton = buttonBuilder.buildAnswerDuocardsButton(ankiAnswer);
                     row.add(answerButton);
                     break;
                 }
@@ -208,7 +208,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildAnkiShowAnswerDuoCardsKeyboard(String word) {
 
-        var showAnswerButton = buttonBuilder.buildShowAnswerButton();
+        var showAnswerButton = buttonBuilder.buildShowAnswerDuocardsButton();
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(showAnswerButton);
 

@@ -44,7 +44,7 @@ public class ShowDecksHandler implements UpdateHandler {
         var text = templateProcessor.processDecksMenuTemplate();
 
         var decks = ankiService.getDecks().block();
-        var keyboard = keyboardBuilder.buildLDecksMenu(decks);
+        var keyboard = keyboardBuilder.buildDecksMenu(decks);
 
         telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
 

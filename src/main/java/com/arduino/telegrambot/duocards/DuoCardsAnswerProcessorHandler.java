@@ -1,0 +1,122 @@
+package com.arduino.telegrambot.duocards;
+
+import com.arduino.telegrambot.anki.AnkiConnectException;
+import com.arduino.telegrambot.anki.AnkiService;
+import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.enummeration.AnkiAnswer;
+import com.arduino.telegrambot.enummeration.UserState;
+import com.arduino.telegrambot.handle.UpdateHandler;
+import com.arduino.telegrambot.model.UserRequest;
+import com.arduino.telegrambot.piper.PiperTtsService;
+import com.arduino.telegrambot.service.TelegramService;
+import com.arduino.telegrambot.service.UserService;
+import com.arduino.telegrambot.template.TemplateProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+
+@Component
+public class DuoCardsAnswerProcessorHandler implements UpdateHandler {
+
+    public static final int COUNT_NULL = 0;
+    public static final String DEUTSCH = "Deutsch";
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TelegramService telegramService;
+
+    @Autowired
+    private KeyboardBuilder keyboardBuilder;
+
+    @Autowired
+    private TemplateProcessor templateProcessor;
+
+    @Autowired
+    private AnkiService ankiService;
+
+    @Autowired
+    private PiperTtsService piperTtsService;
+
+    @Override
+    public boolean isApplicable(UserRequest userRequest) {
+        return "duoCardsAnswer".equals(userRequest.getHandler());
+    }
+
+    @Override
+    public void handle(UserRequest userRequest) {
+
+//        System.out.println("DEUTSCH " +ankiService.startStudy(DEUTSCH).block());
+//        var currentCardtest = ankiService.getCurrentCard().block();
+//        System.out.println("SHOW ANSWER: " + ankiService.showAnswer().block());
+
+        AnkiCurrentCard currentCard;
+
+        if (ankiService.showAnswer().block()) {
+            currentCard = ankiService.getCurrentCard().block();
+        } else {
+            throw new AnkiConnectException("Не смог открыть ответ карточки, т. к. не включен режим Review");
+        }
+
+        var deckName = currentCard.deckName();
+
+        String text;
+        InlineKeyboardMarkup keyboard;
+        AnkiCurrentCard updatedCurrentCard;
+
+        int userAnswerIndex = getUserAnswerIndex(userRequest);
+
+        if (Boolean.FALSE.equals(ankiService.answerCard(userAnswerIndex).block())) {
+            throw new AnkiConnectException("Не получилось обработать ответ пользователя.");
+        }
+
+        var deckStats = ankiService.getDeckStats(deckName).block();
+
+        if (isAllCountsNull(deckStats)) {
+
+            text = templateProcessor.processCompletedDeckTemplate(deckName);
+            keyboard = keyboardBuilder.buildBackToDuoCardsMenuKeyboard();
+
+        } else {
+
+            updatedCurrentCard = ankiService.getCurrentCard().block();
+            text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, deckStats);
+
+            var audio = piperTtsService.synthesize(updatedCurrentCard.question()).block();
+
+
+            //Youglish button added in keyboard
+            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
+            telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
+            telegramService.sendAudio(userRequest.getChatId(),text, audio, keyboard, ParseMode.HTML);
+            return;
+        }
+
+        var user = userService.findById(userRequest.getChatId());
+        user.setState(UserState.FREE);
+        userService.save(user);
+
+        telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
+
+        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+
+    }
+
+    private int getUserAnswerIndex(UserRequest userRequest) {
+        int userAnswerIndex = 0;
+
+        for (AnkiAnswer ankiAnswer : AnkiAnswer.values()) {
+            if (ankiAnswer.getIndex() == Integer.parseInt(userRequest.getRequest())) {
+                userAnswerIndex = ankiAnswer.getIndex();
+            }
+        }
+        return userAnswerIndex;
+    }
+
+    private static boolean isAllCountsNull(AnkiDeckStats deckStats) {
+        return deckStats.newCount() == COUNT_NULL && deckStats.learnCount() == COUNT_NULL && deckStats.reviewCount() == COUNT_NULL;
+    }
+}

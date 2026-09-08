@@ -1,17 +1,22 @@
 package com.arduino.telegrambot.service;
 
 import com.arduino.telegrambot.sender.BotSender;
+import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendVoice;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.LinkPreviewOptions;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.ByteArrayInputStream;
 
 @Component
 public class TelegramService {
@@ -72,6 +77,60 @@ public class TelegramService {
 
         try {
             botSender.execute(editMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void editCaption(
+            Long chatId, long messageId, String text, InlineKeyboardMarkup keyboard, String parseMode) {
+
+        var editMessage = new EditMessageCaption();
+        editMessage.setChatId(chatId);
+        editMessage.setMessageId((int) messageId);
+        editMessage.setCaption(text);
+        editMessage.setParseMode(parseMode);
+        editMessage.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(editMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void sendAudio(
+            Long chatId, String text, byte[] audio, InlineKeyboardMarkup keyboard, String parseMode) {
+
+        var sendAudio = new SendAudio();
+        sendAudio.setChatId(chatId);
+        sendAudio.setCaption(text);
+        sendAudio.setAudio(new InputFile(new ByteArrayInputStream(audio), "speech.wav"));
+        sendAudio.setParseMode(parseMode);
+        sendAudio.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(sendAudio);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void editAudio(
+            Long chatId, String text, byte[] audio, InlineKeyboardMarkup keyboard, String parseMode) {
+
+        var sendAudio = new SendAudio();
+        sendAudio.setChatId(chatId);
+        sendAudio.setCaption(text);
+        sendAudio.setAudio(new InputFile(new ByteArrayInputStream(audio), "speech.wav"));
+        sendAudio.setParseMode(parseMode);
+        sendAudio.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(sendAudio);
         } catch (TelegramApiException e) {
             throw new RuntimeException(
                     "Failed to send message due to an error with the Telegram API.", e);

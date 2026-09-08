@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.anki.handler;
+package com.arduino.telegrambot.duocards;
 
 import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ShowAnkiAnswerHandler implements UpdateHandler {
+public class ShowDuoCardAnswerHandler implements UpdateHandler {
 
     @Autowired
     private TelegramService telegramService;
@@ -39,15 +39,11 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "showAnkiAnswer".equals(userRequest.getHandler());
+        return "showAnswerDuocards".equals(userRequest.getHandler());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-
-        var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.WAIT_ANKI_ANSWER);
-        userService.save(user);
 
         AnkiCurrentCard currentCard;
 
@@ -61,14 +57,15 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
 
         var deckName = currentCard.deckName();
 
-        var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
+        String word = currentCard.question();
+        var keyboardMarkup = keyboardBuilder.buildAnkiAnswerDuoCardsKeyboard(buttons, word);
 
         Map<String, AnkiDeckStats> deckStats = ankiService.getDecksStats(List.of(deckName)).block();
         AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
 
         var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckStats);
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.HTML);
+        telegramService.editCaption(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.HTML);
 
     }
 }

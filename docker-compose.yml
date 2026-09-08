@@ -22,7 +22,7 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U demo_user -d demo_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRESQL_DB_USER} -d ${POSTGRESQL_DB_NAME}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -48,36 +48,66 @@ services:
 
 
   # ==========================================
+  # Piper TTS
+  # ==========================================
+
+  piper:
+    image: piper-tts
+    build:
+      context: ./piper
+      dockerfile: Dockerfile
+
+    container_name: piper-demo
+    restart: unless-stopped
+
+    command:
+      - --model
+      - de_DE-thorsten-medium
+      - --data-dir
+      - /data
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5000"
+
+    expose:
+      - "5000"
+
+    networks:
+      - demo-network
+
+
+  # ==========================================
   # Spring Boot application + Telegram Bot
   # ==========================================
 
-#  app:
-#    extra_hosts:
-#      - ${ANKI_BASE_URL}
-#
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#
-#    container_name: java-demo
-#    restart: unless-stopped
-#
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
-#      webapp:
-#        condition: service_started
-#
-#    environment:
-#      SPRING_DATASOURCE_URL: ${POSTGRESQL_DB_URL}
-#      SPRING_DATASOURCE_USERNAME: ${POSTGRESQL_DB_USER}
-#      SPRING_DATASOURCE_PASSWORD: ${POSTGRESQL_DB_PASSWORD}
-#
-#      GEMINI_API_KEY: ${GEMINI_API_KEY}
-#      GROQ_API_KEY: ${GROQ_API_KEY}
-#
-#    networks:
-#      - demo-network
+  #  app:
+  #    extra_hosts:
+  #      - ${ANKI_BASE_URL}
+  #
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #
+  #    container_name: java-demo
+  #    restart: unless-stopped
+  #
+  #    depends_on:
+  #      postgres:
+  #        condition: service_healthy
+  #      webapp:
+  #        condition: service_started
+  #
+  #    environment:
+  #      SPRING_DATASOURCE_URL: ${POSTGRESQL_DB_URL}
+  #      SPRING_DATASOURCE_USERNAME: ${POSTGRESQL_DB_USER}
+  #      SPRING_DATASOURCE_PASSWORD: ${POSTGRESQL_DB_PASSWORD}
+  #
+  #      GEMINI_API_KEY: ${GEMINI_API_KEY}
+  #      GROQ_API_KEY: ${GROQ_API_KEY}
+  #
+  #    networks:
+  #      - demo-network
 
 
   # ==========================================

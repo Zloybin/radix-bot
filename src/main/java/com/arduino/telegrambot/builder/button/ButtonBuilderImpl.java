@@ -271,6 +271,16 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildAnswerDuocardsButton(AnkiAnswer ankiAnswer) {
+        var hash = getHashWithRequest("duoCardsAnswer", String.valueOf(ankiAnswer.getIndex()));
+
+        var button = new InlineKeyboardButton();
+        button.setText(ankiAnswer.getButtonText());
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildDuoCardsButton() {
 
         var hash = getHashWithoutRequest("duoCards");
@@ -321,6 +331,16 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildShowAnswerButton() {
 
         var hash = getHashWithoutRequest("showAnkiAnswer");
+
+        var button = new InlineKeyboardButton();
+        button.setText("Показать ответ");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildShowAnswerDuocardsButton() {
+        var hash = getHashWithoutRequest("showAnswerDuocards");
 
         var button = new InlineKeyboardButton();
         button.setText("Показать ответ");

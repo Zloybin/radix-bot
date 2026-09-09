@@ -76,6 +76,6 @@ public class AskAiHandler implements UpdateHandler {
 
         var response = llmService.process(taskText, userAnswer);
         var text = templateProcessor.processPhysTaskWithAiTemplate(title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber, response, userAnswer);
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }
 }

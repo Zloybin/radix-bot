@@ -306,7 +306,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildStartWebAppButton(String word) {
         WebAppInfo webAppInfo = new WebAppInfo();
 
-        String url = /*"https://app.radixbot.eu.org/?word="*/"https://competing-ser-responsible-availability.trycloudflare.com/?word=" +
+        String url = /*"https://app.radixbot.eu.org/?word="*/"https://schedule-counseling-distributors-sections.trycloudflare.com/?word=" +
                 URLEncoder.encode(word, StandardCharsets.UTF_8);
         webAppInfo.setUrl(url);
 

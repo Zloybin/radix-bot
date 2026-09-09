@@ -41,7 +41,7 @@ public class AnkiMenuHandler implements UpdateHandler {
         var keyboard = keyboardBuilder.buildAnkiMenu();
         var text = templateProcessor.processAnkiUserProfileTemplate();
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 
     }
 }

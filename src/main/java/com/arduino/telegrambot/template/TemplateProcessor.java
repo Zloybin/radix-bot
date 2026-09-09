@@ -21,7 +21,9 @@ public interface TemplateProcessor {
 
     String processDecksMenuTemplate();
     String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats);
+    String processFrontCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats);
     String processBackCardTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats);
+    String processBackCardDuoCardsTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats);
 
     String processCompletedDeckTemplate(String deckname);
 }

@@ -83,15 +83,15 @@ public class DuoCardsAnswerProcessorHandler implements UpdateHandler {
         } else {
 
             updatedCurrentCard = ankiService.getCurrentCard().block();
-            text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, deckStats);
+            text = templateProcessor.processFrontCardDuoCardsTemplate(updatedCurrentCard, deckStats);
 
             var audio = piperTtsService.synthesize(updatedCurrentCard.question()).block();
 
 
             //Youglish button added in keyboard
-            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
-            telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
-            telegramService.sendAudio(userRequest.getChatId(),text, audio, keyboard, ParseMode.HTML);
+            String word = currentCard.question();
+            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(word);
+            telegramService.editRichMessageWithAudio(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text, audio, word);
             return;
         }
 
@@ -99,9 +99,7 @@ public class DuoCardsAnswerProcessorHandler implements UpdateHandler {
         user.setState(UserState.FREE);
         userService.save(user);
 
-        telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
-
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(),userRequest.getMessageId(), keyboard, text);
 
     }
 

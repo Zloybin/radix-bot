@@ -68,6 +68,6 @@ public class DeleteAnkiCardHandler implements UpdateHandler {
         var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
         var text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, ankiDeckStats);
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }
 }

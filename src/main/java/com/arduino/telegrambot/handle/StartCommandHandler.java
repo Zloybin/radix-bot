@@ -44,9 +44,9 @@ public class StartCommandHandler implements UpdateHandler {
         if ("/start".equals(userRequest.getHandler())) {
             var user = userService.findById(userRequest.getChatId());
             user.setState(UserState.FREE);
-            telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+            telegramService.sendRichMessage(userRequest.getChatId(), keyboard, text);
         } else {
-            telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+            telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
         }
     }
 }

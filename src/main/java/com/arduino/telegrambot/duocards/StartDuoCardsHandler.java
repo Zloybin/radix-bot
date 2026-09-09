@@ -57,12 +57,12 @@ public class StartDuoCardsHandler implements UpdateHandler {
             }
 
             var deckStats = ankiService.getDeckStats(DEUTSCH).block();
-            text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
-            var question = currentCard.question();
-            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(question);
+            text = templateProcessor.processFrontCardDuoCardsTemplate(currentCard, deckStats);
+            var word = currentCard.question();
+            keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(word);
             var audio = piperTtsService.synthesize(currentCard.question()).block();
             telegramService
-                    .sendAudio(userRequest.getChatId(), text, audio, keyboard, ParseMode.HTML);
+                    .editRichMessageWithAudio(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text, audio, word);
         }else{
             throw new AnkiConnectException("не получилось запустить Review режим в колоде Deutsch.");
         }

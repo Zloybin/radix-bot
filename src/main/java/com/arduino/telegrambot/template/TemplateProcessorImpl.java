@@ -157,6 +157,24 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
+    public String processFrontCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
+        var question = currentCard.question();
+
+
+        var tags = currentCard.tags();
+
+        Context context = new Context();
+
+        context.setVariable("newCount", ankiDeckStats.newCount());
+        context.setVariable("learnCount", ankiDeckStats.learnCount());
+        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+
+        context.setVariable("question", question);
+        context.setVariable("tags", tags);
+        return engine.process("duocard_front", context);
+    }
+
+    @Override
     public String processBackCardTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats) {
 
         var question = currentCard.question();
@@ -176,6 +194,27 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("tags", tags);
         context.setVariable("answer", answer);
         return engine.process("anki_back", context);
+    }
+
+    @Override
+    public String processBackCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
+        var question = currentCard.question();
+
+
+        var tags = currentCard.tags();
+
+        var answer = currentCard.answer() + "<br/><br/><cite>" + question +"</cite>";
+
+        Context context = new Context();
+
+        context.setVariable("newCount", ankiDeckStats.newCount());
+        context.setVariable("learnCount", ankiDeckStats.learnCount());
+        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+
+        context.setVariable("question", question);
+        context.setVariable("tags", tags);
+        context.setVariable("answer", answer);
+        return engine.process("duocard_back", context);
     }
 
     @Override

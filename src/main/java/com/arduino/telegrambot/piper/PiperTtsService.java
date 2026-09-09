@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.piper;
 
 import com.arduino.telegrambot.piper.model.PiperRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -10,10 +11,13 @@ public class PiperTtsService {
 
     private final WebClient webClient;
 
-    public PiperTtsService(WebClient.Builder webClientBuilder) {
+    private final String baseUrl;
+
+    public PiperTtsService(WebClient.Builder webClientBuilder, @Value("${piper.url}") String baseUrl) {
         this.webClient = webClientBuilder
-                .baseUrl("http://piper:5000")
+                .baseUrl(baseUrl)
                 .build();
+        this.baseUrl = baseUrl;
     }
 
     public Mono<byte[]> synthesize(String text) {

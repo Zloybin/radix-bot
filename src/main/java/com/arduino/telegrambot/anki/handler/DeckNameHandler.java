@@ -36,9 +36,7 @@ public class DeckNameHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        var user = userService.findById(userRequest.getChatId());
-        UserState state = user.getState();
-        return UserState.WAIT_DECK_NAME.equals(state);
+        return "deckName".equals(userRequest.getHandler());
     }
 
     @Override

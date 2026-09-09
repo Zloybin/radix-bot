@@ -1,6 +1,9 @@
 server:
   port: 8080
 
+piper:
+  url: ${PIPER_URL}
+
 telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN}

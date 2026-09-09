@@ -8,13 +8,13 @@ import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
+import com.arduino.telegrambot.piper.PiperTtsService;
+import com.arduino.telegrambot.rich.TelegramRichMessageService;
 import com.arduino.telegrambot.service.TelegramService;
-import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -26,9 +26,6 @@ public class ShowDuoCardAnswerHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private AnkiService ankiService;
 
     @Autowired
@@ -36,6 +33,9 @@ public class ShowDuoCardAnswerHandler implements UpdateHandler {
 
     @Autowired
     private TemplateProcessor templateProcessor;
+
+    @Autowired
+    private PiperTtsService piperTtsService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -63,9 +63,11 @@ public class ShowDuoCardAnswerHandler implements UpdateHandler {
         Map<String, AnkiDeckStats> deckStats = ankiService.getDecksStats(List.of(deckName)).block();
         AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
 
-        var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckStats);
+        var text = templateProcessor.processBackCardDuoCardsTemplate(currentCard, ankiDeckStats);
 
-        telegramService.editCaption(userRequest.getChatId(), userRequest.getMessageId(), text, keyboardMarkup, ParseMode.HTML);
+        var audio = piperTtsService.synthesize(word).block();
+
+        telegramService.editRichMessageWithAudio(userRequest.getChatId(), userRequest.getMessageId(), keyboardMarkup, text, audio, word);
 
     }
 }

@@ -100,7 +100,7 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
         user.setState(UserState.FREE);
         userService.save(user);
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 
     }
 

@@ -35,6 +35,6 @@ public class DuoCardsMenuHandler implements UpdateHandler {
 
         var text = templateProcessor.processAnkiUserProfileTemplate();
         var keyboard = keyboardBuilder.buildDuoCardsMenuKeyboard();
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }
 }

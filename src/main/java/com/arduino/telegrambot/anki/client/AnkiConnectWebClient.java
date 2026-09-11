@@ -12,10 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class AnkiConnectWebClient implements AnkiConnectClient {
@@ -32,6 +31,9 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         this.ankiBaseUrl = ankiBaseUrl;
         this.webClient = webClientBuilder
                 .baseUrl(ankiBaseUrl)
+                .codecs(configurer ->
+                        configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)
+                )
                 .build();
     }
 
@@ -210,5 +212,166 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         }
 
         return Mono.just(response.get("result"));
+    }
+
+
+    public Mono<byte[]> getCurrentCardVideo() {
+        return invoke("guiCurrentCard", Map.of())
+                .flatMap(cardResponse -> {
+                    Long cardId = extractCardId(cardResponse);
+
+                    return invoke(
+                            "cardsInfo",
+                            Map.of("cards", List.of(cardId))
+                    );
+                })
+                .flatMap(cardInfoResponse -> {
+                    String filename = extractVideoFilename(cardInfoResponse);
+
+                    return invoke(
+                            "retrieveMediaFile",
+                            Map.of("filename", filename)
+                    );
+                })
+                .map(this::decodeBase64);
+    }
+
+    private Long extractCardId(JsonNode response) {
+        JsonNode cardIdNode = response
+                .path("cardId");
+
+        if (cardIdNode.isMissingNode() || cardIdNode.isNull()) {
+            throw new IllegalStateException(
+                    "guiCurrentCard did not return cardId"
+            );
+        }
+
+        return cardIdNode.asLong();
+    }
+
+    private String extractVideoFilename(JsonNode response) {
+
+        if (!response.isArray() || response.isEmpty()) {
+            throw new IllegalStateException(
+                    "cardsInfo did not return card information"
+            );
+        }
+
+        JsonNode card = response.get(0);
+
+        JsonNode fields = card.path("fields");
+
+        if (!fields.isObject()) {
+            throw new IllegalStateException(
+                    "Card does not contain fields"
+            );
+        }
+
+        Pattern pattern = Pattern.compile(
+                "\\[sound:([^\\]]+)]"
+        );
+
+        Iterator<JsonNode> fieldValues = fields.elements();
+
+        while (fieldValues.hasNext()) {
+
+            JsonNode field = fieldValues.next();
+
+            String value = field.path("value").asText("");
+
+            Matcher matcher = pattern.matcher(value);
+
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        }
+
+        throw new IllegalStateException(
+                "No video/audio media found in current card"
+        );
+    }
+
+    private String findVideoFilename(String html) {
+
+        Pattern[] patterns = {
+                Pattern.compile(
+                        "<source[^>]+src=[\"']([^\"']+)[\"']",
+                        Pattern.CASE_INSENSITIVE
+                ),
+
+                Pattern.compile(
+                        "<video[^>]+src=[\"']([^\"']+)[\"']",
+                        Pattern.CASE_INSENSITIVE
+                )
+        };
+
+        for (Pattern pattern : patterns) {
+
+            Matcher matcher = pattern.matcher(html);
+
+            if (matcher.find()) {
+                String src = matcher.group(1);
+
+                return extractFilename(src);
+            }
+        }
+
+        return null;
+    }
+
+    private String extractFilename(String src) {
+
+        // Например:
+        // "physics.mp4"
+        // "/physics.mp4"
+        // "https://example.com/physics.mp4"
+        // "physics.mp4?foo=bar"
+
+        String filename = src;
+
+        int queryIndex = filename.indexOf('?');
+
+        if (queryIndex >= 0) {
+            filename = filename.substring(0, queryIndex);
+        }
+
+        int fragmentIndex = filename.indexOf('#');
+
+        if (fragmentIndex >= 0) {
+            filename = filename.substring(0, fragmentIndex);
+        }
+
+        int slashIndex = filename.lastIndexOf('/');
+
+        if (slashIndex >= 0) {
+            filename = filename.substring(slashIndex + 1);
+        }
+
+        return filename;
+    }
+
+    private byte[] decodeBase64(JsonNode response) {
+
+        if (response.isMissingNode() || response.isNull()) {
+            throw new IllegalStateException(
+                    "retrieveMediaFile returned no response"
+            );
+        }
+
+        if (!response.isTextual()) {
+            throw new IllegalStateException(
+                    "retrieveMediaFile response is not Base64 string"
+            );
+        }
+
+        try {
+            return Base64.getDecoder().decode(response.asText());
+
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException(
+                    "Invalid Base64 returned by AnkiConnect",
+                    e
+            );
+        }
     }
 }

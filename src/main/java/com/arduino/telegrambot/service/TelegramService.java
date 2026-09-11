@@ -173,7 +173,13 @@ public class TelegramService {
     public void editRichMessageWithAudio(
             Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html, byte[] audio, String word) {
 
-        telegramRichMessageService.editRichMessageWithAudio(chatId, messageId, html, audio, keyboard, word).block();
+        telegramRichMessageService.editRichMessageWithAudio(chatId, messageId, html, audio, keyboard).block();
+    }
+
+    public void editRichMessageWithAudioAndVideo(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html, byte[] audio, byte[] video, String word) {
+
+        telegramRichMessageService.editRichMessageWithAudioAndVideo(chatId, messageId, html, audio, video, keyboard).block();
     }
 
     public void deleteMessage(

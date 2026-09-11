@@ -1,19 +1,29 @@
+<figure>
+    <video src="tg://video?id=video_1"></video>
+</figure>
+
 <blockquote expandable>
-<h2>❔</h2>
+    <h2>❔</h2>
+
     <hr/>
+
     <aside align="center" th:utext="${question}">
         Текст вопроса
     </aside>
+
     <hr/>
+
     <figure>
         <audio src="tg://audio?id=audio_1"></audio>
     </figure>
+
 </blockquote>
 
 
 🆕 <b th:text="${newCount}">12</b>
 📖 <b th:text="${learnCount}">5</b>
 🔄 <b th:text="${reviewCount}">37</b>
+
 
 <th:block th:if="${tags != null and !tags.isEmpty()}">
 

@@ -61,8 +61,9 @@ public class StartDuoCardsHandler implements UpdateHandler {
             var word = currentCard.question();
             keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(word);
             var audio = piperTtsService.synthesize(currentCard.question()).block();
+            var video = ankiService.getVideo();
             telegramService
-                    .editRichMessageWithAudio(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text, audio, word);
+                    .editRichMessageWithAudioAndVideo(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text, audio, video, word);
         }else{
             throw new AnkiConnectException("не получилось запустить Review режим в колоде Deutsch.");
         }

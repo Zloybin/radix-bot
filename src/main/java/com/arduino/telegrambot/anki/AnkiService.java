@@ -122,4 +122,8 @@ public class AnkiService {
             );
         }
     }
+
+    public byte[] getVideo(){
+        return ankiClient.getCurrentCardVideo().block();
+    }
 }

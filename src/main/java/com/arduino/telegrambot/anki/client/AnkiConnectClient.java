@@ -34,4 +34,5 @@ public interface AnkiConnectClient {
     Mono<Boolean> showAnswer();
 
     Mono<Boolean> answerCard(int ease);
+    Mono<byte[]> getCurrentCardVideo();
 }

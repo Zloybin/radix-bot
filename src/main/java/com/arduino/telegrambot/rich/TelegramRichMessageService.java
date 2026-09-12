@@ -319,4 +319,24 @@ public class TelegramRichMessageService {
                 .bodyToMono(String.class);
     }
 
+    public Mono<String> editRichMessageReplyMarkup(
+            long chatId,
+            long messageId,
+            InlineKeyboardMarkup keyboard
+    ) {
+
+        Map<String, Object> request = new HashMap<>();
+
+        request.put("chat_id", chatId);
+        request.put("message_id", messageId);
+        request.put("reply_markup", keyboard);
+
+        return webClient.post()
+                .uri("/bot{token}/editMessageReplyMarkup", botToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
 }

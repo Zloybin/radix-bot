@@ -5,6 +5,7 @@ import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.ResultService;
+import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
@@ -29,6 +30,9 @@ public class UserPhysAnswerHandler implements UpdateHandler {
     private TemplateProcessor templateProcessor;
 
     @Autowired
+    private TaskService taskService;
+
+    @Autowired
     private TelegramService telegramService;
 
     @Autowired
@@ -51,13 +55,23 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         user.setState(UserState.FREE);
         userService.save(user);
 
-        var text = templateProcessor.processUserResultMessageTemplate(result.isResult(), result.getTask().getAnswer(), result.getUserAnswer());
+        var physTask = taskService.findById(user.getPhysTaskId());
+
+        var section = physTask.getSection().getRussianName();
+        var title = physTask.getTitle();
+        var taskNumber = physTask.getTaskNumber();
+        var selfTaskNumber = physTask.getSelfTaskNumber();
+        var taskLevel = physTask.getTaskLevel().getTitle();
+        var taskText = physTask.getTaskText();
+        var pageNumber = physTask.getPageNumber();
+
+        var text = templateProcessor.processUserResultMessageTemplate(result.isResult(), result.getTask().getAnswer(), result.getUserAnswer(), section, title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
 
         var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenu();
         var infoButton = keyboardBuilder.buildInfoResultButton(result.isResult());
 
-        telegramService.editKeyboard(userRequest.getChatId(), (int) user.getMessageId(), infoButton);
+//        telegramService.editKeyboard(userRequest.getChatId(), (int) user.getMessageId(), infoButton);
         telegramService.deleteMessage(userRequest.getChatId(), userRequest.getMessageId());
-        telegramService.sendMessageWithKeyboard(userRequest.getChatId(), keyboard, text, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), (int) user.getMessageId(), keyboard, text);
     }
 }

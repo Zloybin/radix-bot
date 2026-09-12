@@ -81,7 +81,7 @@ public class PhysTaskHandler implements UpdateHandler {
 
         var keyboard = keyboardBuilder.buildPhysTaskMenu();
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 
     }
 }

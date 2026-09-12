@@ -65,17 +65,21 @@ public class AskAiHandler implements UpdateHandler {
         }
 
         var title = task.getTitle();
+        var section = task.getSection().getRussianName();
         var taskNumber = task.getTaskNumber();
         var selfTaskNumber = task.getSelfTaskNumber();
         var taskLevel = task.getTaskLevel().getTitle();
         var pageNumber = task.getPageNumber();
+        var rightAnswer = task.getAnswer();
+
+
         var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenuWithoutAi();
 
-        var waitResponseText = templateProcessor.processPhysTaskWaitAiTemplate(title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), waitResponseText, keyboard, ParseMode.HTML);
+        var waitResponseText = templateProcessor.processPhysTaskWaitAiTemplate(title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber, section, userAnswer, rightAnswer);
+        telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, waitResponseText);
 
         var response = llmService.process(taskText, userAnswer);
-        var text = templateProcessor.processPhysTaskWithAiTemplate(title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber, response, userAnswer);
+        var text = templateProcessor.processPhysTaskWithAiTemplate(title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber, section, response, userAnswer, rightAnswer);
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }
 }

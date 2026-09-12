@@ -51,11 +51,7 @@ public class CorrectingResultTrueHandler implements UpdateHandler {
 
         boolean updatedResultValue = true;
         var infoButton = keyboardBuilder.buildInfoResultButton(updatedResultValue);
-        var infoMessageId = user.getMessageId();
         actualResult.ifPresent(result -> {
-            if (!result.isResult()) {
-                telegramService.editKeyboard(userRequest.getChatId(), infoMessageId, infoButton);
-            }
             result.setResult(updatedResultValue);
             resultService.save(result);
             System.out.println(String.format("Результат с id: %s был изменен на значение: true", result.getId()));
@@ -69,7 +65,7 @@ public class CorrectingResultTrueHandler implements UpdateHandler {
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
         var text = templateProcessor.processSuccessCorrectTemplate(task.getId(), updatedResultValue);
 
-
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessageKeyboard(userRequest.getChatId(), (long) userRequest.getMessageId(), infoButton);
+        telegramService.sendRichMessage(userRequest.getChatId(), keyboard, text);
     }
 }

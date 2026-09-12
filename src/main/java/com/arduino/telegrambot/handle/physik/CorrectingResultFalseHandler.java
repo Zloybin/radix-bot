@@ -47,29 +47,24 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
         var actualResult = results.stream()
                 .filter(result -> result.getTask().getId().equals(task.getId()))
                 .findFirst();
-        boolean updatedResultValue = false;
 
+        boolean updatedResultValue = false;
         var infoButton = keyboardBuilder.buildInfoResultButton(updatedResultValue);
-        var infoMessageId = user.getMessageId();
         actualResult.ifPresent(result -> {
-            if(result.isResult()){
-                telegramService.editKeyboard(userRequest.getChatId(), infoMessageId, infoButton);
-            }
             result.setResult(updatedResultValue);
             resultService.save(result);
             System.out.println(String.format("Результат с id: %s был изменен на значение: false", result.getId()));
         });
-
 
         user.setPhysTaskId(0L);
         user.setMessageId(0L);
         userService.save(user);
 
         var keyboard = keyboardBuilder.buildCompletedPhysTaskMenu();
-
         var text = templateProcessor.processSuccessCorrectTemplate(task.getId(), updatedResultValue);
 
 
-        telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessageKeyboard(userRequest.getChatId(), (long) userRequest.getMessageId(), infoButton);
+        telegramService.sendRichMessage(userRequest.getChatId(), keyboard, text);
     }
 }

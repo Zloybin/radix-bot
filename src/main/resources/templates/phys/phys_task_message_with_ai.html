@@ -1,0 +1,74 @@
+<details open>
+    <summary>📝 Результат</summary>
+
+
+    <b>Ваш ответ:</b>
+    <blockquote>
+        <p>
+            <code th:text="${userAnswer}">101101</code>
+        </p>
+
+    </blockquote>
+
+
+    <b>Правильный ответ:</b>
+    <blockquote>
+        <p>
+            <code th:text="${rightAnswer != null and !#strings.isEmpty(rightAnswer) ? rightAnswer : 'Правильный ответ не определен'}">
+                45
+            </code>
+        </p>
+    </blockquote>
+
+    <hr/>
+</details>
+
+<details open>
+    <summary>🤖 Ответ ИИ</summary>
+
+    <blockquote expandable>
+        <th:block th:utext="${aiAnswer}">
+            Ответ ИИ на задание
+        </th:block>
+    </blockquote>
+</details>
+
+<details>
+    <summary>ℹ️ Информация о задании</summary>
+
+    📚 <b>Тема:</b>
+    <th:block th:text="${title}">Название</th:block>
+
+    <footer>
+        <b>Раздел:</b>
+        <th:block th:text="${section}">Раздел</th:block>
+    </footer>
+
+    <h6>
+        <b>Самостоятельная работа №:</b>
+        <b th:text="${selfTaskNumber}">20</b>
+
+        <br/>
+
+        <b>Уровень:</b>
+        <b th:text="${taskLevel}">INITIAL</b>
+
+        <br/>
+
+        <b>Задание №:</b>
+        <b th:text="${taskNumber}">7</b>
+    </h6>
+
+    <blockquote>
+        <th:block th:utext="${taskText}">
+            Текст задания
+        </th:block>
+    </blockquote>
+
+    📖 <b>Страница:</b>
+    <b th:text="${pageNumber}">70</b>
+
+</details>
+
+<h3>❓ Вы правильно ответили на задание?</h3>
+

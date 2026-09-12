@@ -158,10 +158,17 @@ public class TelegramService {
     }
 
 
+
     public void sendRichMessage(
             Long chatId, InlineKeyboardMarkup keyboard, String html) {
 
         telegramRichMessageService.sendRichMessage(chatId, html, keyboard).block();
+    }
+
+    public void editRichMessageKeyboard(
+            Long chatId, Long messageId, InlineKeyboardMarkup keyboard) {
+
+        telegramRichMessageService.editRichMessageReplyMarkup(chatId, messageId, keyboard).block();
     }
 
     public void editRichMessage(

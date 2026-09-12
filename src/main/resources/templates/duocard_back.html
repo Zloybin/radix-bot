@@ -1,26 +1,48 @@
 <blockquote>
     <h2>💡</h2>
+
     <hr/>
+
     <aside align="center" th:utext="${answer}">
         Ответ на вопрос
     </aside>
+
+    📝 <b>Пример:</b>
+    <br/>
+
+    <p th:if="${example != null and !example.isEmpty()}"
+       th:utext="${example}">
+        Пример использования
+    </p>
+
     <hr/>
+
     <figure>
         <audio src="tg://audio?id=audio_1"></audio>
     </figure>
 </blockquote>
 
+<details>
+    <summary>
+        📹 Видео
+    </summary>
+
+    <figure>
+        <video src="tg://video?id=video_1"></video>
+    </figure>
+</details>
+
 🆕 <b th:text="${newCount}">12</b>
 📖 <b th:text="${learnCount}">5</b>
 🔄 <b th:text="${reviewCount}">37</b>
-
-
 
 <th:block th:if="${tags != null and !tags.isEmpty()}">
 
     <hr/>
 
     🏷 <b>Теги:</b>
-    <i th:text="${#strings.listJoin(tags, ', ')}">physics, mechanics</i>
+    <i th:text="${#strings.listJoin(tags, ', ')}">
+        physics, mechanics
+    </i>
 
 </th:block>

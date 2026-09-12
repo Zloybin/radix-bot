@@ -147,6 +147,19 @@ public class TelegramRichMessageService {
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(multipart.build()))
                 .retrieve()
+                .onStatus(
+                        status -> status.isError(),
+                        response -> response.bodyToMono(String.class)
+                                .flatMap(body -> {
+                                    System.err.println(
+                                            "Telegram error: " + body
+                                    );
+
+                                    return Mono.error(
+                                            new RuntimeException(body)
+                                    );
+                                })
+                )
                 .bodyToMono(String.class);
     }
 
@@ -330,6 +343,16 @@ public class TelegramRichMessageService {
         request.put("chat_id", chatId);
         request.put("message_id", messageId);
         request.put("reply_markup", keyboard);
+
+        String json = null;
+        try {
+            json = objectMapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(json);
+
 
         return webClient.post()
                 .uri("/bot{token}/editMessageReplyMarkup", botToken)

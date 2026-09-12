@@ -11,6 +11,7 @@ public record AnkiCurrentCard(
         String deckName,
         String question,
         String answer,
+        String example,
         List <String> tags,
         List<Integer> buttons
 ) {

@@ -1,13 +1,21 @@
-<b>📝 Вопрос</b>
+<h3>📝 Вопрос</h3>
 
-<blockquote expandable th:utext="${question}">
+<blockquote th:utext="${question}">
     Текст вопроса
 </blockquote>
 
-━━━━━━━━━━━━━━━━━━
+<hr/>
 
-<b>Карты:</b> 🆕 <b th:text="${newCount}">12</b>  📖 <b th:text="${learnCount}">5</b>  🔄 <b th:text="${reviewCount}">37</b>
-<th:block th:if="${tags != null and !tags.isEmpty()}">
-
-🏷 <b>Теги:</b> <i th:text="${#strings.listJoin(tags, ', ')}">physics, mechanics</i>
-</th:block>
+<p>
+    <b>Карты:</b>
+    🆕 <b th:text="${newCount}">12</b>
+    📖 <b th:text="${learnCount}">5</b>
+    🔄 <b th:text="${reviewCount}">37</b>
+</p>
+<br/>
+<p th:if="${tags != null and !tags.isEmpty()}">
+    🏷 <b>Теги:</b>
+    <i th:text="${#strings.listJoin(tags, ', ')}">
+        physics, mechanics
+    </i>
+</p>

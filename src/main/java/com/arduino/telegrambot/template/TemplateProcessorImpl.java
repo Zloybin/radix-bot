@@ -214,6 +214,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
 
         var tags = currentCard.tags();
+        var example = currentCard.example();
 
         var answer = currentCard.answer() + "<br/><br/><cite>" + question +"</cite>";
 
@@ -226,6 +227,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("question", question);
         context.setVariable("tags", tags);
         context.setVariable("answer", answer);
+        context.setVariable("example", example);
         return engine.process("duocard_back", context);
     }
 

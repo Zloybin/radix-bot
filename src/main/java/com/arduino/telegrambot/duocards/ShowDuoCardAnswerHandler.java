@@ -63,11 +63,13 @@ public class ShowDuoCardAnswerHandler implements UpdateHandler {
         Map<String, AnkiDeckStats> deckStats = ankiService.getDecksStats(List.of(deckName)).block();
         AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
 
+        var video = ankiService.getVideo();
+
         var text = templateProcessor.processBackCardDuoCardsTemplate(currentCard, ankiDeckStats);
 
         var audio = piperTtsService.synthesize(word).block();
 
-        telegramService.editRichMessageWithAudio(userRequest.getChatId(), userRequest.getMessageId(), keyboardMarkup, text, audio, word);
+        telegramService.editRichMessageWithAudioAndVideo(userRequest.getChatId(), userRequest.getMessageId(), keyboardMarkup, text, audio, video, word);
 
     }
 }

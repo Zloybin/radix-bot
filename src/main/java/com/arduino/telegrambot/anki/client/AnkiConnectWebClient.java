@@ -120,6 +120,10 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                                             .path("Back")
                                             .path("value")
                                             .asText(),
+                                    json.path("fields")
+                                            .path("Beispiel")
+                                            .path("value")
+                                            .asText(),
                                     Jsoup.parse(
                                                     json.path("fields").path("DisplayTags").path("value").asText()
                                             ).select(".tag")

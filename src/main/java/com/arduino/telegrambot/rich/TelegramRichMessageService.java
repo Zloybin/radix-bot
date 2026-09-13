@@ -172,8 +172,8 @@ public class TelegramRichMessageService {
             InlineKeyboardMarkup keyboard
     ) {
 
-        String audioMediaId = "audio_1";
-        String audioFileFieldName = "audio";
+//        String audioMediaId = "audio_1";
+//        String audioFileFieldName = "audio";
 
         String videoMediaId = "video_1";
         String videoFileFieldName = "video";
@@ -183,16 +183,16 @@ public class TelegramRichMessageService {
         // AUDIO
         // ============================================================
 
-        Map<String, Object> inputMediaAudio = new HashMap<>();
-        inputMediaAudio.put("type", "audio");
-        inputMediaAudio.put(
-                "media",
-                "attach://" + audioFileFieldName
-        );
-
-        Map<String, Object> richMediaAudio = new HashMap<>();
-        richMediaAudio.put("id", audioMediaId);
-        richMediaAudio.put("media", inputMediaAudio);
+//        Map<String, Object> inputMediaAudio = new HashMap<>();
+//        inputMediaAudio.put("type", "audio");
+//        inputMediaAudio.put(
+//                "media",
+//                "attach://" + audioFileFieldName
+//        );
+//
+//        Map<String, Object> richMediaAudio = new HashMap<>();
+//        richMediaAudio.put("id", audioMediaId);
+//        richMediaAudio.put("media", inputMediaAudio);
 
 
         // ============================================================
@@ -222,7 +222,7 @@ public class TelegramRichMessageService {
         richMessage.put(
                 "media",
                 List.of(
-                        richMediaAudio,
+                        /*richMediaAudio,*/
                         richMediaVideo
                 )
         );
@@ -279,18 +279,18 @@ public class TelegramRichMessageService {
         // AUDIO FILE
         // ============================================================
 
-        multipart.part(
-                audioFileFieldName,
-                new ByteArrayResource(audioBytes) {
-
-                    @Override
-                    public String getFilename() {
-                        return "audio.mp3";
-                    }
-                }
-        ).contentType(
-                MediaType.parseMediaType("audio/mpeg")
-        );
+//        multipart.part(
+//                audioFileFieldName,
+//                new ByteArrayResource(audioBytes) {
+//
+//                    @Override
+//                    public String getFilename() {
+//                        return "audio.mp3";
+//                    }
+//                }
+//        ).contentType(
+//                MediaType.parseMediaType("audio/mpeg")
+//        );
 
 
         // ============================================================

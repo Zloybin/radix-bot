@@ -67,9 +67,9 @@ public class ShowDuoCardAnswerHandler implements UpdateHandler {
 
         var text = templateProcessor.processBackCardDuoCardsTemplate(currentCard, ankiDeckStats);
 
-        var audio = piperTtsService.synthesize(word).block();
+//        var audio = piperTtsService.synthesize(word).block();
 
-        telegramService.editRichMessageWithAudioAndVideo(userRequest.getChatId(), userRequest.getMessageId(), keyboardMarkup, text, audio, video, word);
+        telegramService.editRichMessageWithAudioAndVideo(userRequest.getChatId(), userRequest.getMessageId(), keyboardMarkup, text, null, video, word);
 
     }
 }

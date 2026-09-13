@@ -92,20 +92,20 @@ public class TelegramRichMessageService {
             InlineKeyboardMarkup keyboard
     ) {
 
-        String mediaId = "audio_1";
-        String fileFieldName = "audio";
+//        String mediaId = "audio_1";
+//        String fileFieldName = "audio";
+//
+//        Map<String, Object> inputMediaAudio = new HashMap<>();
+//        inputMediaAudio.put("type", "audio");
+//        inputMediaAudio.put("media", "attach://" + fileFieldName);
 
-        Map<String, Object> inputMediaAudio = new HashMap<>();
-        inputMediaAudio.put("type", "audio");
-        inputMediaAudio.put("media", "attach://" + fileFieldName);
-
-        Map<String, Object> richMedia = new HashMap<>();
-        richMedia.put("id", mediaId);
-        richMedia.put("media", inputMediaAudio);
+//        Map<String, Object> richMedia = new HashMap<>();
+//        richMedia.put("id", mediaId);
+//        richMedia.put("media", inputMediaAudio);
 
         Map<String, Object> richMessage = new HashMap<>();
         richMessage.put("html", html);
-        richMessage.put("media", List.of(richMedia));
+//        richMessage.put("media", List.of(richMedia));
 
         MultipartBodyBuilder multipart = new MultipartBodyBuilder();
 
@@ -132,15 +132,15 @@ public class TelegramRichMessageService {
             }
         }
 
-        multipart.part(
-                fileFieldName,
-                new ByteArrayResource(audioBytes) {
-                    @Override
-                    public String getFilename() {
-                        return "Прослушать \uD83D\uDD0A";
-                    }
-                }
-        ).contentType(MediaType.parseMediaType("audio/mpeg"));
+//        multipart.part(
+//                fileFieldName,
+//                new ByteArrayResource(audioBytes) {
+//                    @Override
+//                    public String getFilename() {
+//                        return "Прослушать \uD83D\uDD0A";
+//                    }
+//                }
+//        ).contentType(MediaType.parseMediaType("audio/mpeg"));
 
         return webClient.post()
                 .uri("/bot{token}/editMessageText", botToken)

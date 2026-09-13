@@ -60,9 +60,9 @@ public class StartDuoCardsHandler implements UpdateHandler {
             text = templateProcessor.processFrontCardDuoCardsTemplate(currentCard, deckStats);
             var word = currentCard.question();
             keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(word);
-            var audio = piperTtsService.synthesize(currentCard.question()).block();
+//            var audio = piperTtsService.synthesize(currentCard.question()).block();
             telegramService
-                    .editRichMessageWithAudio(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text, audio, word);
+                    .editRichMessageWithAudio(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text, null, word);
         }else{
             throw new AnkiConnectException("не получилось запустить Review режим в колоде Deutsch.");
         }

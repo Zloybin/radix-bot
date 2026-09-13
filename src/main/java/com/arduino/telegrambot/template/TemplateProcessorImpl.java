@@ -2,6 +2,7 @@ package com.arduino.telegrambot.template;
 
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.anki.parser.TelegramLatexParser;
 import com.arduino.telegrambot.model.SectionProgress;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,7 +164,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("learnCount", ankiDeckStats.learnCount());
         context.setVariable("reviewCount", ankiDeckStats.reviewCount());
 
-        context.setVariable("question", question);
+
+        var parsedQuestion = TelegramLatexParser.parse(question);
+        context.setVariable("question", parsedQuestion);
         context.setVariable("tags", tags);
         return engine.process("anki_front", context);
     }
@@ -202,9 +205,12 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("learnCount", ankiDeckStats.learnCount());
         context.setVariable("reviewCount", ankiDeckStats.reviewCount());
 
-        context.setVariable("question", question);
+        var parsedQuestion = TelegramLatexParser.parse(question);
+        var parsedAnswer = TelegramLatexParser.parse(answer);
+
+        context.setVariable("question", parsedQuestion);
         context.setVariable("tags", tags);
-        context.setVariable("answer", answer);
+        context.setVariable("answer", parsedAnswer);
         return engine.process("anki_back", context);
     }
 

@@ -1,7 +1,5 @@
 package com.arduino.telegrambot.anki.parser;
 
-import org.springframework.stereotype.Component;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,8 +16,6 @@ import java.util.regex.Pattern;
  * Порядок проверки важен: сначала $$ и \[...\], иначе одинарный $
  * или \( съедят их как обычный текст.
  */
-
-@Component
 public class TelegramLatexParser {
 
     // $$...$$  (не жадный, поддержка переноса строк)
@@ -60,11 +56,12 @@ public class TelegramLatexParser {
         text = extractAndReplace(text, INLINE_BRACKETS, extracted);
         text = extractAndReplace(text, SINGLE_DOLLAR, extracted);
 
-        // Экранируем HTML-спецсимволы в оставшемся обычном тексте,
-        // т.к. Telegram HTML parse_mode требует экранирования < > &
-        text = escapeHtml(text);
+        // Остальной текст (включая уже существующую HTML-разметку,
+        // если она там есть) не трогаем и не экранируем.
 
-        // Возвращаем формулы на место, уже обёрнутыми в тег
+        // Возвращаем формулы на место, уже обёрнутыми в тег.
+        // Экранируем спецсимволы только ВНУТРИ формулы, чтобы, например,
+        // "a < b" в LaTeX не сломало сам тег <tg-math-block>.
         for (int i = 0; i < extracted.size(); i++) {
             String placeholder = PLACEHOLDER_PREFIX + i + PLACEHOLDER_SUFFIX;
             String formula = extracted.get(i);
@@ -102,13 +99,14 @@ public class TelegramLatexParser {
     public static void main(String[] args) {
         String sample =
                 "Формула плотности: $\\rho = \\frac{m}{V}$, а вот подъёмная сила:\n" +
-                        "$$F = \\rho g V$$\n" +
-                        "Условие плавания шара: \\(F_A > mg\\).\n" +
-                        "И развёрнутая формула:\n" +
-                        "\\[\n" +
-                        "  P = \\rho_{возд} g V - \\rho_{газ} g V\n" +
-                        "\\]\n" +
-                        "Обычный текст с <тегом> и & символом остаётся как есть.";
+                "$$F = \\rho g V$$\n" +
+                "Условие плавания шара: \\(F_A > mg\\).\n" +
+                "И развёрнутая формула:\n" +
+                "\\[\n" +
+                "  P = \\rho_{возд} g V - \\rho_{газ} g V\n" +
+                "\\]\n" +
+                "Обычный текст с <b>жирным тегом Telegram</b> остаётся как есть, " +
+                "и сравнение внутри формулы $a < b$ тоже не ломает разметку.";
 
         System.out.println(parse(sample));
     }

@@ -8,9 +8,12 @@ import org.jsoup.Jsoup;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -29,8 +32,11 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     public AnkiConnectWebClient(WebClient.Builder webClientBuilder, @Value("${anki.baseUrl}") String ankiBaseUrl) {
         this.ankiBaseUrl = ankiBaseUrl;
+        ConnectionProvider provider = ConnectionProvider.newConnection();
+        HttpClient httpClient = HttpClient.create(provider);
         this.webClient = webClientBuilder
                 .baseUrl(ankiBaseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .codecs(configurer ->
                         configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)
                 )

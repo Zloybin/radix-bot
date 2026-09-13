@@ -6,15 +6,6 @@
     <aside align="center" th:utext="${answer}">
         Ответ на вопрос
     </aside>
-
-    📝 <b>Пример:</b>
-    <br/>
-
-    <p th:if="${example != null and !example.isEmpty()}"
-       th:utext="${example}">
-        Пример использования
-    </p>
-
     <hr/>
 
     <figure>
@@ -22,9 +13,19 @@
     </figure>
 </blockquote>
 
+📝 <b>Пример:</b>
+<hr/>
+<p th:if="${example != null and !example.isEmpty()}"
+   th:utext="${example}">
+    Пример использования
+</p>
+
+<hr/>
+
 <details>
     <summary>
         📹 Видео
+        <hr/>
     </summary>
 
     <figure>

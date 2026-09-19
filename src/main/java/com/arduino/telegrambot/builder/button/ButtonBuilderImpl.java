@@ -52,30 +52,57 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildPhysTaskStartButton() {
-        var hash = getHashWithoutRequest("physTask");
-
-        var button = new InlineKeyboardButton();
-        button.setText("\uD83D\uDCA1 Решить задачу");
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildOpenSourceFileButton() {
-        var button = new InlineKeyboardButton();
-        button.setText("\uD83D\uDCD6");
-        button.setUrl("https://drive.google.com/file/d/1xJ_ywA8fZktF9U_N-iDKmL5wavw-GlDV/view?usp=sharing");
-        return button;
-    }
-
-    @Override
     public InlineKeyboardButton buildStatisticsButton() {
 
         var hash = getHashWithoutRequest("statistics");
 
         var button = new InlineKeyboardButton();
         button.setText("\uD83D\uDCCA Статистика");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildSettingButton() {
+
+        var hash = getHashWithoutRequest("settingPhys");
+
+        var button = new InlineKeyboardButton();
+        button.setText("🎚️Настройки");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildExcludeCompletedTaskButton(boolean isExclude) {
+
+        var hash = getHashWithoutRequest("excludeCompletedTask");
+
+        String check = isExclude ? "✅" : "☑️";
+
+        var button = new InlineKeyboardButton();
+        button.setText(String.format("Искл. пройденные %s", check));
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildFilterButton() {
+
+        var hash = getHashWithoutRequest("filterPhys");
+
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83D\uDD0E Фильтр");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildPhysTaskStartButton() {
+        var hash = getHashWithoutRequest("physTask");
+
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83D\uDCA1 Решить задачу");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
@@ -102,63 +129,14 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         return button;
     }
 
-
     @Override
-    public InlineKeyboardButton buildInfoButton(String text) {
-
-        var hash = getHashWithoutRequest("info");
-
+    public InlineKeyboardButton buildOpenBookButton() {
         var button = new InlineKeyboardButton();
-        button.setText(text);
-        button.setCallbackData(String.valueOf(hash));
+        button.setText("\uD83D\uDCD6");
+        button.setUrl("https://drive.google.com/file/d/1xJ_ywA8fZktF9U_N-iDKmL5wavw-GlDV/view?usp=sharing");
         return button;
     }
 
-    @Override
-    public InlineKeyboardButton buildAskAiButton() {
-
-        var hash = getHashWithoutRequest("askAi");
-
-        var button = new InlineKeyboardButton();
-        button.setText("\uD83E\uDDE0 Спроси ИИ");
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildSettingButton() {
-
-        var hash = getHashWithoutRequest("settingPhys");
-
-        var button = new InlineKeyboardButton();
-        button.setText("🎚️Настройки");
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildFilterButton() {
-
-        var hash = getHashWithoutRequest("filterPhys");
-
-        var button = new InlineKeyboardButton();
-        button.setText("\uD83D\uDD0E Фильтр");
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildExcludeCompletedTaskButton(boolean isExclude) {
-
-        var hash = getHashWithoutRequest("excludeCompletedTask");
-
-        String check = isExclude ? "✅" : "☑️";
-
-        var button = new InlineKeyboardButton();
-        button.setText(String.format("Искл. пройденные %s", check));
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
 
     @Override
     public InlineKeyboardButton buildCorrectingResultTrueButton() {
@@ -183,15 +161,27 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildPhysTaskConfirmationButton() {
+    public InlineKeyboardButton buildAskAiButton() {
 
-        var hash = getHashWithoutRequest("confirmTask");
+        var hash = getHashWithoutRequest("askAi");
 
         var button = new InlineKeyboardButton();
-        button.setText("Продолжить");
+        button.setText("\uD83E\uDDE0 Спроси ИИ");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
+
+    @Override
+    public InlineKeyboardButton buildInfoButton(String text) {
+
+        var hash = getHashWithoutRequest("info");
+
+        var button = new InlineKeyboardButton();
+        button.setText(text);
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
 
     //radConverter
 
@@ -227,10 +217,11 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         return button;
     }
 
-    @Override
-    public InlineKeyboardButton buildAnkiTaskStartButton() {
 
-        var hash = getHashWithoutRequest("ankiMainMenu");
+    @Override
+    public InlineKeyboardButton buildAnkiMenuButton() {
+
+        var hash = getHashWithoutRequest("ankiMenu");
 
         var button = new InlineKeyboardButton();
         button.setText("\uD83D\uDDC3\uFE0F Карточки Anki");
@@ -244,25 +235,47 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("showDecks");
 
         var button = new InlineKeyboardButton();
-        button.setText("🗃️Показать колодs");
+        button.setText("📨 Колоды");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
 
     @Override
-    public InlineKeyboardButton buildDeckNameButton(String deckName) {
-        var hash = getHashWithRequest("deckName", deckName);
+    public InlineKeyboardButton buildDeckNameButton(String deckName, int total) {
+        var hash = getHashWithRequest("showAnkiCard", deckName);
 
         var button = new InlineKeyboardButton();
-        button.setText(deckName);
+        button.setText(String.format("%s (%d)", deckName, total));
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
 
     @Override
-    public InlineKeyboardButton buildAnkiAnswerButton(AnkiAnswer ankiAnswer) {
+    public InlineKeyboardButton buildShowAnkiAnswerButton() {
 
-        var hash = getHashWithRequest("ankiAnswer", String.valueOf(ankiAnswer.getIndex()));
+        var hash = getHashWithoutRequest("showAnkiAnswer");
+
+        var button = new InlineKeyboardButton();
+        button.setText("Показать ответ");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildDeleteAnkiCardButton() {
+
+        var hash = getHashWithoutRequest("deleteAnkiCard");
+
+        var button = new InlineKeyboardButton();
+        button.setText("⛔️ Удалить карточку");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildAnkiOptionAnswerButton(AnkiAnswer ankiAnswer) {
+
+        var hash = getHashWithRequest("processAnkiAnswer", String.valueOf(ankiAnswer.getIndex()));
 
         var button = new InlineKeyboardButton();
         button.setText(ankiAnswer.getButtonText());
@@ -270,20 +283,11 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         return button;
     }
 
-    @Override
-    public InlineKeyboardButton buildAnswerDuocardsButton(AnkiAnswer ankiAnswer) {
-        var hash = getHashWithRequest("duoCardsAnswer", String.valueOf(ankiAnswer.getIndex()));
-
-        var button = new InlineKeyboardButton();
-        button.setText(ankiAnswer.getButtonText());
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
 
     @Override
-    public InlineKeyboardButton buildDuoCardsButton() {
+    public InlineKeyboardButton buildDuoCardsMenuButton() {
 
-        var hash = getHashWithoutRequest("duoCards");
+        var hash = getHashWithoutRequest("duoCardsMenu");
 
         var button = new InlineKeyboardButton();
         button.setText("🦉 DuoCards");
@@ -303,7 +307,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildStartWebAppButton(String word) {
+    public InlineKeyboardButton buildYouglishStartButton(String word) {
         WebAppInfo webAppInfo = new WebAppInfo();
 
         String url = /*"https://app.radixbot.eu.org/?word="*/"https://relating-removal-coaches-heating.trycloudflare.com/?word=" +
@@ -317,29 +321,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildDeleteAnkiCardButton() {
-
-        var hash = getHashWithoutRequest("deleteAnkiCard");
-
-        var button = new InlineKeyboardButton();
-        button.setText("⛔️ Удалить карточку");
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildShowAnswerButton() {
-
-        var hash = getHashWithoutRequest("showAnkiAnswer");
-
-        var button = new InlineKeyboardButton();
-        button.setText("Показать ответ");
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
-
-    @Override
-    public InlineKeyboardButton buildShowAnswerDuocardsButton() {
+    public InlineKeyboardButton buildShowAnswerDuoCardsButton() {
         var hash = getHashWithoutRequest("showAnswerDuocards");
 
         var button = new InlineKeyboardButton();
@@ -347,6 +329,17 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
+
+    @Override
+    public InlineKeyboardButton buildAnswerOptionDuoCardsButton(AnkiAnswer ankiAnswer) {
+        var hash = getHashWithRequest("duoCardsAnswer", String.valueOf(ankiAnswer.getIndex()));
+
+        var button = new InlineKeyboardButton();
+        button.setText(ankiAnswer.getButtonText());
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
 
 
     private @NonNull Long getHashWithoutRequest(String handler) {

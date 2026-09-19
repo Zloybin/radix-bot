@@ -21,22 +21,15 @@ public class AnkiMenuHandler implements UpdateHandler {
     private KeyboardBuilder keyboardBuilder;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private TemplateProcessor templateProcessor;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "ankiMainMenu".equals(userRequest.getHandler());
+        return "ankiMenu".equals(userRequest.getHandler());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-
-        var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.FREE);
-        userService.save(user);
 
         var keyboard = keyboardBuilder.buildAnkiMenu();
         var text = templateProcessor.processAnkiUserProfileTemplate();

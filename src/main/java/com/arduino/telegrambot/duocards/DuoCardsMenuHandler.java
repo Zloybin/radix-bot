@@ -17,9 +17,6 @@ public class DuoCardsMenuHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private AnkiService ankiService;
-
-    @Autowired
     private KeyboardBuilder keyboardBuilder;
 
     @Autowired
@@ -27,7 +24,7 @@ public class DuoCardsMenuHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "duoCards".equals(userRequest.getHandler());
+        return "duoCardsMenu".equals(userRequest.getHandler());
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +78,7 @@ public class PhysTaskHandler implements UpdateHandler {
 
         var text = templateProcessor.processPhysTaskTemplate(section, title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
 
-        var keyboard = keyboardBuilder.buildPhysTaskMenu();
+        var keyboard = keyboardBuilder.buildPhysTaskCardMenu();
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 

@@ -45,10 +45,6 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
 
-        var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.WAIT_ANKI_ANSWER);
-        userService.save(user);
-
         AnkiCurrentCard currentCard;
 
         if (ankiService.showAnswer().block()) {

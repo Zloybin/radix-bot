@@ -1,8 +1,10 @@
 package com.arduino.telegrambot.builder.keyboard;
 
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface KeyboardBuilder {
@@ -16,17 +18,18 @@ public interface KeyboardBuilder {
 
     //physTask
     InlineKeyboardMarkup buildPhysTaskMainMenu();
-    InlineKeyboardMarkup buildPhysTaskMenu();
-    InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenu();
-    InlineKeyboardMarkup buildCompletedPhysTaskMenu();
-    InlineKeyboardMarkup buildInfoResultButton(boolean result);
-    InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenuWithoutAi();
     InlineKeyboardMarkup buildSettingMenu(boolean isExclude);
     InlineKeyboardMarkup buildBackToPhysTaskMenuFromStatistic();
 
-    //handler
+    InlineKeyboardMarkup buildPhysTaskCardMenu();
+    InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenu();
+    InlineKeyboardMarkup buildCompletedPhysTaskWithCorrectMenuWithoutAi();
+    InlineKeyboardMarkup buildCompletedPhysTaskMenu();
+    InlineKeyboardMarkup buildInfoResultButton(boolean result);
+
+    //anki
     InlineKeyboardMarkup buildAnkiMenu();
-    InlineKeyboardMarkup buildDecksMenu(List<String> decks);
+    InlineKeyboardMarkup buildDecksMenu(List<String> decks, Map<String, AnkiDeckStats> stats);
 
     InlineKeyboardMarkup buildAnkiAnswerKeyboard(List<Integer> buttons);
     InlineKeyboardMarkup buildAnkiAnswerDuoCardsKeyboard(List<Integer> buttons, String word);

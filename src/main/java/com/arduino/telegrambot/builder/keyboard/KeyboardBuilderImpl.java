@@ -1,5 +1,7 @@
 package com.arduino.telegrambot.builder.keyboard;
 
+import com.arduino.telegrambot.anki.AnkiUtility;
+import com.arduino.telegrambot.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.button.ButtonBuilder;
 import com.arduino.telegrambot.builder.button.procesor.ButtonProcessor;
 import com.arduino.telegrambot.enummeration.AnkiAnswer;
@@ -10,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class KeyboardBuilderImpl implements KeyboardBuilder {
@@ -25,8 +28,8 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var radConverterButton = buttonBuilder.buildRadConverterStartButton();
         var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
-        var ankiTaskButton = buttonBuilder.buildAnkiTaskStartButton();
-        var duoCards = buttonBuilder.buildDuoCardsButton();
+        var ankiTaskButton = buttonBuilder.buildAnkiMenuButton();
+        var duoCards = buttonBuilder.buildDuoCardsMenuButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(radConverterButton);
@@ -98,18 +101,25 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildDecksMenu(List<String> decks) {
+    public InlineKeyboardMarkup buildDecksMenu(List<String> decks, Map<String, AnkiDeckStats> stats) {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         for (String deck : decks) {
+
+            if(AnkiUtility.EXCLUDED_DECKS.contains(deck)){
+                continue;
+            }
+
+            var deckStats = stats.get(deck);
+            int total = deckStats.totalInDeck();
             var row = new ArrayList<InlineKeyboardButton>();
-            var deckNameButton = buttonBuilder.buildDeckNameButton(deck);
+            var deckNameButton = buttonBuilder.buildDeckNameButton(deck, total);
             row.add(deckNameButton);
             rows.add(row);
         }
 
 
-        var ankiMenu = buttonBuilder.buildAnkiTaskStartButton();
+        var ankiMenu = buttonBuilder.buildAnkiMenuButton();
         var backToAnkiStartMenu = buttonProcessor.renameButton(ankiMenu, "⬅️ Назад");
         var ankiRow = new ArrayList<InlineKeyboardButton>();
         ankiRow.add(backToAnkiStartMenu);
@@ -135,7 +145,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
                     }else{
                         row = row2;
                     }
-                    answerButton = buttonBuilder.buildAnkiAnswerButton(ankiAnswer);
+                    answerButton = buttonBuilder.buildAnkiOptionAnswerButton(ankiAnswer);
                     row.add(answerButton);
                     break;
                 }
@@ -151,7 +161,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     public InlineKeyboardMarkup buildAnkiAnswerDuoCardsKeyboard(List<Integer> buttonIndexes, String word) {
         var rows = new ArrayList<List<InlineKeyboardButton>>();
 
-        var startWebAppButton = buttonBuilder.buildStartWebAppButton(word);
+        var startWebAppButton = buttonBuilder.buildYouglishStartButton(word);
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(startWebAppButton);
         var row2 = new ArrayList<InlineKeyboardButton>();
@@ -168,7 +178,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
                     }else{
                         row = row3;
                     }
-                    answerButton = buttonBuilder.buildAnswerDuocardsButton(ankiAnswer);
+                    answerButton = buttonBuilder.buildAnswerOptionDuoCardsButton(ankiAnswer);
                     row.add(answerButton);
                     break;
                 }
@@ -184,7 +194,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildAnkiShowAnswerKeyboard() {
 
-        var showAnswerButton = buttonBuilder.buildShowAnswerButton();
+        var showAnswerButton = buttonBuilder.buildShowAnkiAnswerButton();
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(showAnswerButton);
 
@@ -208,11 +218,11 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildAnkiShowAnswerDuoCardsKeyboard(String word) {
 
-        var showAnswerButton = buttonBuilder.buildShowAnswerDuocardsButton();
+        var showAnswerButton = buttonBuilder.buildShowAnswerDuoCardsButton();
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(showAnswerButton);
 
-        var startWebAppButton = buttonBuilder.buildStartWebAppButton(word);
+        var startWebAppButton = buttonBuilder.buildYouglishStartButton(word);
         var row2 = new ArrayList<InlineKeyboardButton>();
         row2.add(startWebAppButton);
 
@@ -220,7 +230,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(deleteAnkiCardButton);
 
-        var showDecksButton = buttonBuilder.buildDuoCardsButton();
+        var showDecksButton = buttonBuilder.buildDuoCardsMenuButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
         var row4 = new ArrayList<InlineKeyboardButton>();
         row4.add(backToShowDeckNames);
@@ -254,7 +264,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildBackToDuoCardsMenuKeyboard() {
-        var duoCards = buttonBuilder.buildDuoCardsButton();
+        var duoCards = buttonBuilder.buildDuoCardsMenuButton();
         buttonProcessor.renameButton(duoCards, "⬅️ Назад");
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(duoCards);
@@ -368,11 +378,10 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildPhysTaskMenu() {
+    public InlineKeyboardMarkup buildPhysTaskCardMenu() {
         var accept = buttonBuilder.buildGiveAnswerPhysButton();
-//        var askAi = buttonBuilder.buildAskAiButton();
         var cancel = buttonBuilder.buildCancelPhysTaskButton();
-        var openSource = buttonBuilder.buildOpenSourceFileButton();
+        var openSource = buttonBuilder.buildOpenBookButton();
         var back = buttonBuilder.buildPhysTaskMenuButton();
 
         var renamedBack = buttonProcessor.renameButton(back, "⬅\uFE0F Назад");
@@ -380,9 +389,6 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(accept);
-
-//        var row2 = new ArrayList<InlineKeyboardButton>();
-//        row2.add(askAi);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(cancel);
@@ -393,7 +399,6 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
-//        rows.add(row2);
         rows.add(row3);
         rows.add(row4);
 
@@ -406,21 +411,16 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var correctTrue = buttonBuilder.buildCorrectingResultTrueButton();
         var correctFalse = buttonBuilder.buildCorrectingResultFalseButton();
         var askAi = buttonBuilder.buildAskAiButton();
-//        var confirmButton = buttonBuilder.buildPhysTaskConfirmationButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(correctTrue);
         row1.add(correctFalse);
-
-//        var row2 = new ArrayList<InlineKeyboardButton>();
-//        row2.add(confirmButton);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
         row2.add(askAi);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
-//        rows.add(row2);
         rows.add(row2);
 
         return new InlineKeyboardMarkup(rows);

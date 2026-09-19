@@ -16,23 +16,14 @@ public interface AnkiConnectClient {
 
     // Decks
     Mono<List<String>> getDeckNames();
-
     Mono<Map<String, Long>> getDeckNamesAndIds();
-
-    Mono<Boolean> startDeckReview(String deckName);
-
     Mono<Map<String, AnkiDeckStats>> getDeckStats(List<String> deckNames);
 
     // Reviewer
+    Mono<Boolean> startDeckReview(String deckName);
     Mono<AnkiCurrentCard> getCurrentCard();
-
-    Mono<Boolean> startCardTimer();
     Mono<Boolean> deleteCard(long cardId);
-
-    Mono<Boolean> showQuestion();
-
     Mono<Boolean> showAnswer();
-
     Mono<Boolean> answerCard(int ease);
     Mono<byte[]> getCurrentCardVideo();
 }

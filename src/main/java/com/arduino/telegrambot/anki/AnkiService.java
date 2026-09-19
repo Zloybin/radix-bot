@@ -42,9 +42,7 @@ public class AnkiService {
     /**
      * Получает статистику указанных колод.
      */
-    public Mono<Map<String, AnkiDeckStats>> getDecksStats(
-            List<String> deckNames
-    ) {
+    public Mono<Map<String, AnkiDeckStats>> getDecksStats(List<String> deckNames) {
         return ankiClient.getDeckStats(deckNames);
     }
 

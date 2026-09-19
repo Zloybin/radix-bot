@@ -39,15 +39,11 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "ankiAnswer".equals(userRequest.getHandler());
+        return "processAnkiAnswer".equals(userRequest.getHandler());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-
-//        System.out.println("DEUTSCH " +ankiService.startStudy(DEUTSCH).block());
-//        var currentCardtest = ankiService.getCurrentCard().block();
-//        System.out.println("SHOW ANSWER: " + ankiService.showAnswer().block());
 
         AnkiCurrentCard currentCard;
 
@@ -95,10 +91,6 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
                 keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
             }
         }
-
-        var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.FREE);
-        userService.save(user);
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 

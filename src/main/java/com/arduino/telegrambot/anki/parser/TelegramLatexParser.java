@@ -94,20 +94,4 @@ public class TelegramLatexParser {
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
     }
-
-    // Быстрый тест
-    public static void main(String[] args) {
-        String sample =
-                "Формула плотности: $\\rho = \\frac{m}{V}$, а вот подъёмная сила:\n" +
-                "$$F = \\rho g V$$\n" +
-                "Условие плавания шара: \\(F_A > mg\\).\n" +
-                "И развёрнутая формула:\n" +
-                "\\[\n" +
-                "  P = \\rho_{возд} g V - \\rho_{газ} g V\n" +
-                "\\]\n" +
-                "Обычный текст с <b>жирным тегом Telegram</b> остаётся как есть, " +
-                "и сравнение внутри формулы $a < b$ тоже не ломает разметку.";
-
-        System.out.println(parse(sample));
-    }
 }

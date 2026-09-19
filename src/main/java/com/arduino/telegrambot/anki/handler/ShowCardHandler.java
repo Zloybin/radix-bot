@@ -4,7 +4,6 @@ import com.arduino.telegrambot.anki.AnkiConnectException;
 import com.arduino.telegrambot.anki.AnkiService;
 import com.arduino.telegrambot.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.TelegramService;
@@ -16,10 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
-public class DeckNameHandler implements UpdateHandler {
-
-    @Autowired
-    private UserService userService;
+public class ShowCardHandler implements UpdateHandler {
 
     @Autowired
     private TelegramService telegramService;
@@ -36,18 +32,11 @@ public class DeckNameHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "deckName".equals(userRequest.getHandler());
+        return "showAnkiCard".equals(userRequest.getHandler());
     }
 
     @Override
     public void handle(UserRequest userRequest) {
-        var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.FREE);
-        userService.save(user);
-
-        //        System.out.println("DEUTSCH " +ankiService.startStudy(DEUTSCH).block());
-        //        var currentCardtest = ankiService.getCurrentCard().block();
-        //        System.out.println("SHOW ANSWER: " + ankiService.showAnswer().block());
 
         AnkiCurrentCard currentCard;
         InlineKeyboardMarkup keyboard;
@@ -60,8 +49,9 @@ public class DeckNameHandler implements UpdateHandler {
 
             if (ankiService.startStudy(requestedDeckName).block()) {
                 currentCard = ankiService.getCurrentCard().block();
+                System.out.println(String.format("Review-режим для колоды %s включен.", requestedDeckName));
             } else {
-                throw new AnkiConnectException(String.format("Не получилось открыть колоду: %s", requestedDeckName));
+                throw new AnkiConnectException(String.format("Не получилось включить Review режим для колоды: %s", requestedDeckName));
             }
 
         } catch (AnkiConnectException e) {

@@ -8,42 +8,44 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildMainMenuButton();
     InlineKeyboardButton buildBackToMainMenuButton();
 
-
     //physTask
     InlineKeyboardButton buildPhysTaskMenuButton();
-    InlineKeyboardButton buildPhysTaskStartButton();
-    InlineKeyboardButton buildOpenSourceFileButton();
     InlineKeyboardButton buildStatisticsButton();
+
+    InlineKeyboardButton buildSettingButton();
+    InlineKeyboardButton buildExcludeCompletedTaskButton(boolean isExclude);
+    InlineKeyboardButton buildFilterButton();
+
+    InlineKeyboardButton buildPhysTaskStartButton();
+
     InlineKeyboardButton buildGiveAnswerPhysButton();
     InlineKeyboardButton buildCancelPhysTaskButton();
+    InlineKeyboardButton buildOpenBookButton();
+
     InlineKeyboardButton buildCorrectingResultTrueButton();
     InlineKeyboardButton buildCorrectingResultFalseButton();
-    InlineKeyboardButton buildPhysTaskConfirmationButton();
-    InlineKeyboardButton buildInfoButton(String text);
     InlineKeyboardButton buildAskAiButton();
-    InlineKeyboardButton buildSettingButton();
-    InlineKeyboardButton buildFilterButton();
-    InlineKeyboardButton buildExcludeCompletedTaskButton(boolean isExclude);
-
+    InlineKeyboardButton buildInfoButton(String text);
 
     //radConverter
     InlineKeyboardButton buildRadConverterStartButton();
     InlineKeyboardButton buildGiveAnswerButton();
     InlineKeyboardButton buildCancelTaskButton();
 
-    //handler
-    InlineKeyboardButton buildAnkiTaskStartButton();
+    //Anki
+
+    InlineKeyboardButton buildAnkiMenuButton();
     InlineKeyboardButton buildShowDecksButton();
-    InlineKeyboardButton buildShowAnswerButton();
-    InlineKeyboardButton buildShowAnswerDuocardsButton();
-    InlineKeyboardButton buildDeckNameButton(String deckName);
-    InlineKeyboardButton buildAnkiAnswerButton(AnkiAnswer ankiAnswer);
-    InlineKeyboardButton buildAnswerDuocardsButton(AnkiAnswer ankiAnswer);
-
-    InlineKeyboardButton buildDuoCardsButton();
-
-    InlineKeyboardButton buildStartDuoCardsButton();
-    InlineKeyboardButton buildStartWebAppButton(String word);
-
+    InlineKeyboardButton buildDeckNameButton(String deckName, int total);
+    InlineKeyboardButton buildShowAnkiAnswerButton();
     InlineKeyboardButton buildDeleteAnkiCardButton();
+    InlineKeyboardButton buildAnkiOptionAnswerButton(AnkiAnswer ankiAnswer);
+
+    //DuoCard
+    InlineKeyboardButton buildDuoCardsMenuButton();
+    InlineKeyboardButton buildStartDuoCardsButton();
+    InlineKeyboardButton buildYouglishStartButton(String word);
+    InlineKeyboardButton buildShowAnswerDuoCardsButton();
+    InlineKeyboardButton buildAnswerOptionDuoCardsButton(AnkiAnswer ankiAnswer);
+
 }

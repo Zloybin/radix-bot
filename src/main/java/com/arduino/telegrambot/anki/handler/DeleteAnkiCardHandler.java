@@ -8,20 +8,15 @@ import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 
 import com.arduino.telegrambot.service.TelegramService;
-import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 
 import java.util.List;
 
 
 @Component
 public class DeleteAnkiCardHandler implements UpdateHandler {
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private TelegramService telegramService;

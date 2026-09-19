@@ -1,5 +1,8 @@
 package com.arduino.telegrambot.anki.test;
 
+import com.arduino.telegrambot.anki.client.AnkiConnectClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,16 +15,18 @@ import reactor.core.publisher.Mono;
 public class AnkiTestController {
 
     private final WebClient webClient;
+    private final String ankiBaseUrl;
 
-    public AnkiTestController(WebClient.Builder webClientBuilder) {
+    public AnkiTestController(WebClient.Builder webClientBuilder, @Value("${anki.baseUrl}") String ankiBaseUrl) {
         this.webClient = webClientBuilder.build();
+        this.ankiBaseUrl = ankiBaseUrl;
     }
 
     @GetMapping("/test")
     public Mono<String> testAnki() {
 
         return webClient.post()
-                .uri("http://host.docker.internal:8765")
+                .uri(ankiBaseUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue("""
                         {
@@ -32,9 +37,4 @@ public class AnkiTestController {
                 .retrieve()
                 .bodyToMono(String.class);
     }
-
-//    @GetMapping("/handler/test")
-//    public Mono<Integer> testAnki() {
-//        return ankiClient.version();
-//    }
 }

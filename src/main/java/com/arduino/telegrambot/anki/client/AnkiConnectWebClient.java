@@ -24,29 +24,22 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
     private static final int API_VERSION = 6;
 
-
     private final String ankiBaseUrl;
 
     private final WebClient webClient;
 
 
-    public AnkiConnectWebClient(WebClient.Builder webClientBuilder, @Value("${anki.baseUrl}") String ankiBaseUrl) {
+    public AnkiConnectWebClient(@Value("${anki.baseUrl}") String ankiBaseUrl) {
         this.ankiBaseUrl = ankiBaseUrl;
         ConnectionProvider provider = ConnectionProvider.newConnection();
         HttpClient httpClient = HttpClient.create(provider);
-        this.webClient = webClientBuilder
+        this.webClient = WebClient.builder()
                 .baseUrl(ankiBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .codecs(configurer ->
                         configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)
                 )
                 .build();
-    }
-
-    @Override
-    public Mono<Integer> version() {
-        return invoke("version", Map.of())
-                .map(JsonNode::asInt);
     }
 
     @Override
@@ -79,14 +72,6 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     }
 
     @Override
-    public Mono<Boolean> startDeckReview(String deckName) {
-        return invoke(
-                "guiDeckReview",
-                Map.of("name", deckName)
-        ).map(JsonNode::asBoolean);
-    }
-
-    @Override
     public Mono<Map<String, AnkiDeckStats>> getDeckStats(
             List<String> deckNames
     ) {
@@ -111,6 +96,14 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
 
             return result;
         });
+    }
+
+    @Override
+    public Mono<Boolean> startDeckReview(String deckName) {
+        return invoke(
+                "guiDeckReview",
+                Map.of("name", deckName)
+        ).map(JsonNode::asBoolean);
     }
 
     @Override
@@ -143,20 +136,8 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     }
 
     @Override
-    public Mono<Boolean> startCardTimer() {
-        return invoke("guiStartCardTimer", Map.of())
-                .map(JsonNode::asBoolean);
-    }
-
-    @Override
     public Mono<Boolean> deleteCard(long cardId) {
         return invoke("suspend", Map.of("cards", List.of(cardId)))
-                .map(JsonNode::asBoolean);
-    }
-
-    @Override
-    public Mono<Boolean> showQuestion() {
-        return invoke("guiShowQuestion", Map.of())
                 .map(JsonNode::asBoolean);
     }
 
@@ -177,15 +158,32 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 ).map(JsonNode::asBoolean);
     }
 
-    private List<Integer> readIntegerList(JsonNode node) {
+    @Override
+    public Mono<byte[]> getCurrentCardVideo() {
+        return invoke("guiCurrentCard", Map.of())
+                .flatMap(cardResponse -> {
+                    Long cardId = extractCardId(cardResponse);
 
-        List<Integer> result = new ArrayList<>();
+                    return invoke(
+                            "cardsInfo",
+                            Map.of("cards", List.of(cardId))
+                    );
+                })
+                .flatMap(cardInfoResponse -> {
+                    String filename = extractVideoFilename(cardInfoResponse);
 
-        node.forEach(element ->
-                result.add(element.asInt())
-        );
+                    return invoke(
+                            "retrieveMediaFile",
+                            Map.of("filename", filename)
+                    );
+                })
+                .map(this::decodeBase64);
+    }
 
-        return result;
+    @Override
+    public Mono<Integer> version() {
+        return invoke("version", Map.of())
+                .map(JsonNode::asInt);
     }
 
     private Mono<JsonNode> invoke(
@@ -211,6 +209,17 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 .flatMap(this::handleResponse);
     }
 
+    private List<Integer> readIntegerList(JsonNode node) {
+
+        List<Integer> result = new ArrayList<>();
+
+        node.forEach(element ->
+                result.add(element.asInt())
+        );
+
+        return result;
+    }
+
     private Mono<JsonNode> handleResponse(JsonNode response) {
 
         JsonNode error = response.get("error");
@@ -222,28 +231,6 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         }
 
         return Mono.just(response.get("result"));
-    }
-
-
-    public Mono<byte[]> getCurrentCardVideo() {
-        return invoke("guiCurrentCard", Map.of())
-                .flatMap(cardResponse -> {
-                    Long cardId = extractCardId(cardResponse);
-
-                    return invoke(
-                            "cardsInfo",
-                            Map.of("cards", List.of(cardId))
-                    );
-                })
-                .flatMap(cardInfoResponse -> {
-                    String filename = extractVideoFilename(cardInfoResponse);
-
-                    return invoke(
-                            "retrieveMediaFile",
-                            Map.of("filename", filename)
-                    );
-                })
-                .map(this::decodeBase64);
     }
 
     private Long extractCardId(JsonNode response) {
@@ -299,65 +286,6 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         throw new IllegalStateException(
                 "No video/audio media found in current card"
         );
-    }
-
-    private String findVideoFilename(String html) {
-
-        Pattern[] patterns = {
-                Pattern.compile(
-                        "<source[^>]+src=[\"']([^\"']+)[\"']",
-                        Pattern.CASE_INSENSITIVE
-                ),
-
-                Pattern.compile(
-                        "<video[^>]+src=[\"']([^\"']+)[\"']",
-                        Pattern.CASE_INSENSITIVE
-                )
-        };
-
-        for (Pattern pattern : patterns) {
-
-            Matcher matcher = pattern.matcher(html);
-
-            if (matcher.find()) {
-                String src = matcher.group(1);
-
-                return extractFilename(src);
-            }
-        }
-
-        return null;
-    }
-
-    private String extractFilename(String src) {
-
-        // Например:
-        // "physics.mp4"
-        // "/physics.mp4"
-        // "https://example.com/physics.mp4"
-        // "physics.mp4?foo=bar"
-
-        String filename = src;
-
-        int queryIndex = filename.indexOf('?');
-
-        if (queryIndex >= 0) {
-            filename = filename.substring(0, queryIndex);
-        }
-
-        int fragmentIndex = filename.indexOf('#');
-
-        if (fragmentIndex >= 0) {
-            filename = filename.substring(0, fragmentIndex);
-        }
-
-        int slashIndex = filename.lastIndexOf('/');
-
-        if (slashIndex >= 0) {
-            filename = filename.substring(slashIndex + 1);
-        }
-
-        return filename;
     }
 
     private byte[] decodeBase64(JsonNode response) {

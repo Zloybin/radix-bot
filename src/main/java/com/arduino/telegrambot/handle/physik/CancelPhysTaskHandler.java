@@ -3,14 +3,12 @@ package com.arduino.telegrambot.handle.physik;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handle.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.repository.TaskRepository;
 import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.service.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +66,7 @@ public class CancelPhysTaskHandler implements UpdateHandler {
 
         var text = templateProcessor.processPhysTaskTemplate(section, title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
 
-        var keyboard = keyboardBuilder.buildPhysTaskMenu();
+        var keyboard = keyboardBuilder.buildPhysTaskCardMenu();
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }

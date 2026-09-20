@@ -37,18 +37,14 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var row2 = new ArrayList<InlineKeyboardButton>();
         row2.add(physTaskButton);
+        row1.add(ankiTaskButton);
 
-        var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(ankiTaskButton);
 
-        var row4 = new ArrayList<InlineKeyboardButton>();
-        row4.add(duoCards);
+        row2.add(duoCards);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
-        rows.add(row3);
-        rows.add(row4);
         return new InlineKeyboardMarkup(rows);
     }
 

@@ -272,4 +272,10 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         return engine.process("completed_deck_message", context);
     }
 
+    @Override
+    public String processAppsInfoTemplate() {
+        Context context = new Context();
+        return engine.process("apps_info", context);
+    }
+
 }

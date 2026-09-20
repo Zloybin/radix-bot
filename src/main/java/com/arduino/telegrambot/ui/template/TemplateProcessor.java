@@ -28,4 +28,6 @@ public interface TemplateProcessor {
     String processBackCardDuoCardsTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats);
 
     String processCompletedDeckTemplate(String deckname);
+
+    String processAppsInfoTemplate();
 }

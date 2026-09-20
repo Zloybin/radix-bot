@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 public interface ButtonBuilder {
 
     InlineKeyboardButton buildMainMenuButton();
+    InlineKeyboardButton buildAppsInfoButton();
     InlineKeyboardButton buildBackToMainMenuButton();
 
     //physTask
@@ -48,5 +49,4 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildYouglishStartButton(String word);
     InlineKeyboardButton buildShowAnswerDuoCardsButton();
     InlineKeyboardButton buildAnswerOptionDuoCardsButton(AnkiAnswer ankiAnswer);
-
 }

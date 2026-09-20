@@ -40,7 +40,7 @@ public class BackToMainMenuHandler implements UpdateHandler{
         var keyboard = keyboardBuilder.buildMainMenu();
         var text = templateProcessor.processGreetingsTemplate();
 
-        telegramService.editMessage(chatId, userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+        telegramService.editRichMessage(chatId, userRequest.getMessageId(), keyboard, text);
 
     }
 }

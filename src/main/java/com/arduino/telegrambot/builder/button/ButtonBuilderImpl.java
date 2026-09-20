@@ -30,6 +30,16 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildAppsInfoButton() {
+        var hash = getHashWithoutRequest("appsInfo");
+
+        var button = new InlineKeyboardButton();
+        button.setText("ℹ Apps Info");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildBackToMainMenuButton() {
 
         var hash = getHashWithoutRequest("backToMainMenu");
@@ -237,7 +247,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("ankiMenu");
 
         var button = new InlineKeyboardButton();
-        button.setText("\uD83D\uDDC3\uFE0F Карточки Anki");
+        button.setText("🧠 Карточки Anki");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
@@ -303,7 +313,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("duoCardsMenu");
 
         var button = new InlineKeyboardButton();
-        button.setText("🦉 DuoCards");
+        button.setText("🇩🇪 DuoCards");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }

@@ -31,20 +31,23 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
         var ankiTaskButton = buttonBuilder.buildAnkiMenuButton();
         var duoCards = buttonBuilder.buildDuoCardsMenuButton();
+        var appsInfo = buttonBuilder.buildAppsInfoButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(radConverterButton);
+        row1.add(appsInfo);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(physTaskButton);
-        row1.add(ankiTaskButton);
+        row2.add(radConverterButton);
+        row2.add(ankiTaskButton);
 
-
-        row2.add(duoCards);
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(physTaskButton);
+        row3.add(duoCards);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+        rows.add(row3);
         return new InlineKeyboardMarkup(rows);
     }
 
@@ -293,6 +296,18 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
                 .selective(false)
                 .build();
 
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildAppsInfoMenu() {
+        var back = buttonBuilder.buildBackToMainMenuButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(back);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        return new InlineKeyboardMarkup(rows);
     }
 
     //radTask

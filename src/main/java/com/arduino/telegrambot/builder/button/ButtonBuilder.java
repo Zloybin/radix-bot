@@ -20,6 +20,7 @@ public interface ButtonBuilder {
 
     InlineKeyboardButton buildGiveAnswerPhysButton();
     InlineKeyboardButton buildCancelPhysTaskButton();
+    InlineKeyboardButton buildCancelPhysAnswerButton();
     InlineKeyboardButton buildOpenBookButton();
 
     InlineKeyboardButton buildCorrectingResultTrueButton();

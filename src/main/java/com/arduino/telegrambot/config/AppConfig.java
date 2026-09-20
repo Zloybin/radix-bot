@@ -1,7 +1,7 @@
 package com.arduino.telegrambot.config;
 
-import com.arduino.telegrambot.ai.GroqLLMService;
-import com.arduino.telegrambot.ai.LLMService;
+import com.arduino.telegrambot.feature.ai.groq.GroqLLMService;
+import com.arduino.telegrambot.feature.ai.LLMService;
 import com.google.genai.Client;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

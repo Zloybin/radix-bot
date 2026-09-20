@@ -1,13 +1,11 @@
 package com.arduino.telegrambot.service;
 
-import com.arduino.telegrambot.converter.RadConverter;
+import com.arduino.telegrambot.feature.rad.converter.RadConverter;
 import com.arduino.telegrambot.entity.Task;
-import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.NumberSystem;
 import com.arduino.telegrambot.enummeration.Section;
 import com.arduino.telegrambot.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

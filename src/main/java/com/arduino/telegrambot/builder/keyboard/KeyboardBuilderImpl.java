@@ -1,12 +1,13 @@
 package com.arduino.telegrambot.builder.keyboard;
 
-import com.arduino.telegrambot.anki.AnkiUtility;
-import com.arduino.telegrambot.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
+import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.button.ButtonBuilder;
 import com.arduino.telegrambot.builder.button.procesor.ButtonProcessor;
 import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -52,8 +53,8 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildBackToPhysTaskMenu() {
-        var taskMenu = buttonBuilder.buildPhysTaskStartButton();
+    public InlineKeyboardMarkup buildWaitingForAnswerMenu() {
+        var taskMenu = buttonBuilder.buildCancelPhysAnswerButton();
 
         var cancelAnswer = buttonProcessor.renameButton(taskMenu, "\uD83D\uDEAB Отменить ответ");
 
@@ -288,10 +289,20 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public ForceReplyKeyboard buildForcedKeyboardMenu(String text) {
+        return ForceReplyKeyboard.builder()
+                .forceReply(true)
+                .inputFieldPlaceholder("Ваш текст здесь")
+                .selective(false)
+                .build();
+
+    }
+
     //radTask
 
     @Override
-    public InlineKeyboardMarkup buildRadConverterMenu() {
+    public InlineKeyboardMarkup buildRadConverterTaskMenu() {
 
         var accept = buttonBuilder.buildGiveAnswerButton();
         var cancel = buttonBuilder.buildCancelTaskButton();

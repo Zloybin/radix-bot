@@ -1,0 +1,39 @@
+<details open>
+    <summary>📝 Результат</summary>
+
+
+    <b>👤 Ваш ответ:</b>
+    <blockquote>
+        <p>
+            <code th:text="${userAnswer}">101101</code>
+        </p>
+
+    </blockquote>
+
+
+    <b>✅ Правильный ответ:</b>
+    <blockquote>
+        <p>
+            <code th:text="${rightAnswer != null and !#strings.isEmpty(rightAnswer) ? rightAnswer : 'Правильный ответ не определен'}">
+                45
+            </code>
+        </p>
+    </blockquote>
+
+    <hr/>
+</details>
+
+<details>
+    <summary>ℹ️ Информация о задании</summary>
+
+    <blockquote>
+        Переведите число
+        <b th:text="${task}">1010</b>
+        из
+        <u><b th:text="${source}">2</b></u>
+        системы счисления
+        в
+        <u><b th:text="${drain}">10</b></u>.
+    </blockquote>
+
+</details>

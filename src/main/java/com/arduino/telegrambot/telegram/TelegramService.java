@@ -1,0 +1,213 @@
+package com.arduino.telegrambot.telegram;
+
+import com.arduino.telegrambot.feature.rich.TelegramRichMessageServiceImpl;
+import com.arduino.telegrambot.telegram.sender.BotSender;
+import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageCaption;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.LinkPreviewOptions;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.io.ByteArrayInputStream;
+
+@Component
+public class TelegramService {
+
+    @Autowired
+    private BotSender botSender;
+
+    @Autowired
+    private TelegramRichMessageServiceImpl telegramRichMessageServiceImpl;
+
+
+    //message
+    public void sendMessage(
+            Long chatId, String text, String parseMode) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(text);
+        sendMessage.setParseMode(parseMode);
+
+        var linkPreviewOptions = new LinkPreviewOptions();
+        linkPreviewOptions.setShowAboveText(false);
+        linkPreviewOptions.setPreferLargeMedia(true);
+        sendMessage.setLinkPreviewOptions(linkPreviewOptions);
+
+        try {
+            botSender.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void sendMessageWithKeyboard(
+            Long chatId,  InlineKeyboardMarkup keyboardMarkup, String text, String parseMode) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(text);
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        sendMessage.setParseMode(parseMode);
+
+        var linkPreviewOptions = new LinkPreviewOptions();
+        linkPreviewOptions.setShowAboveText(false);
+        linkPreviewOptions.setPreferLargeMedia(true);
+        sendMessage.setLinkPreviewOptions(linkPreviewOptions);
+
+        try {
+            botSender.execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void editMessage(
+            Long chatId, long messageId, String text, InlineKeyboardMarkup keyboard, String parseMode) {
+
+        var editMessage = new EditMessageText();
+        editMessage.setChatId(chatId);
+        editMessage.setMessageId((int) messageId);
+        editMessage.setText(text);
+        editMessage.setParseMode(parseMode);
+        editMessage.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(editMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void editKeyboard(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard) {
+
+        var editMessage = new EditMessageReplyMarkup();
+        editMessage.setChatId(chatId);
+        editMessage.setMessageId((int) messageId);
+        editMessage.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(editMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void editCaption(
+            Long chatId, long messageId, String text, InlineKeyboardMarkup keyboard, String parseMode) {
+
+        var editMessage = new EditMessageCaption();
+        editMessage.setChatId(chatId);
+        editMessage.setMessageId((int) messageId);
+        editMessage.setCaption(text);
+        editMessage.setParseMode(parseMode);
+        editMessage.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(editMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void sendAudio(
+            Long chatId, String text, byte[] audio, InlineKeyboardMarkup keyboard, String parseMode) {
+
+        var sendAudio = new SendAudio();
+        sendAudio.setChatId(chatId);
+        sendAudio.setCaption(text);
+        sendAudio.setAudio(new InputFile(new ByteArrayInputStream(audio), "speech.wav"));
+        sendAudio.setParseMode(parseMode);
+        sendAudio.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(sendAudio);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void editAudio(
+            Long chatId, String text, byte[] audio, InlineKeyboardMarkup keyboard, String parseMode) {
+
+        var sendAudio = new SendAudio();
+        sendAudio.setChatId(chatId);
+        sendAudio.setCaption(text);
+        sendAudio.setAudio(new InputFile(new ByteArrayInputStream(audio), "speech.wav"));
+        sendAudio.setParseMode(parseMode);
+        sendAudio.setReplyMarkup(keyboard);
+
+        try {
+            botSender.execute(sendAudio);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+    public void deleteMessage(
+            Long chatId, int messageId) {
+
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(chatId);
+        deleteMessage.setMessageId(messageId);
+
+        try {
+            botSender.execute(deleteMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(
+                    "Failed to send message due to an error with the Telegram API.", e);
+        }
+    }
+
+
+    //rich
+    public void sendRichMessage(
+            Long chatId, InlineKeyboardMarkup keyboard, String html) {
+        telegramRichMessageServiceImpl.sendRichMessage(chatId, html, keyboard).block();
+    }
+
+    public void editRichMessage(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html) {
+        telegramRichMessageServiceImpl.editRichMessage(chatId, messageId, html, keyboard).block();
+    }
+
+    public void editRichMessageKeyboard(
+            Long chatId, int messageId, InlineKeyboardMarkup keyboard) {
+        telegramRichMessageServiceImpl.editRichMessageReplyMarkup(chatId, messageId, keyboard).block();
+    }
+
+    public void editRichMessageKeyboardWithForcedKeyboard(
+            Long chatId, int messageId, InlineKeyboardMarkup keyboard) {
+        telegramRichMessageServiceImpl.editRichMessageReplyMarkup(chatId, messageId, keyboard).block();
+    }
+
+    public Long callForcedKeyboard(
+            Long chatId, ReplyKeyboard keyboard, String text) {
+        return telegramRichMessageServiceImpl.sendRichMessage(chatId, text, keyboard).block();
+    }
+
+    public void editRichMessageWithAudio(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html, byte[] audio, String word) {
+        telegramRichMessageServiceImpl.editRichMessageWithAudio(chatId, messageId, html, audio, keyboard).block();
+    }
+
+    public void editRichMessageWithAudioAndVideo(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html, byte[] audio, byte[] video, String word) {
+        telegramRichMessageServiceImpl.editRichMessageWithAudioAndVideo(chatId, messageId, html, audio, video, keyboard).block();
+    }
+}

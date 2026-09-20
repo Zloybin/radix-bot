@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.dispatcher;
 
-import com.arduino.telegrambot.handle.UpdateHandler;
+import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import lombok.Getter;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,9 @@
 package com.arduino.telegrambot.builder.keyboard;
 
-import com.arduino.telegrambot.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 import java.util.List;
 import java.util.Map;
@@ -9,16 +11,16 @@ import java.util.Map;
 
 public interface KeyboardBuilder {
     InlineKeyboardMarkup buildMainMenu();
-    InlineKeyboardMarkup buildBackToPhysTaskMenu();
 
     //radTask
-    InlineKeyboardMarkup buildRadConverterMenu();
+    InlineKeyboardMarkup buildRadConverterTaskMenu();
     InlineKeyboardMarkup buildBackToRadConverterMenu();
     InlineKeyboardMarkup buildCompletedTaskMenu();
 
     //physTask
     InlineKeyboardMarkup buildPhysTaskMainMenu();
     InlineKeyboardMarkup buildSettingMenu(boolean isExclude);
+    InlineKeyboardMarkup buildWaitingForAnswerMenu();
     InlineKeyboardMarkup buildBackToPhysTaskMenuFromStatistic();
 
     InlineKeyboardMarkup buildPhysTaskCardMenu();
@@ -41,4 +43,5 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildBackToDuoCardsMenuKeyboard();
 
     InlineKeyboardMarkup buildBackToAnkiDecksMenu();
+    ReplyKeyboard buildForcedKeyboardMenu(String text);
 }

@@ -1,0 +1,71 @@
+<h3>👤 Профиль пользователя</h3>
+
+<b>Имя:</b>
+<th:block th:text="${userName}">Иван</th:block>
+
+<hr/>
+
+<h2>📈 Прогресс</h2>
+
+<aside align="center"
+       th:with="progress=${tasksCount > 0 ? completedTaskCount * 100.0 / tasksCount : 0}">
+
+    <h2 th:text="${#numbers.formatDecimal(progress, 1, 1) + '%'}">
+        25.0%
+    </h2>
+
+    <b th:text="${
+        progress >= 100 ? '🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩' :
+        progress >= 90  ? '🟩🟩🟩🟩🟩🟩🟩🟩🟩⬜' :
+        progress >= 80  ? '🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜' :
+        progress >= 70  ? '🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜' :
+        progress >= 60  ? '🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜' :
+        progress >= 50  ? '🟩🟩🟩🟩🟩⬜⬜⬜⬜⬜' :
+        progress >= 40  ? '🟩🟩🟩🟩⬜⬜⬜⬜⬜⬜' :
+        progress >= 30  ? '🟩🟩🟩⬜⬜⬜⬜⬜⬜⬜' :
+        progress >= 20  ? '🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜' :
+        progress >= 10  ? '🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜' :
+                           '⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜'
+    }">
+        🟩🟩⬜⬜⬜⬜⬜⬜⬜⬜
+    </b>
+
+</aside>
+
+<footer align="center">
+    Выполнено:
+    <b th:text="${completedTaskCount}">25</b>
+    из
+    <b th:text="${tasksCount}">100</b>
+</footer>
+
+<hr/>
+
+<blockquote expandable>
+
+    <h3>📚 Статистика</h3>
+
+    <table>
+        <tr>
+            <td>Всего заданий</td>
+            <td align="right">
+                <b th:text="${tasksCount}">100</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Выполнено</td>
+            <td align="right">
+                <b th:text="${completedTaskCount}">25</b>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Осталось</td>
+            <td align="right">
+                <b th:text="${tasksCount - completedTaskCount}">75</b>
+            </td>
+        </tr>
+    </table>
+
+</blockquote>

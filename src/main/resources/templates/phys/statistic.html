@@ -1,0 +1,61 @@
+<h2>📊 Прогресс по разделам</h2>
+
+<th:block th:each="section : ${sections}">
+
+    <hr/>
+
+    <h4>
+        📚 <th:block th:text="${section.section}">
+        Механика движения
+    </th:block>
+    </h4>
+
+    <aside align="center">
+
+        <h3 th:text="${section.completionPercentage + '%'}">
+            61%
+        </h3>
+
+        <b th:text="${section.progressBar}">
+            🟩🟩🟩🟩🟩🟩⬜⬜⬜⬜
+        </b>
+
+    </aside>
+
+    <blockquote expandable>
+
+        <table>
+            <tr>
+                <td>📚 Всего задач</td>
+                <td align="right">
+                    <b th:text="${section.totalTasks}">18</b>
+                </td>
+            </tr>
+
+            <tr>
+                <td>✅ Решено</td>
+                <td align="right">
+                    <b th:text="${section.completedTasks}">11</b>
+                </td>
+            </tr>
+
+            <tr>
+                <td>❌ Провалено</td>
+                <td align="right">
+                    <b th:text="${section.failedTasks}">3</b>
+                </td>
+            </tr>
+
+            <tr>
+                <td>⏳ Осталось</td>
+                <td align="right">
+                    <b th:text="${section.totalTasks - section.completedTasks - section.failedTasks}">
+                        4
+                    </b>
+                </td>
+            </tr>
+        </table>
+
+    </blockquote>
+
+</th:block>

@@ -107,6 +107,9 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         return button;
     }
 
+
+
+
     @Override
     public InlineKeyboardButton buildGiveAnswerPhysButton() {
 
@@ -125,6 +128,16 @@ public class ButtonBuilderImpl implements ButtonBuilder {
 
         var button = new InlineKeyboardButton();
         button.setText("\uD83D\uDD01 Сбросить задачу");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCancelPhysAnswerButton() {
+        var hash = getHashWithoutRequest("cancelPhysAnswer");
+
+        var button = new InlineKeyboardButton();
+        button.setText("\uD83D\uDEAB Отменить ответ");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }

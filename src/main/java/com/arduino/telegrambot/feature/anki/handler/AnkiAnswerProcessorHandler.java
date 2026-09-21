@@ -86,7 +86,7 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
                 keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
 
             } else {
-                keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
+                keyboard = keyboardBuilder.buildAnkiCardKeyboard();
             }
         }
 

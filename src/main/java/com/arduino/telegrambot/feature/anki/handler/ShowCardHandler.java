@@ -74,7 +74,7 @@ public class ShowCardHandler implements UpdateHandler {
 
         var deckStats = ankiService.getDeckStats(currentCard.deckName()).block();
         text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
-        keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
+        keyboard = keyboardBuilder.buildAnkiCardKeyboard();
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }

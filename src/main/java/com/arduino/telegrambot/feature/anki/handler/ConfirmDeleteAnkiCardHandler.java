@@ -60,7 +60,7 @@ public class ConfirmDeleteAnkiCardHandler implements UpdateHandler {
         var ankiDeckStats = stats.get(deckName);
 
 
-        var keyboard = keyboardBuilder.buildAnkiShowAnswerKeyboard();
+        var keyboard = keyboardBuilder.buildAnkiCardKeyboard();
         var text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, ankiDeckStats);
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);

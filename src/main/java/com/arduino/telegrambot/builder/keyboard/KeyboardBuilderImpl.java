@@ -192,7 +192,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildAnkiShowAnswerKeyboard() {
+    public InlineKeyboardMarkup buildAnkiCardKeyboard() {
 
         var showAnswerButton = buttonBuilder.buildShowAnkiAnswerButton();
         var row1 = new ArrayList<InlineKeyboardButton>();

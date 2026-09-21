@@ -45,4 +45,6 @@ public interface KeyboardBuilder {
     ReplyKeyboard buildForcedKeyboardMenu(String text);
 
     InlineKeyboardMarkup buildAppsInfoMenu();
+
+    InlineKeyboardMarkup buildConfirmDeleteCardKeyboard();
 }

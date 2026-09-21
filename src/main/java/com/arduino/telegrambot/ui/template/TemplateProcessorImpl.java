@@ -194,7 +194,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         var parsedQuestion = TelegramLatexParser.parse(question);
         context.setVariable("question", parsedQuestion);
         context.setVariable("tags", tags);
-        return engine.process("anki_front", context);
+        return engine.process("./anki/anki_front", context);
     }
 
     @Override
@@ -276,6 +276,26 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     public String processAppsInfoTemplate() {
         Context context = new Context();
         return engine.process("apps_info", context);
+    }
+
+    @Override
+    public String processConfirmDeleteCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats) {
+        var question = currentCard.question();
+
+
+        var tags = currentCard.tags();
+
+        Context context = new Context();
+
+        context.setVariable("newCount", deckStats.newCount());
+        context.setVariable("learnCount", deckStats.learnCount());
+        context.setVariable("reviewCount", deckStats.reviewCount());
+
+
+        var parsedQuestion = TelegramLatexParser.parse(question);
+        context.setVariable("question", parsedQuestion);
+        context.setVariable("tags", tags);
+        return engine.process("./anki/confirm_delete_anki_card", context);
     }
 
 }

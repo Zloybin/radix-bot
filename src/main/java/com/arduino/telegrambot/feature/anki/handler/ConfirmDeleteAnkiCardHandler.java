@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @Component
-public class DeleteAnkiCardHandler implements UpdateHandler {
+public class ConfirmDeleteAnkiCardHandler implements UpdateHandler {
 
     @Autowired
     private TelegramService telegramService;

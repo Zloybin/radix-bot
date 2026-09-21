@@ -30,4 +30,6 @@ public interface TemplateProcessor {
     String processCompletedDeckTemplate(String deckname);
 
     String processAppsInfoTemplate();
+
+    String processConfirmDeleteCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats);
 }

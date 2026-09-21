@@ -1,0 +1,23 @@
+<h3>📝 Вопрос</h3>
+
+<blockquote th:utext="${question}">
+    Текст вопроса
+</blockquote>
+
+<hr/>
+
+<p>
+    <b>Карты:</b>
+    🆕 <b th:text="${newCount}">12</b>
+    🔄 <b th:text="${reviewCount}">37</b>
+    📖 <b th:text="${learnCount}">5</b>
+</p>
+<br/>
+<p th:if="${tags != null and !tags.isEmpty()}">
+    🏷 <b>Теги:</b>
+    <i th:text="${#strings.listJoin(tags, ', ')}">
+        physics, mechanics
+    </i>
+</p>
+
+Вы уверены что хотит удалить эту карточку?

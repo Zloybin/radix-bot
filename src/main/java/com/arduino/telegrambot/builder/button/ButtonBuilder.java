@@ -49,4 +49,7 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildYouglishStartButton(String word);
     InlineKeyboardButton buildShowAnswerDuoCardsButton();
     InlineKeyboardButton buildAnswerOptionDuoCardsButton(AnkiAnswer ankiAnswer);
+
+    InlineKeyboardButton buildCancelDeleteCardButton();
+    InlineKeyboardButton buildConfirmDeleteCardButton();
 }

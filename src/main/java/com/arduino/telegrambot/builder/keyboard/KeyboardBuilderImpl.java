@@ -27,11 +27,11 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildMainMenu() {
 
+        var appsInfo = buttonBuilder.buildAppsInfoButton();
         var radConverterButton = buttonBuilder.buildRadConverterStartButton();
         var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
         var ankiTaskButton = buttonBuilder.buildAnkiMenuButton();
         var duoCards = buttonBuilder.buildDuoCardsMenuButton();
-        var appsInfo = buttonBuilder.buildAppsInfoButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(appsInfo);
@@ -304,6 +304,20 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(back);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildConfirmDeleteCardKeyboard() {
+        var confirm = buttonBuilder.buildConfirmDeleteCardButton();
+        var cancel = buttonBuilder.buildCancelDeleteCardButton();
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(confirm);
+        row1.add(cancel);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);

@@ -1,13 +1,20 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.entity.DeckProgress;
+import com.arduino.telegrambot.entity.DeckStrikeInfo;
+import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.feature.anki.service.AnkiService;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
+import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.List;
 
 @Component
 public class AnkiMenuHandler implements UpdateHandler {
@@ -24,6 +31,9 @@ public class AnkiMenuHandler implements UpdateHandler {
     @Autowired
     private AnkiService ankiService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public boolean isApplicable(UserRequest userRequest) {
         return "ankiMenu".equals(userRequest.getHandler());
@@ -32,9 +42,45 @@ public class AnkiMenuHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
 
-        var keyboard = keyboardBuilder.buildAnkiMenu();
+        var user = userService.findById(userRequest.getChatId());
+        user.setState(UserState.WAIT_DECK_NAME);
+
+        var decks = ankiService.getDecks().block();
+        var strikes = user.getStrikes();
+
+        var deckProgress = user.getDeckProgress();
+
+         var updatedDeckProgresses = ankiService.updateUserDeckStatus(decks, deckProgress);
+
+        var progressTemplateData = new HashMap<String, String>();
+
+
+
+
+        for (DeckProgress updatedDeckProgress : updatedDeckProgresses) {
+            progressTemplateData.put(updatedDeckProgress.getDeckName(), updatedDeckProgress.getDeckStatus().getTitle());
+        }
+
+        var refreshedStrikes = strikes.size() == 0
+                ? ankiService.initialStrikeStats(decks)
+                : ankiService.refreshStrikeStats(strikes);
+
+        user.setStrikes(refreshedStrikes);
+        userService.save(user);
+
+        var strikesTemplateData = new HashMap<String, Integer>();
+
+        for (DeckStrikeInfo refreshedStrike : refreshedStrikes) {
+            strikesTemplateData.put(refreshedStrike.getDeckName(), refreshedStrike.getStrikeCount());
+        }
+
+
+
+        var stats = ankiService.getDecksStats(decks).block();
+        var keyboard = keyboardBuilder.buildDecksMenu(decks, stats);
+
         var numCardsReviewedToday = ankiService.getNumCardsReviewedToday().block();
-        var text = templateProcessor.processAnkiUserProfileTemplate(numCardsReviewedToday);
+        var text = templateProcessor.processAnkiUserProfileTemplate(numCardsReviewedToday, strikesTemplateData, progressTemplateData);
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 
     }

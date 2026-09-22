@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -159,9 +160,11 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processAnkiUserProfileTemplate(int numCardsReviewedToday) {
+    public String processAnkiUserProfileTemplate(int numCardsReviewedToday, HashMap<String, Integer> strikesTemplateData, HashMap<String, String> progressTemplateData) {
         Context context = new Context();
         context.setVariable("numCardsReviewedToday", numCardsReviewedToday);
+        context.setVariable("strikesTemplateData", strikesTemplateData);
+        context.setVariable("progressTemplateData", progressTemplateData);
         return engine.process("./anki/anki_user_profile", context);
     }
 

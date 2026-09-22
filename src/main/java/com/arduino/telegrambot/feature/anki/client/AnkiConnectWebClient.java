@@ -344,21 +344,12 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 .map(this::buildStrikeStat);
     }
 
-
-//    @Override
-//    public Mono<DeckStrikeInfo> refreshDeckStrikeInfo(DeckStrikeInfo deckStrikeInfo) {
-//        return invoke("cardReviews", Map.of("deck", deckStrikeInfo.getDeckName(), "startID", deckStrikeInfo.getLastReviewedDate()))
-//                .flatMapMany(Flux::fromIterable)
-//                .map(review -> review.get(0).asLong())
-//
-//    }
-
     @Override
     public Mono<Long> lastReviewTime(String deck) {
         return invoke("cardReviews", Map.of("deck", deck, "startID", 0L))
                 .flatMapMany(Flux::fromIterable)
                 .map(review -> review.get(0).asLong())   // берём reviewTime каждого review
-                .reduce(Math::max);                       // находим максимальный (самый свежий) reviewTime
+                .reduce(Math::max);
     }
 
     private LocalDate toLocalDate(long epochMilli) {

@@ -11,3 +11,29 @@
 <hr/>
 
 👇 <b>Выбери колоду и продолжай обучение!</b>
+
+<h3>📚 Статистика колод</h3>
+
+<table>
+    <tr>
+        <th>Колода</th>
+        <th>Статус</th>
+        <th>🔥 Страйк</th>
+    </tr>
+
+    <tr th:each="entry : ${strikesTemplateData}">
+        <td>
+            <b th:text="${entry.key}">Java</b>
+        </td>
+
+        <td>
+            <th:block th:text="${progressTemplateData.get(entry.key)}">
+                В процессе
+            </th:block>
+        </td>
+
+        <td align="center">
+            🔥 <b th:text="${entry.value}">7</b>
+        </td>
+    </tr>
+</table>

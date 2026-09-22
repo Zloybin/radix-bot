@@ -4,6 +4,7 @@ import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public interface TemplateProcessor {
     String processPhysUserResultMessageTemplate(boolean result, String rightAnswer, String userAnswer, String section, String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber);
     String processRadUserResultMessageTemplate(boolean result, String rightAnswer, String userAnswer, String source, String target, String task);
     String processStatisticTemplate(List<SectionProgress> sectionProgresses);
-    String processAnkiUserProfileTemplate(int numCardsReviewedToday);
+    String processAnkiUserProfileTemplate(int numCardsReviewedToday, HashMap<String, Integer> strikesTemplateData, HashMap<String, String> progressTemplateData);
     String processDuoCardsUserProfileTemplate();
     String processDecksMenuTemplate(Map<String, Integer> strikesTemplateData);
     String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats);

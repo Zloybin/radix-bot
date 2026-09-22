@@ -38,7 +38,7 @@ public class ShowDecksHandler implements UpdateHandler {
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
-        return "showDecks".equals(userRequest.getHandler());
+        return "***".equals(userRequest.getHandler());
     }
 
     @Override

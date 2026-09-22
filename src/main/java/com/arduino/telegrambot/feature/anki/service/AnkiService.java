@@ -1,6 +1,8 @@
 package com.arduino.telegrambot.feature.anki.service;
 
+import com.arduino.telegrambot.entity.DeckProgress;
 import com.arduino.telegrambot.entity.DeckStrikeInfo;
+import com.arduino.telegrambot.enummeration.DeckStatus;
 import com.arduino.telegrambot.feature.anki.client.AnkiConnectClient;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
@@ -9,6 +11,7 @@ import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -232,5 +235,73 @@ public class AnkiService {
         long startOfYesterday = LocalDate.now().minusDays(1).atStartOfDay(zone).plusHours(4).toInstant().toEpochMilli();
 
         return lastReviewedCardDate < startOfYesterday;
+    }
+
+    public List<DeckProgress> updateUserDeckStatus(List<String> decks, List<DeckProgress> deckProgress) {
+
+        var updatedDeckProgressList = new ArrayList<DeckProgress>();
+
+        for (String deck : decks) {
+            for (DeckProgress progress : deckProgress) {
+
+                if (progress.getDeckName().equals(deck)) {
+                    DeckStatus updatedDeckStatus = DeckStatus.NOT_STARTED;
+                    LocalDate updatedLocalDate;
+
+                    var ankiDeckStats = ankiClient.getDeckStats(List.of(deck)).block().get(deck);
+
+                    var lastCardReviewDate = getLastCardReviewDate(deck);
+                    var lastDeckProgressDate = Instant.ofEpochMilli(progress.getLocalDate()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+                    if (lastDeckProgressDate.isBefore(lastCardReviewDate)) {
+                        updatedLocalDate = lastCardReviewDate;
+                        if (isDeckCompleted(ankiDeckStats)) {
+                            if (!DeckStatus.COMPLETED.equals(progress.getDeckStatus())) {
+                                updatedDeckStatus = DeckStatus.COMPLETED;
+                            }
+                        } else {
+                            updatedDeckStatus = DeckStatus.IN_PROGRESS;
+                        }
+
+                    } else if (lastDeckProgressDate.equals(lastCardReviewDate)) {
+                        updatedLocalDate = lastDeckProgressDate;
+                        if (isDeckCompleted(ankiDeckStats)) {
+                            if (!DeckStatus.COMPLETED.equals(progress.getDeckStatus())) {
+                                updatedDeckStatus = DeckStatus.COMPLETED;
+                            }
+
+                        } else {
+                            updatedDeckStatus = DeckStatus.IN_PROGRESS;
+                        }
+                    } else {
+                        updatedLocalDate = lastDeckProgressDate;
+                        if (!DeckStatus.NOT_STARTED.equals(progress.getDeckStatus())) {
+                            updatedDeckStatus = DeckStatus.NOT_STARTED;
+                        }
+                    }
+                    DeckProgress updatedDeckProgress = DeckProgress.builder()
+                            .id(progress.getId())
+                            .user(progress.getUser())
+                            .deckName(progress.getDeckName())
+                            .deckStatus(updatedDeckStatus)
+                            .localDate(updatedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                            .build();
+
+                    updatedDeckProgressList.add(updatedDeckProgress);
+                }
+
+            }
+        }
+        return updatedDeckProgressList;
+    }
+
+    private LocalDate getLastCardReviewDate(String deck) {
+        Long lastCardReviewTime = ankiClient.lastReviewTime(deck).block();
+        var lastCardReviewDate = Instant.ofEpochMilli(lastCardReviewTime).atZone(ZoneId.systemDefault()).toLocalDate();
+        return lastCardReviewDate;
+    }
+
+    private boolean isDeckCompleted(AnkiDeckStats ankiDeckStats) {
+        return ankiDeckStats.learnCount() == 0 && ankiDeckStats.newCount() == 0 && ankiDeckStats.reviewCount() == 0;
     }
 }

@@ -3,6 +3,8 @@ package com.arduino.telegrambot.feature.anki.handler;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.entity.DeckProgress;
 import com.arduino.telegrambot.entity.DeckStrikeInfo;
+import com.arduino.telegrambot.entity.User;
+import com.arduino.telegrambot.enummeration.DeckStatus;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.feature.anki.service.AnkiService;
 import com.arduino.telegrambot.handler.UpdateHandler;
@@ -13,6 +15,7 @@ import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,7 +53,25 @@ public class AnkiMenuHandler implements UpdateHandler {
 
         var deckProgress = user.getDeckProgress();
 
-         var updatedDeckProgresses = ankiService.updateUserDeckStatus(decks, deckProgress);
+        if(deckProgress.size() == 0){
+
+            List<DeckProgress>deckPro = new ArrayList<>();
+            for (String deck : decks) {
+                DeckProgress build = DeckProgress.builder()
+                        .deckName(deck)
+                        .localDate(0L)
+                        .deckStatus(DeckStatus.NOT_STARTED)
+                        .build();
+                deckPro.add(build);
+            }
+            user.setDeckProgress(deckPro);
+            userService.save(user);
+        }
+
+        User byId = userService.findById(userRequest.getChatId());
+
+
+        var updatedDeckProgresses = ankiService.updateUserDeckStatus(decks, byId.getDeckProgress());
 
         var progressTemplateData = new HashMap<String, String>();
 

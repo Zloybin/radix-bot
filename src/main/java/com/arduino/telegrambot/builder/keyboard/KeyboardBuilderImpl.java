@@ -119,7 +119,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         }
 
 
-        var ankiMenu = buttonBuilder.buildAnkiMenuButton();
+        var ankiMenu = buttonBuilder.buildMainMenuButton();
         var backToAnkiStartMenu = buttonProcessor.renameButton(ankiMenu, "⬅️ Назад");
         var ankiRow = new ArrayList<InlineKeyboardButton>();
         ankiRow.add(backToAnkiStartMenu);

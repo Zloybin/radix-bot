@@ -1,11 +1,17 @@
 package com.arduino.telegrambot.feature.anki.service;
 
+import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.feature.anki.client.AnkiConnectClient;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
+import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -125,7 +131,106 @@ public class AnkiService {
         }
     }
 
-    public byte[] getVideo(){
+    public byte[] getVideo() {
         return ankiClient.getCurrentCardVideo().block();
+    }
+
+    public Integer getDecksStrikeStat(String deckName, long lastReviewedDate) {
+        return ankiClient.cardReviews(deckName, lastReviewedDate).block();
+    }
+
+    public List<DeckStrikeInfo> initialStrikeStats(List<String> deckNames) {
+
+        var deckStrikeInfos = new ArrayList<DeckStrikeInfo>();
+        for (String deckName : deckNames) {
+            if (!AnkiUtility.EXCLUDED_DECKS.contains(deckName)) {
+                InitStrikeStatDate initStrikeStatDate = ankiClient.initialStrikeStat(deckName).block();
+                DeckStrikeInfo deckStrikeInfo = DeckStrikeInfo.builder()
+                        .deckName(deckName)
+                        .strikeCount(initStrikeStatDate.getStrikeCount())
+                        .lastReviewedDate(initStrikeStatDate.getLastReviewDate())
+                        .build();
+
+                deckStrikeInfos.add(deckStrikeInfo);
+            }
+        }
+        return deckStrikeInfos;
+    }
+
+    public List<DeckStrikeInfo> refreshStrikeStats(List<DeckStrikeInfo> deckStrikeInfos) {
+
+        var refreshedStrikeInfos = new ArrayList<DeckStrikeInfo>();
+
+        for (DeckStrikeInfo deckStrikeInfo : deckStrikeInfos) {
+
+            long lastReviewedDate = deckStrikeInfo.getLastReviewedDate();
+
+            if (isReviewedAndRefreshedToday(lastReviewedDate) || isNotReviewedAndNotRefreshedToday(lastReviewedDate)) {
+
+                refreshedStrikeInfos.add(deckStrikeInfo);
+
+            } else if (isTodayReviewedButNotRefreshed(deckStrikeInfo.getDeckName(), deckStrikeInfo.getLastReviewedDate())) {
+
+                var refreshedDeckStrikeInfo = DeckStrikeInfo.builder()
+                        .id(deckStrikeInfo.getId())
+                        .user(deckStrikeInfo.getUser())
+                        .deckName(deckStrikeInfo.getDeckName())
+                        .strikeCount(deckStrikeInfo.getStrikeCount() + 1)
+                        .lastReviewedDate(LocalDate.now()
+                                .atStartOfDay(ZoneId.systemDefault())
+                                .plusDays(1)
+                                .plusHours(4)
+                                .toInstant()
+                                .toEpochMilli())
+                        .build();
+
+                refreshedStrikeInfos.add(refreshedDeckStrikeInfo);
+            } else if (isStreakBroken(lastReviewedDate)) {
+                var refreshedDeckStrikeInfo = DeckStrikeInfo.builder()
+                        .id(deckStrikeInfo.getId())
+                        .user(deckStrikeInfo.getUser())
+                        .deckName(deckStrikeInfo.getDeckName())
+                        .strikeCount(0)
+                        .lastReviewedDate(0L)
+                        .build();
+                refreshedStrikeInfos.add(refreshedDeckStrikeInfo);
+            }
+        }
+
+        return refreshedStrikeInfos;
+    }
+
+
+    private boolean isReviewedAndRefreshedToday(Long lastReviewedCardDate) {
+        ZoneId zone = ZoneId.systemDefault();
+        long endOfDay = LocalDate.now().plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli();
+        return lastReviewedCardDate == endOfDay;
+    }
+
+    private boolean isNotReviewedAndNotRefreshedToday(Long lastReviewedCardDate) {
+
+        ZoneId zone = ZoneId.systemDefault();
+        long startOfYesterday = LocalDate.now().minusDays(1).atStartOfDay(zone).plusHours(4).toInstant().toEpochMilli();
+        long endOfYesterday = LocalDate.now().atStartOfDay(zone).plusHours(4).toInstant().toEpochMilli();
+
+        return lastReviewedCardDate >= startOfYesterday && lastReviewedCardDate <= endOfYesterday;
+    }
+
+    private boolean isTodayReviewedButNotRefreshed(String deckName, long lastReviewedCardDate) {
+        Long lastCardReviewTime = ankiClient.lastReviewTime(deckName).block();
+
+        ZoneId zone = ZoneId.systemDefault();
+        long startOfDay = LocalDate.now().atStartOfDay(zone).toInstant().toEpochMilli();
+        long endOfDay = LocalDate.now().plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli();
+
+        return lastReviewedCardDate < lastCardReviewTime && lastCardReviewTime >= startOfDay && lastCardReviewTime < endOfDay;
+    }
+
+    private boolean isStreakBroken(long lastReviewedCardDate) {
+
+        ZoneId zone = ZoneId.systemDefault();
+        long startOfYesterday = LocalDate.now().minusDays(1).atStartOfDay(zone).plusHours(4).toInstant().toEpochMilli();
+
+        return lastReviewedCardDate < startOfYesterday;
     }
 }

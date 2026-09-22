@@ -1,7 +1,9 @@
 package com.arduino.telegrambot.feature.anki.client;
 
+import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -26,5 +28,13 @@ public interface AnkiConnectClient {
     Mono<Boolean> showAnswer();
     Mono<Boolean> answerCard(int ease);
     Mono<byte[]> getCurrentCardVideo();
+
+    //Statistic
     Mono<Integer> getNumCardsReviewedToday();
+    Mono<Integer> cardReviews(String deck, long now);
+
+    Mono<InitStrikeStatDate> initialStrikeStat(String deck);
+//    Mono<DeckStrikeInfo> refreshDeckStrikeInfo(DeckStrikeInfo deckStrikeInfo);
+
+    Mono<Long> lastReviewTime(String deck);
 }

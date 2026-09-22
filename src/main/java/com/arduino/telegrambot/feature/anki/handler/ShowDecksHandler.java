@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
+import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.feature.anki.service.AnkiService;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
@@ -10,6 +11,12 @@ import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ShowDecksHandler implements UpdateHandler {
@@ -40,9 +47,25 @@ public class ShowDecksHandler implements UpdateHandler {
         user.setState(UserState.WAIT_DECK_NAME);
         userService.save(user);
 
-        var text = templateProcessor.processDecksMenuTemplate();
-
         var decks = ankiService.getDecks().block();
+
+        var strikes = user.getStrikes();
+
+        var refreshedStrikes = strikes == null
+                ? ankiService.initialStrikeStats(decks)
+                : ankiService.refreshStrikeStats(strikes);
+
+        user.setStrikes(refreshedStrikes);
+        userService.save(user);
+
+        var strikesTemplateData = new HashMap<String, Integer>();
+
+        for (DeckStrikeInfo refreshedStrike : refreshedStrikes) {
+           strikesTemplateData.put(refreshedStrike.getDeckName(), refreshedStrike.getStrikeCount());
+        }
+
+        var text = templateProcessor.processDecksMenuTemplate(strikesTemplateData);
+
         var stats = ankiService.getDecksStats(decks).block();
         var keyboard = keyboardBuilder.buildDecksMenu(decks, stats);
 

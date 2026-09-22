@@ -10,6 +10,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class TemplateProcessorImpl implements TemplateProcessor{
@@ -171,8 +172,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processDecksMenuTemplate() {
+    public String processDecksMenuTemplate(Map<String, Integer> strikesTemplateData) {
         Context context = new Context();
+        context.setVariable("strikesTemplateData", strikesTemplateData);
         return engine.process("./anki/show_decks_template", context);
     }
 

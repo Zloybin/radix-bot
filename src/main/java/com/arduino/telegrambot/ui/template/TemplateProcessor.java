@@ -5,6 +5,7 @@ import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TemplateProcessor {
     String processGreetingsTemplate();
@@ -21,7 +22,7 @@ public interface TemplateProcessor {
     String processStatisticTemplate(List<SectionProgress> sectionProgresses);
     String processAnkiUserProfileTemplate(int numCardsReviewedToday);
     String processDuoCardsUserProfileTemplate();
-    String processDecksMenuTemplate();
+    String processDecksMenuTemplate(Map<String, Integer> strikesTemplateData);
     String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats);
     String processFrontCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats);
     String processBackCardTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats);

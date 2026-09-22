@@ -1,8 +1,10 @@
 package com.arduino.telegrambot.feature.anki.client;
 
+import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jsoup.Jsoup;
 
@@ -11,10 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -150,6 +157,13 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     @Override
     public Mono<Integer> getNumCardsReviewedToday() {
         return invoke("getNumCardsReviewedToday", Map.of())
+                .map(JsonNode::asInt);
+    }
+
+    @Override
+    public Mono<Integer> cardReviews(String deck, long now) {
+        return invoke("cardReviews", Map.of("deck", deck, "startID", now))
+                .doOnNext(json -> System.out.println(json))
                 .map(JsonNode::asInt);
     }
 
@@ -318,4 +332,110 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
             );
         }
     }
+
+    @Override
+    public Mono<InitStrikeStatDate> initialStrikeStat(String deck) {
+        return invoke("cardReviews", Map.of("deck", deck, "startID", 0L))
+                .flatMapMany(Flux::fromIterable)          // разворачиваем массив ревью в поток
+                .map(review -> review.get(0).asLong())     // берём reviewTime (первый элемент каждого под-массива)
+                .map(this::toLocalDate)                    // unix millis -> календарная дата
+                .distinct()                                // убираем дубликаты дат (несколько карточек в один день)
+                .collectSortedList(Comparator.reverseOrder()) // сортируем от новых дат к старым
+                .map(this::buildStrikeStat);
+    }
+
+
+//    @Override
+//    public Mono<DeckStrikeInfo> refreshDeckStrikeInfo(DeckStrikeInfo deckStrikeInfo) {
+//        return invoke("cardReviews", Map.of("deck", deckStrikeInfo.getDeckName(), "startID", deckStrikeInfo.getLastReviewedDate()))
+//                .flatMapMany(Flux::fromIterable)
+//                .map(review -> review.get(0).asLong())
+//
+//    }
+
+    @Override
+    public Mono<Long> lastReviewTime(String deck) {
+        return invoke("cardReviews", Map.of("deck", deck, "startID", 0L))
+                .flatMapMany(Flux::fromIterable)
+                .map(review -> review.get(0).asLong())   // берём reviewTime каждого review
+                .reduce(Math::max);                       // находим максимальный (самый свежий) reviewTime
+    }
+
+    private LocalDate toLocalDate(long epochMilli) {
+        return Instant.ofEpochMilli(epochMilli)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    private int calculateStreak(List<LocalDate> datesDesc) {
+        if (datesDesc.isEmpty()) {
+            return 0;
+        }
+
+        LocalDate expected = LocalDate.now();
+        long lastReviewed = expected.atStartOfDay(ZoneId.systemDefault())
+                .plusDays(1L)
+                .toInstant().toEpochMilli();
+
+        // если сегодня ещё не проходили карточки — начинаем отсчёт со вчерашнего дня,
+        // иначе стрик сразу обнулится, хотя пользователь ещё может успеть позаниматься сегодня
+        if (!datesDesc.get(0).equals(expected)) {
+            expected = expected.minusDays(1);
+            lastReviewed = expected
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .plusDays(1L)
+                    .toInstant()
+                    .toEpochMilli();
+        }
+
+        int streak = 0;
+        for (LocalDate date : datesDesc) {
+            if (date.equals(expected)) {
+                streak++;
+                expected = expected.minusDays(1);
+            } else if (date.isBefore(expected)) {
+                // нашли пропуск — дальше список можно отбрасывать
+                break;
+            }
+        }
+
+        if(streak == 0){
+
+        }
+
+        return streak;
+    }
+
+    private InitStrikeStatDate buildStrikeStat(List<LocalDate> datesDesc) {
+        if (datesDesc.isEmpty()) {
+            return InitStrikeStatDate.builder()
+                    .strikeCount(0)
+                    .lastReviewDate(0L)
+                    .build();
+        }
+
+        LocalDate mostRecent = datesDesc.get(0);
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+
+        // последняя дата прохождения кладётся только если это сегодня или вчера,
+        // иначе стрик уже прерван и хранить нечего — ставим 0
+        long lastReviewDate = (mostRecent.equals(today) || mostRecent.equals(yesterday))
+                ? toEpochMilli(mostRecent)
+                : 0L;
+
+        int strikeCount = calculateStreak(datesDesc);
+
+        return InitStrikeStatDate.builder()
+                .strikeCount(strikeCount)
+                .lastReviewDate(lastReviewDate)
+                .build();
+    }
+
+    private long toEpochMilli(LocalDate date) {
+        return date.atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+    }
+
 }

@@ -1,1 +1,27 @@
-show decks
+<h3>🔥 Серия занятий</h3>
+
+<th:block th:each="entry : ${strikesTemplateData}">
+
+    <hr/>
+
+    <h3>
+        📚 <th:block th:text="${entry.key}">Java</th:block>
+    </h3>
+
+    <aside align="center">
+
+        <h2>
+            🔥 <th:block th:text="${entry.value}">7</th:block>
+        </h2>
+
+        <b th:text="${
+            entry.value == 1 ? 'день подряд' :
+            entry.value >= 2 and entry.value <= 4 ? 'дня подряд' :
+            'дней подряд'
+        }">
+            дней подряд
+        </b>
+
+    </aside>
+
+</th:block>

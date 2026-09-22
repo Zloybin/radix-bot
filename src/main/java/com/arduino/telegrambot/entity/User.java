@@ -42,4 +42,7 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Result> results;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<DeckStrikeInfo> strikes;
 }

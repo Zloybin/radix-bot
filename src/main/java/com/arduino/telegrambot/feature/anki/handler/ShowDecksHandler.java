@@ -45,13 +45,12 @@ public class ShowDecksHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
         user.setState(UserState.WAIT_DECK_NAME);
-        userService.save(user);
 
         var decks = ankiService.getDecks().block();
 
         var strikes = user.getStrikes();
 
-        var refreshedStrikes = strikes == null
+        var refreshedStrikes = strikes.size() == 0
                 ? ankiService.initialStrikeStats(decks)
                 : ankiService.refreshStrikeStats(strikes);
 

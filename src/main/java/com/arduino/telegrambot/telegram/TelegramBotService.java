@@ -1,7 +1,11 @@
 package com.arduino.telegrambot.telegram;
 
 import com.arduino.telegrambot.dispatcher.Dispatcher;
+import com.arduino.telegrambot.entity.DeckProgress;
 import com.arduino.telegrambot.entity.User;
+import com.arduino.telegrambot.enummeration.DeckStatus;
+import com.arduino.telegrambot.feature.anki.service.AnkiService;
+import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.telegram.properties.BotProperties;
 import com.arduino.telegrambot.service.CallbackService;
@@ -11,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -28,6 +35,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private CallbackService callbackService;
 
+    @Autowired
+    private AnkiService ankiService;
+
 
 
     @Override
@@ -42,6 +52,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
 
         var userRequestBuilder = UserRequest.builder();
 
@@ -70,8 +81,28 @@ public class TelegramBotService extends TelegramLongPollingBot {
             throw new RuntimeException("Неисправное состояние объекта класса update.");
         }
 
+
         var userRequest = userRequestBuilder.build();
         Long chatId = userRequest.getChatId();
+
+        var decks = ankiService.getDecks().block();
+        var filteredDeckList = decks.stream().filter(deck -> !AnkiUtility.EXCLUDED_DECKS.contains(deck)).toList();
+
+        User userz = userService.findById(userRequest.getChatId());
+        List<DeckProgress> deckProgressList = new ArrayList<>();
+        for (String deck : filteredDeckList) {
+            var deckProgress = DeckProgress.builder()
+                    .deckStatus(DeckStatus.NOT_STARTED)
+                    .localDate(0L)
+                    .deckName(deck)
+                    .user(userz)
+                    .build();
+
+            deckProgressList.add(deckProgress);
+        }
+
+        userz.setDeckProgress(deckProgressList);
+
 
 //        User userT = userService.findById(userRequest.getChatId());
 //        userT.setState(UserState.FREE);

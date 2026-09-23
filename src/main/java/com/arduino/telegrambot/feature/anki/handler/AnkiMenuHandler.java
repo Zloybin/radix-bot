@@ -7,6 +7,7 @@ import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.DeckStatus;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.feature.anki.service.AnkiService;
+import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.UserService;
@@ -46,9 +47,10 @@ public class AnkiMenuHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
 
         var user = userService.findById(userRequest.getChatId());
-        user.setState(UserState.WAIT_DECK_NAME);
+
 
         var decks = ankiService.getDecks().block();
+        List<String> filteredDeckList = decks.stream().filter(deck -> !AnkiUtility.EXCLUDED_DECKS.contains(deck)).toList();
         var strikes = user.getStrikes();
 
         var deckProgress = user.getDeckProgress();
@@ -56,7 +58,7 @@ public class AnkiMenuHandler implements UpdateHandler {
         if(deckProgress.size() == 0){
 
             List<DeckProgress>deckPro = new ArrayList<>();
-            for (String deck : decks) {
+            for (String deck : filteredDeckList) {
                 DeckProgress build = DeckProgress.builder()
                         .deckName(deck)
                         .localDate(0L)
@@ -65,6 +67,7 @@ public class AnkiMenuHandler implements UpdateHandler {
                 deckPro.add(build);
             }
             user.setDeckProgress(deckPro);
+            user.setState(UserState.WAIT_DECK_NAME);
             userService.save(user);
         }
 
@@ -74,9 +77,6 @@ public class AnkiMenuHandler implements UpdateHandler {
         var updatedDeckProgresses = ankiService.updateUserDeckStatus(decks, byId.getDeckProgress());
 
         var progressTemplateData = new HashMap<String, String>();
-
-
-
 
         for (DeckProgress updatedDeckProgress : updatedDeckProgresses) {
             progressTemplateData.put(updatedDeckProgress.getDeckName(), updatedDeckProgress.getDeckStatus().getTitle());

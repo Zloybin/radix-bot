@@ -280,8 +280,6 @@ public class AnkiService {
                         }
                     }
                     DeckProgress updatedDeckProgress = DeckProgress.builder()
-                            .id(progress.getId())
-                            .user(progress.getUser())
                             .deckName(progress.getDeckName())
                             .deckStatus(updatedDeckStatus)
                             .localDate(updatedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())

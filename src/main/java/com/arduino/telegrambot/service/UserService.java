@@ -4,7 +4,7 @@ import com.arduino.telegrambot.entity.DeckProgress;
 import com.arduino.telegrambot.enummeration.DeckStatus;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.feature.anki.service.AnkiService;
+import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UserService {
 
     @Autowired
-    private AnkiService ankiService;
+    private AnkiServiceImpl ankiService;
 
     @Autowired
     private UserRepository userRepository;

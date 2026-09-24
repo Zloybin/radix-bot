@@ -6,7 +6,7 @@ import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.enummeration.DeckStatus;
 import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.feature.anki.service.AnkiService;
+import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -33,7 +33,7 @@ public class AnkiMenuHandler implements UpdateHandler {
     private TemplateProcessor templateProcessor;
 
     @Autowired
-    private AnkiService ankiService;
+    private AnkiServiceImpl ankiService;
 
     @Autowired
     private UserService userService;
@@ -75,7 +75,7 @@ public class AnkiMenuHandler implements UpdateHandler {
         User byId = userService.findById(userRequest.getChatId());
 
 
-        var updatedDeckProgresses = ankiService.updateUserDeckStatus(decks, byId.getDeckProgress());
+        var updatedDeckProgresses = ankiService.updateUserDeckStatus(filteredDeckList, byId.getDeckProgress());
 
         var progressTemplateData = new HashMap<String, String>();
 
@@ -99,7 +99,7 @@ public class AnkiMenuHandler implements UpdateHandler {
 
 
         var stats = ankiService.getDecksStats(decks).block();
-        var keyboard = keyboardBuilder.buildDecksMenu(decks, stats);
+        var keyboard = keyboardBuilder.buildAnkiMenu(decks, stats);
 
         var numCardsReviewedToday = ankiService.getNumCardsReviewedToday().block();
         var text = templateProcessor.processAnkiUserProfileTemplate(numCardsReviewedToday, strikesTemplateData, progressTemplateData);

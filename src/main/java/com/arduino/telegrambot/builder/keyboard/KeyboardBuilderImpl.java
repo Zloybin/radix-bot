@@ -82,26 +82,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildAnkiMenu() {
-        var showDecks = buttonBuilder.buildShowDecksButton();
-        var backToMainMenu = buttonBuilder.buildBackToMainMenuButton();
-
-        var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(showDecks);
-
-        var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(backToMainMenu);
-
-        var rows = new ArrayList<List<InlineKeyboardButton>>();
-        rows.add(row1);
-        rows.add(row2);
-
-        return new InlineKeyboardMarkup(rows);
-
-    }
-
-    @Override
-    public InlineKeyboardMarkup buildDecksMenu(List<String> decks, Map<String, AnkiDeckStats> stats) {
+    public InlineKeyboardMarkup buildAnkiMenu(List<String> decks, Map<String, AnkiDeckStats> stats) {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         for (String deck : decks) {
@@ -199,10 +180,12 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row1.add(showAnswerButton);
 
         var deleteAnkiCardButton = buttonBuilder.buildDeleteAnkiCardButton();
+        var markAnkiCardButton = buttonBuilder.buildMarkAnkiCardButton();
         var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(markAnkiCardButton);
         row2.add(deleteAnkiCardButton);
 
-        var showDecksButton = buttonBuilder.buildShowDecksButton();
+        var showDecksButton = buttonBuilder.buildMainMenuButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(backToShowDeckNames);
@@ -286,16 +269,6 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         rows.add(row1);
 
         return new InlineKeyboardMarkup(rows);
-    }
-
-    @Override
-    public ForceReplyKeyboard buildForcedKeyboardMenu(String text) {
-        return ForceReplyKeyboard.builder()
-                .forceReply(true)
-                .inputFieldPlaceholder("Ваш текст здесь")
-                .selective(false)
-                .build();
-
     }
 
     @Override

@@ -29,6 +29,8 @@ public interface AnkiConnectClient {
     Mono<Boolean> answerCard(int ease);
     Mono<byte[]> getCurrentCardVideo();
 
+    Mono<Boolean> setSpecificValueOfCard(long cardId);
+
     //Statistic
     Mono<Integer> getNumCardsReviewedToday();
     Mono<Integer> cardReviews(String deck, long now);

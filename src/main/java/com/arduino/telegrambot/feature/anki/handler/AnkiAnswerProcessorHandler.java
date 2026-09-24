@@ -1,7 +1,7 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
-import com.arduino.telegrambot.feature.anki.service.AnkiService;
+import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
@@ -33,7 +33,7 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
     private TemplateProcessor templateProcessor;
 
     @Autowired
-    private AnkiService ankiService;
+    private AnkiServiceImpl ankiService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {

@@ -35,13 +35,15 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildCancelTaskButton();
 
     //Anki
-
     InlineKeyboardButton buildAnkiMenuButton();
     InlineKeyboardButton buildShowDecksButton();
     InlineKeyboardButton buildDeckNameButton(String deckName, int total);
     InlineKeyboardButton buildShowAnkiAnswerButton();
     InlineKeyboardButton buildDeleteAnkiCardButton();
     InlineKeyboardButton buildAnkiOptionAnswerButton(AnkiAnswer ankiAnswer);
+    InlineKeyboardButton buildCancelDeleteCardButton();
+    InlineKeyboardButton buildConfirmDeleteCardButton();
+    InlineKeyboardButton buildMarkAnkiCardButton();
 
     //DuoCard
     InlineKeyboardButton buildDuoCardsMenuButton();
@@ -50,6 +52,5 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildShowAnswerDuoCardsButton();
     InlineKeyboardButton buildAnswerOptionDuoCardsButton(AnkiAnswer ankiAnswer);
 
-    InlineKeyboardButton buildCancelDeleteCardButton();
-    InlineKeyboardButton buildConfirmDeleteCardButton();
+
 }

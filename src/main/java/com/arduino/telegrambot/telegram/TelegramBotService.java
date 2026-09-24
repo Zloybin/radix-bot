@@ -1,11 +1,8 @@
 package com.arduino.telegrambot.telegram;
 
 import com.arduino.telegrambot.dispatcher.Dispatcher;
-import com.arduino.telegrambot.entity.DeckProgress;
 import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.enummeration.DeckStatus;
-import com.arduino.telegrambot.feature.anki.service.AnkiService;
-import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
+import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.telegram.properties.BotProperties;
 import com.arduino.telegrambot.service.CallbackService;
@@ -15,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Slf4j
@@ -36,7 +30,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private CallbackService callbackService;
 
     @Autowired
-    private AnkiService ankiService;
+    private AnkiServiceImpl ankiService;
 
 
 

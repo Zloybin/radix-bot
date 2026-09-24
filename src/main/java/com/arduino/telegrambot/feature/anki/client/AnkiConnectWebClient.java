@@ -114,6 +114,15 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     }
 
     @Override
+    public Mono<Boolean> setSpecificValueOfCard(long cardId) {
+        return invoke(
+                "setSpecificValueOfCard",
+                Map.of("card", cardId, "keys", List.of("flags"), "newValues", List.of(1), "warning_check", true)
+        ).doOnNext(jsonNode -> System.out.println(jsonNode))
+                .map(JsonNode::asBoolean);
+    }
+
+    @Override
     public Mono<AnkiCurrentCard> getCurrentCard() {
         return invoke("guiCurrentCard", Map.of())
                 .map(json -> {

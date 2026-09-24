@@ -1,7 +1,7 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
 import com.arduino.telegrambot.entity.DeckStrikeInfo;
-import com.arduino.telegrambot.feature.anki.service.AnkiService;
+import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handler.UpdateHandler;
@@ -12,11 +12,7 @@ import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class ShowDecksHandler implements UpdateHandler {
@@ -34,7 +30,7 @@ public class ShowDecksHandler implements UpdateHandler {
     private TemplateProcessor templateProcessor;
 
     @Autowired
-    private AnkiService ankiService;
+    private AnkiServiceImpl ankiService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -66,7 +62,7 @@ public class ShowDecksHandler implements UpdateHandler {
         var text = templateProcessor.processDecksMenuTemplate(strikesTemplateData);
 
         var stats = ankiService.getDecksStats(decks).block();
-        var keyboard = keyboardBuilder.buildDecksMenu(decks, stats);
+        var keyboard = keyboardBuilder.buildAnkiMenu(decks, stats);
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 

@@ -290,7 +290,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("confirmDeleteAnkiCard");
 
         var button = new InlineKeyboardButton();
-        button.setText("⛔️ Удалить карточку");
+        button.setText("⛔️");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
@@ -379,6 +379,16 @@ public class ButtonBuilderImpl implements ButtonBuilder {
 
         var button = new InlineKeyboardButton();
         button.setText("✅ Подтвердить");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildMarkAnkiCardButton() {
+        var hash = getHashWithoutRequest("markAnkiCard");
+
+        var button = new InlineKeyboardButton();
+        button.setText("🚩");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }

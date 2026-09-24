@@ -63,6 +63,7 @@ public class AnkiMenuHandler implements UpdateHandler {
                         .deckName(deck)
                         .localDate(0L)
                         .deckStatus(DeckStatus.NOT_STARTED)
+                        .user(userService.findById(userRequest.getChatId()))
                         .build();
                 deckPro.add(build);
             }

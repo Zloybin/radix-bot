@@ -78,7 +78,6 @@ public class UserService {
                     .deckStatus(DeckStatus.NOT_STARTED)
                     .localDate(0L)
                     .deckName(deck)
-                    .user(user)
                     .build();
 
             deckProgressList.add(deckProgress);

@@ -1,28 +1,3 @@
-<details open>
-    <summary>📝 Результат</summary>
-
-
-    <b>Ваш ответ:</b>
-    <blockquote>
-        <p>
-            <code th:text="${userAnswer}">101101</code>
-        </p>
-
-    </blockquote>
-
-
-    <b>Правильный ответ:</b>
-    <blockquote>
-        <p>
-            <code th:text="${rightAnswer != null and !#strings.isEmpty(rightAnswer) ? rightAnswer : 'Правильный ответ не определен'}">
-                45
-            </code>
-        </p>
-    </blockquote>
-
-    <hr/>
-</details>
-
 <details>
     <summary>ℹ️ Информация о задании</summary>
 
@@ -62,4 +37,29 @@
 
 <hr/>
 
+<details open>
+    <summary>📝 Результат</summary>
+
+
+    <b>Ваш ответ:</b>
+    <blockquote>
+        <p>
+            <code th:text="${userAnswer}">101101</code>
+        </p>
+
+    </blockquote>
+
+
+    <b>Правильный ответ:</b>
+    <blockquote>
+        <p>
+            <code th:text="${rightAnswer != null and !#strings.isEmpty(rightAnswer) ? rightAnswer : 'Правильный ответ не определен'}">
+                45
+            </code>
+        </p>
+    </blockquote>
+
+</details>
+
+<hr/>
 Ожидаем ответ бота...

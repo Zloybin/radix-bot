@@ -110,16 +110,21 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         return invoke(
                 "guiDeckReview",
                 Map.of("name", deckName)
-        ).map(JsonNode::asBoolean);
+        ).doOnNext(jsonNode -> System.out.println(jsonNode))
+                .map(JsonNode::asBoolean);
     }
 
     @Override
     public Mono<Boolean> setSpecificValueOfCard(long cardId) {
         return invoke(
                 "setSpecificValueOfCard",
-                Map.of("card", cardId, "keys", List.of("flags"), "newValues", List.of(1), "warning_check", true)
-        ).doOnNext(jsonNode -> System.out.println(jsonNode))
-                .map(JsonNode::asBoolean);
+                Map.of("card", cardId,
+                        "keys", List.of("flags"),
+                        "newValues", List.of(1),
+                        "warning_check", true)
+        ).map(root -> {
+            return root.get(0).asBoolean();
+        });
     }
 
     @Override

@@ -49,7 +49,7 @@ public class MarkAnkiCardHandler implements UpdateHandler {
         var deckStats = ankiService.getDeckStats(updatedCurrentCard.deckName()).block();
 
         var keyboard = keyboardBuilder.buildAnkiCardKeyboard();
-        var text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
+        var text = templateProcessor.processMarkedFrontCardTemplate(currentCard, deckStats);
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 

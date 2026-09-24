@@ -185,7 +185,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row2.add(markAnkiCardButton);
         row2.add(deleteAnkiCardButton);
 
-        var showDecksButton = buttonBuilder.buildMainMenuButton();
+        var showDecksButton = buttonBuilder.buildAnkiMenuButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(backToShowDeckNames);
@@ -260,10 +260,10 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildBackToAnkiDecksMenu() {
-        var duoCards = buttonBuilder.buildShowDecksButton();
-        buttonProcessor.renameButton(duoCards, "⬅️ Назад");
+        var ankiMenu = buttonBuilder.buildAnkiMenuButton();
+        var renameButton = buttonProcessor.renameButton(ankiMenu, "⬅️ Назад");
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(duoCards);
+        row1.add(renameButton);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);

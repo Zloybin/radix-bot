@@ -1,22 +1,12 @@
 <h3>👋 Добро пожаловать в Anki!</h3>
 
-Рад тебя видеть,
-<b th:text="${userName}">Иван</b>! 😊
-
 <hr/>
-
-📚 <b>Карточек сегодня:</b>
-<b th:text="${numCardsReviewedToday}">25</b> 🎯
-
-<hr/>
-
-👇 <b>Выбери колоду и продолжай обучение!</b>
 
 <h3>📚 Статистика колод</h3>
 
 <table>
     <tr>
-        <th>Колода</th>
+        <th></th>
         <th>Статус</th>
         <th>🔥 Страйк</th>
     </tr>
@@ -26,7 +16,7 @@
             <b th:text="${entry.key}">Java</b>
         </td>
 
-        <td>
+        <td align="center">
             <th:block th:text="${progressTemplateData.get(entry.key)}">
                 В процессе
             </th:block>
@@ -37,3 +27,10 @@
         </td>
     </tr>
 </table>
+
+<hr/>
+
+📚 <b>Карточек сегодня:</b>
+<b th:text="${numCardsReviewedToday}">25</b> 🎯
+<br/>
+<br/>

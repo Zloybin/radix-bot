@@ -112,7 +112,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         var context = new Context();
         context.setVariable("id", taskId);
         context.setVariable("result", result);
-        return engine.process("success_correct", context);
+        return engine.process("phys/success_correct", context);
     }
 
     @Override
@@ -203,6 +203,27 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
+    public String processMarkedFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
+
+        var question = currentCard.question();
+
+
+        var tags = currentCard.tags();
+
+        Context context = new Context();
+
+        context.setVariable("newCount", ankiDeckStats.newCount());
+        context.setVariable("learnCount", ankiDeckStats.learnCount());
+        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+
+
+        var parsedQuestion = TelegramLatexParser.parse(question);
+        context.setVariable("question", parsedQuestion);
+        context.setVariable("tags", tags);
+        return engine.process("./anki/marked_anki_front", context);
+    }
+
+    @Override
     public String processFrontCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
         var question = currentCard.question();
 
@@ -242,7 +263,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("question", parsedQuestion);
         context.setVariable("tags", tags);
         context.setVariable("answer", parsedAnswer);
-        return engine.process("anki_back", context);
+        return engine.process("anki/anki_back", context);
     }
 
     @Override
@@ -274,7 +295,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         Context context = new Context();
         context.setVariable("deckName", deckname);
 
-        return engine.process("completed_deck_message", context);
+        return engine.process("anki/completed_deck_message", context);
     }
 
     @Override

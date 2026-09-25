@@ -33,11 +33,12 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildRadConverterStartButton();
     InlineKeyboardButton buildGiveAnswerButton();
     InlineKeyboardButton buildCancelTaskButton();
+    InlineKeyboardButton buildCancelAnswerButton();
 
     //Anki
     InlineKeyboardButton buildAnkiMenuButton();
     InlineKeyboardButton buildShowDecksButton();
-    InlineKeyboardButton buildDeckNameButton(String deckName, int total);
+    InlineKeyboardButton buildDeckNameButton(String deckName);
     InlineKeyboardButton buildShowAnkiAnswerButton();
     InlineKeyboardButton buildDeleteAnkiCardButton();
     InlineKeyboardButton buildAnkiOptionAnswerButton(AnkiAnswer ankiAnswer);

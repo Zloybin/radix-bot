@@ -240,6 +240,16 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         return button;
     }
 
+    @Override
+    public InlineKeyboardButton buildCancelAnswerButton() {
+        var hash = getHashWithoutRequest("cancelRadAnswer");
+
+        var button = new InlineKeyboardButton();
+        button.setText("🚫 Отменить ответ");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
 
     @Override
     public InlineKeyboardButton buildAnkiMenuButton() {
@@ -264,11 +274,11 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildDeckNameButton(String deckName, int total) {
+    public InlineKeyboardButton buildDeckNameButton(String deckName) {
         var hash = getHashWithRequest("showAnkiCard", deckName);
 
         var button = new InlineKeyboardButton();
-        button.setText(String.format("%s (%d)", deckName, total));
+        button.setText(deckName);
         button.setCallbackData(String.valueOf(hash));
         return button;
     }

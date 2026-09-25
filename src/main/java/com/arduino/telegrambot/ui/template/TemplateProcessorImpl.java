@@ -301,7 +301,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     @Override
     public String processAppsInfoTemplate() {
         Context context = new Context();
-        return engine.process("apps_info", context);
+        return engine.process("anki/apps_info", context);
     }
 
     @Override

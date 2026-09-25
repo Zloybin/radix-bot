@@ -96,10 +96,7 @@ public class AnkiMenuHandler implements UpdateHandler {
             strikesTemplateData.put(refreshedStrike.getDeckName(), refreshedStrike.getStrikeCount());
         }
 
-
-
-        var stats = ankiService.getDecksStats(decks).block();
-        var keyboard = keyboardBuilder.buildAnkiMenu(decks, stats);
+        var keyboard = keyboardBuilder.buildAnkiMenu(filteredDeckList);
 
         var numCardsReviewedToday = ankiService.getNumCardsReviewedToday().block();
         var text = templateProcessor.processAnkiUserProfileTemplate(numCardsReviewedToday, strikesTemplateData, progressTemplateData);

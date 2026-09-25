@@ -82,23 +82,22 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     }
 
     @Override
-    public InlineKeyboardMarkup buildAnkiMenu(List<String> decks, Map<String, AnkiDeckStats> stats) {
+    public InlineKeyboardMarkup buildAnkiMenu(List<String> decks) {
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
-        for (String deck : decks) {
-
-            if(AnkiUtility.EXCLUDED_DECKS.contains(deck)){
-                continue;
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        for (int i = 0; i < decks.size(); i++) {
+            var deckName = decks.get(i);
+            var deckNameButton = buttonBuilder.buildDeckNameButton(deckName);
+            if(i % 2 == 0) {
+                row1.add(deckNameButton);
+            }else {
+                row2.add(deckNameButton);
             }
-
-            var deckStats = stats.get(deck);
-            int total = deckStats.totalInDeck();
-            var row = new ArrayList<InlineKeyboardButton>();
-            var deckNameButton = buttonBuilder.buildDeckNameButton(deck, total);
-            row.add(deckNameButton);
-            rows.add(row);
         }
-
+            rows.add(row1);
+            rows.add(row2);
 
         var ankiMenu = buttonBuilder.buildMainMenuButton();
         var backToAnkiStartMenu = buttonProcessor.renameButton(ankiMenu, "⬅️ Назад");
@@ -324,7 +323,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
     @Override
     public InlineKeyboardMarkup buildBackToRadConverterMenu() {
-        var radConverterButton = buttonBuilder.buildRadConverterStartButton();
+        var radConverterButton = buttonBuilder.buildCancelAnswerButton();
         var cancelAnswer = buttonProcessor.renameButton(radConverterButton, "\uD83D\uDEAB Отменить ответ");
 
         var row1 = new ArrayList<InlineKeyboardButton>();

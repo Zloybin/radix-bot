@@ -55,27 +55,7 @@ public class AnkiMenuHandler implements UpdateHandler {
 
         var deckProgress = user.getDeckProgress();
 
-        if(deckProgress.size() == 0){
-
-            List<DeckProgress>deckPro = new ArrayList<>();
-            for (String deck : filteredDeckList) {
-                DeckProgress build = DeckProgress.builder()
-                        .deckName(deck)
-                        .localDate(0L)
-                        .deckStatus(DeckStatus.NOT_STARTED)
-                        .user(userService.findById(userRequest.getChatId()))
-                        .build();
-                deckPro.add(build);
-            }
-            user.setDeckProgress(deckPro);
-            user.setState(UserState.WAIT_DECK_NAME);
-            userService.save(user);
-        }
-
-        User byId = userService.findById(userRequest.getChatId());
-
-
-        var updatedDeckProgresses = ankiService.updateUserDeckStatus(filteredDeckList, byId.getDeckProgress());
+        var updatedDeckProgresses = ankiService.updateUserDeckStatus(filteredDeckList, deckProgress);
 
         var progressTemplateData = new HashMap<String, String>();
 

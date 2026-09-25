@@ -30,7 +30,7 @@ public class DeckProgress {
     @Column
     private long localDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "main_entity_id")
-    private User user;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "main_entity_id")
+//    private User user;
 }

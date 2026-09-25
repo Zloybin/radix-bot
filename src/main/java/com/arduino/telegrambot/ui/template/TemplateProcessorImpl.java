@@ -238,7 +238,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         context.setVariable("question", question);
         context.setVariable("tags", tags);
-        return engine.process("duocard_front", context);
+        return engine.process("duocards/duocard_front", context);
     }
 
     @Override
@@ -286,7 +286,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("tags", tags);
         context.setVariable("answer", answer);
         context.setVariable("example", example);
-        return engine.process("duocard_back", context);
+        return engine.process("duocards/duocard_back", context);
     }
 
     @Override

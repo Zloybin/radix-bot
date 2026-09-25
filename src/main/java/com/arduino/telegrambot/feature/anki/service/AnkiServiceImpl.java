@@ -42,6 +42,10 @@ public class AnkiServiceImpl implements AnkiService{
         return ankiClient.getDeckNames();
     }
 
+    public Mono<List<String>> getFilteredDecks() {
+        return ankiClient.getFilteredDeckNames();
+    }
+
     /**
      * Получает названия колод и их ID.
      */
@@ -289,7 +293,6 @@ public class AnkiServiceImpl implements AnkiService{
                     }
 
                     DeckProgress updatedDeckProgress = DeckProgress.builder()
-//                            .user(progress.getUser())
                             .localDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).plusDays(1).plusHours(4).toInstant().toEpochMilli())
                             .deckName(progress.getDeckName())
                             .deckStatus(updatedDeckStatus)

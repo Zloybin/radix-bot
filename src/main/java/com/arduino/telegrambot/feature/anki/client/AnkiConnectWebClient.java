@@ -5,6 +5,7 @@ import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
+import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jsoup.Jsoup;
 
@@ -25,6 +26,7 @@ import java.time.ZoneId;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class AnkiConnectWebClient implements AnkiConnectClient {
@@ -59,6 +61,16 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                     );
                     return decks;
                 });
+    }
+
+    @Override
+    public Mono<List<String>> getFilteredDeckNames() {
+        return getDeckNames()
+                .map(list -> list
+                        .stream()
+                        .filter(deckName -> !AnkiUtility.EXCLUDED_DECKS.contains(deckName))
+                        .toList()
+                );
     }
 
     @Override

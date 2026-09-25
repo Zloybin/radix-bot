@@ -1,5 +1,7 @@
 package com.arduino.telegrambot.feature.anki.model;
 
+import com.arduino.telegrambot.enummeration.AnkiTemplate;
+
 import java.util.List;
 
 
@@ -10,6 +12,7 @@ public record AnkiCurrentCard(
         String answer,
         String example,
         List <String> tags,
-        List<Integer> buttons
+        List<Integer> buttons,
+        AnkiTemplate ankiTemplate
 ) {
 }

@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.ui.template;
 
+import com.arduino.telegrambot.enummeration.AnkiTemplate;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.parser.TelegramLatexParser;
@@ -225,8 +226,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
     @Override
     public String processFrontCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
-        var question = currentCard.question();
-
+        var question = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.ankiTemplate().getTitile())
+                ? currentCard.question()
+                : currentCard.answer();
 
         var tags = currentCard.tags();
 
@@ -268,13 +270,20 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
     @Override
     public String processBackCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
-        var question = currentCard.question();
+
+        var question = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.ankiTemplate().getTitile())
+                ? currentCard.question()
+                : currentCard.answer();
+
+        var answer = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.ankiTemplate().getTitile())
+                ? currentCard.answer()
+                : currentCard.question();
 
 
         var tags = currentCard.tags();
         var example = currentCard.example();
 
-        var answer = currentCard.answer() + "<br/><br/><cite>" + question +"</cite>";
+        answer = answer + "<br/><br/><cite>" + question +"</cite>";
 
         Context context = new Context();
 

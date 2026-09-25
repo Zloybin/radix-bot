@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.feature.anki.client;
 
 import com.arduino.telegrambot.entity.DeckStrikeInfo;
+import com.arduino.telegrambot.enummeration.AnkiTemplate;
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
@@ -160,7 +161,8 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                                                     json.path("fields").path("DisplayTags").path("value").asText()
                                             ).select(".tag")
                                             .eachText(),
-                                    readIntegerList(json.get("buttons")));
+                                    readIntegerList(json.get("buttons"))
+                                    , AnkiTemplate.TEMPLATE_1.getTitile().equals(json.get("template").asText()) ? AnkiTemplate.TEMPLATE_1 : AnkiTemplate.TEMPLATE_2);
 
                             System.out.println("***GET ANKI CARD:" + currentCard);
                             return currentCard;

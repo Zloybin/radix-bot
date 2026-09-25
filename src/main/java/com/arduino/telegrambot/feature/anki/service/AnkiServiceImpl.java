@@ -257,7 +257,7 @@ public class AnkiServiceImpl implements AnkiService{
                     var ankiDeckStats = ankiClient.getDeckStats(List.of(deck)).block().get(deck);
 
                     var lastCardReviewDate = getLastCardReviewDate(deck);
-                    var localDate = progress.getLocalDate();
+                    var localDate = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
                     var start = Instant.ofEpochMilli(localDate).atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay(ZoneId.systemDefault()).minusDays(1).plusHours(4).toLocalDateTime();
                     var end = Instant.ofEpochMilli(localDate).atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay(ZoneId.systemDefault()).plusHours(4).toLocalDateTime();
 

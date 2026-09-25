@@ -64,7 +64,7 @@ public class ShowCardHandler implements UpdateHandler {
                     keyboard = keyboardBuilder.buildBackToAnkiDecksMenu();
                 }
 
-                telegramService.editMessage(userRequest.getChatId(), userRequest.getMessageId(), text, keyboard, ParseMode.HTML);
+                telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
                 return;
 
             } else {

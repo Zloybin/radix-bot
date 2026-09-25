@@ -50,7 +50,25 @@ public class AnkiMenuHandler implements UpdateHandler {
 
 
         var decks = ankiService.getDecks().block();
+        var deckProgress1 = user.getDeckProgress();
         List<String> filteredDeckList = decks.stream().filter(deck -> !AnkiUtility.EXCLUDED_DECKS.contains(deck)).toList();
+        if (deckProgress1.size() == 0){
+            List<DeckProgress> deckProgressList = new ArrayList<>();
+            for (String deck : filteredDeckList) {
+                var deckProgress = DeckProgress.builder()
+                        .deckStatus(DeckStatus.NOT_STARTED)
+                        .localDate(0L)
+                        .deckName(deck)
+                        .build();
+
+                deckProgressList.add(deckProgress);
+            }
+
+            user.setDeckProgress(deckProgressList);
+            userService.save(user);
+        }
+
+
         var strikes = user.getStrikes();
 
         var deckProgress = user.getDeckProgress();

@@ -23,13 +23,14 @@
 <hr/>
 
 <footer th:if="${tags != null and !tags.isEmpty()}">
+
     🏷 <b>Теги:</b>
     <i th:text="${#strings.listJoin(tags, ', ')}">
         physics, mechanics
     </i>
-</footer>
 
-<hr/>
+    <hr/>
+</footer>
 
 <h3>💡 Ответ</h3>
 

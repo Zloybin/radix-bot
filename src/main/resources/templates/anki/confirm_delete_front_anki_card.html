@@ -20,13 +20,16 @@
 
 <hr/>
 
-<footer>
+<footer th:if="${tags != null and !tags.isEmpty()}">
+
     🏷 <b>Теги:</b>
     <i th:text="${#strings.listJoin(tags, ', ')}">
         physics, mechanics
     </i>
+
+    <hr/>
 </footer>
 
 <blockquote>
-⚠️Вы уверены что хотит удалить эту карточку?
+    ⚠️Вы уверены что хотит удалить эту карточку?
 </blockquote>

@@ -22,7 +22,7 @@ public interface AnkiService {
     Mono<Boolean> answerCard(int ease);
     Mono<AnkiCurrentCard> answerAndGetNextCard(int ease);
     Mono<Boolean> deleteCard(long cardId);
-    Mono<Boolean> markCard(long cardId);
+    Mono<Boolean> markCard(long cardId, int flag);
 
     Mono<Integer> getVersion();
 

@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
+import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
 import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
@@ -62,6 +63,10 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
         if (Boolean.FALSE.equals(ankiService.answerCard(userAnswerIndex).block())) {
             throw new AnkiConnectException("Не получилось обработать ответ пользователя.");
         }
+
+        var user = userService.findById(userRequest.getChatId());
+        user.setAnswerSide(false);
+        userService.save(user);
 
         var deckStats = ankiService.getDeckStats(deckName).block();
 

@@ -29,7 +29,7 @@ public interface AnkiConnectClient {
     Mono<Boolean> answerCard(int ease);
     Mono<byte[]> getCurrentCardVideo();
 
-    Mono<Boolean> setSpecificValueOfCard(long cardId);
+    Mono<Boolean> setSpecificValueOfCard(long cardId, int flag);
 
     //Statistic
     Mono<Integer> getNumCardsReviewedToday();

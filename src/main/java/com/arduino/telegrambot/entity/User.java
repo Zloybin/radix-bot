@@ -49,4 +49,6 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private List<DeckProgress> deckProgress;
+
+    private boolean isAnswerSide;
 }

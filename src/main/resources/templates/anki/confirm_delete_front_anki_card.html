@@ -1,9 +1,8 @@
 <h3>📝 Вопрос</h3>
 
-<blockquote expandable th:utext="${question}">
+<blockquote th:utext="${question}">
     Текст вопроса
 </blockquote>
-
 
 <table>
     <tr>
@@ -13,7 +12,6 @@
             🔄 <b th:text="${reviewCount}">37</b>
             📖 <b th:text="${learnCount}">5</b>
         </td>
-
         <td align="right">
             <b th:text="${flag}">🇩🇪</b>
         </td>
@@ -22,22 +20,13 @@
 
 <hr/>
 
-<footer th:if="${tags != null and !tags.isEmpty()}">
+<footer>
     🏷 <b>Теги:</b>
     <i th:text="${#strings.listJoin(tags, ', ')}">
         physics, mechanics
     </i>
 </footer>
 
-<hr/>
-
-<h3>💡 Ответ</h3>
-
-<blockquote >
-    <br/>
-    <th:block th:utext="${answer}">
-    Ответ на вопрос
-    </th:block>
-    <br/>
-    <br/>
+<blockquote>
+⚠️Вы уверены что хотит удалить эту карточку?
 </blockquote>

@@ -7,10 +7,12 @@ import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 
+import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class ConfirmDeleteAnkiCardHandler implements UpdateHandler {
 
     @Autowired
     private TelegramService telegramService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
@@ -38,6 +43,12 @@ public class ConfirmDeleteAnkiCardHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
+
+        var user = userService.findById(userRequest.getChatId());
+        if (user.isAnswerSide()) {
+            user.setAnswerSide(false);
+            userService.save(user);
+        }
 
         var currentCard = ankiService.getCurrentCard().block();
         var deckName = currentCard.deckName();
@@ -60,8 +71,16 @@ public class ConfirmDeleteAnkiCardHandler implements UpdateHandler {
         var ankiDeckStats = stats.get(deckName);
 
 
-        var keyboard = keyboardBuilder.buildAnkiCardKeyboard();
-        var text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, ankiDeckStats);
+        String text;
+        InlineKeyboardMarkup keyboard;
+        if(user.isAnswerSide()){
+            keyboard = keyboardBuilder.buildAnkiAnswerKeyboard(updatedCurrentCard.buttons());
+            text = templateProcessor.processBackCardTemplate(updatedCurrentCard, ankiDeckStats);
+        } else{
+            keyboard = keyboardBuilder.buildAnkiCardKeyboard();
+            text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, ankiDeckStats);
+        }
+
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
     }

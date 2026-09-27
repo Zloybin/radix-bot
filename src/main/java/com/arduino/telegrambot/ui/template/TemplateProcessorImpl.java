@@ -4,6 +4,7 @@ import com.arduino.telegrambot.enummeration.AnkiTemplate;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.parser.TelegramLatexParser;
+import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -186,9 +187,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     public String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
 
         var question = currentCard.question();
-
-
         var tags = currentCard.tags();
+        var flagValue = currentCard.flag();
+        var flag = AnkiUtility.getFlagView(flagValue);
 
         Context context = new Context();
 
@@ -200,6 +201,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         var parsedQuestion = TelegramLatexParser.parse(question);
         context.setVariable("question", parsedQuestion);
         context.setVariable("tags", tags);
+        context.setVariable("flag", flag);
         return engine.process("./anki/anki_front", context);
     }
 
@@ -248,6 +250,8 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         var question = currentCard.question();
 
+        var flag = AnkiUtility.getFlagView(currentCard.flag());
+
 
         var tags = currentCard.tags();
 
@@ -265,6 +269,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("question", parsedQuestion);
         context.setVariable("tags", tags);
         context.setVariable("answer", parsedAnswer);
+        context.setVariable("flag", flag);
         return engine.process("anki/anki_back", context);
     }
 
@@ -314,11 +319,11 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processConfirmDeleteCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats) {
+    public String processConfirmDeleteFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats) {
         var question = currentCard.question();
-
-
         var tags = currentCard.tags();
+        var flagValue = currentCard.flag();
+        var flag = AnkiUtility.getFlagView(flagValue);
 
         Context context = new Context();
 
@@ -330,7 +335,35 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         var parsedQuestion = TelegramLatexParser.parse(question);
         context.setVariable("question", parsedQuestion);
         context.setVariable("tags", tags);
-        return engine.process("./anki/confirm_delete_anki_card", context);
+        context.setVariable("flag", flag);
+        return engine.process("./anki/confirm_delete_front_anki_card", context);
+    }
+
+    @Override
+    public String processConfirmDeleteBackCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats) {
+        var question = currentCard.question();
+
+        var flag = AnkiUtility.getFlagView(currentCard.flag());
+
+
+        var tags = currentCard.tags();
+
+        var answer = currentCard.answer();
+
+        Context context = new Context();
+
+        context.setVariable("newCount", deckStats.newCount());
+        context.setVariable("learnCount", deckStats.learnCount());
+        context.setVariable("reviewCount", deckStats.reviewCount());
+
+        var parsedQuestion = TelegramLatexParser.parse(question);
+        var parsedAnswer = TelegramLatexParser.parse(answer);
+
+        context.setVariable("question", parsedQuestion);
+        context.setVariable("tags", tags);
+        context.setVariable("answer", parsedAnswer);
+        context.setVariable("flag", flag);
+        return engine.process("./anki/confirm_delete_back_anki_card", context);
     }
 
 }

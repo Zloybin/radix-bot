@@ -13,6 +13,7 @@ public record AnkiCurrentCard(
         String example,
         List <String> tags,
         List<Integer> buttons,
-        AnkiTemplate ankiTemplate
+        AnkiTemplate ankiTemplate,
+        Integer flag
 ) {
 }

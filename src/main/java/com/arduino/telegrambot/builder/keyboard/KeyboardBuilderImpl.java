@@ -114,6 +114,13 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         var row2 = new ArrayList<InlineKeyboardButton>();
+        var row3 = new ArrayList<InlineKeyboardButton>();
+
+        var deleteAnkiCardButton = buttonBuilder.buildDeleteAnkiCardButton();
+        var markAnkiCardButton = buttonBuilder.buildMarkAnkiCardButton();
+
+        row1.add(deleteAnkiCardButton);
+        row1.add(markAnkiCardButton);
 
         for (Integer buttonIndex : buttonIndexes) {
             InlineKeyboardButton answerButton;
@@ -121,9 +128,9 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
                 if (ankiAnswer.getIndex() == buttonIndex) {
                     List<InlineKeyboardButton> row;
                     if(buttonIndex <= 2){
-                        row = row1;
-                    }else{
                         row = row2;
+                    }else{
+                        row = row3;
                     }
                     answerButton = buttonBuilder.buildAnkiOptionAnswerButton(ankiAnswer);
                     row.add(answerButton);
@@ -133,6 +140,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         }
         rows.add(row1);
         rows.add(row2);
+        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
     }
@@ -181,8 +189,8 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var deleteAnkiCardButton = buttonBuilder.buildDeleteAnkiCardButton();
         var markAnkiCardButton = buttonBuilder.buildMarkAnkiCardButton();
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(markAnkiCardButton);
         row2.add(deleteAnkiCardButton);
+        row2.add(markAnkiCardButton);
 
         var showDecksButton = buttonBuilder.buildAnkiMenuButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");

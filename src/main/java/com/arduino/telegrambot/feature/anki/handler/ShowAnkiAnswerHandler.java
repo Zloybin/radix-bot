@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
+import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
 import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
@@ -41,6 +42,10 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
 
     @Override
     public void handle(UserRequest userRequest) {
+
+        var user = userService.findById(userRequest.getChatId());
+        user.setAnswerSide(true);
+        userService.save(user);
 
         AnkiCurrentCard currentCard;
 

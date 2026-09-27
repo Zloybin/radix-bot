@@ -128,46 +128,58 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     }
 
     @Override
-    public Mono<Boolean> setSpecificValueOfCard(long cardId) {
+    public Mono<Boolean> setSpecificValueOfCard(long cardId, int flag) {
         return invoke(
                 "setSpecificValueOfCard",
                 Map.of("card", cardId,
                         "keys", List.of("flags"),
-                        "newValues", List.of(1),
+                        "newValues", List.of(flag),
                         "warning_check", true)
-        ).map(root -> {
-            return root.get(0).asBoolean();
-        });
+        )
+                .map(this::parseSetValueResult)
+                .flatMap(success -> invoke("reloadCollection", Map.of())
+                        .thenReturn(success));
     }
+
+
 
     @Override
     public Mono<AnkiCurrentCard> getCurrentCard() {
         return invoke("guiCurrentCard", Map.of())
-                .map(json -> {
+                .flatMap(currentCardJson -> {
+                    long cardId = currentCardJson.get("cardId").asLong();
 
-                            var currentCard = new AnkiCurrentCard(
-                                    json.get("cardId").asLong(),
-                                    json.path("deckName").asText(),
-                                    json.path("fields").path("Front").path("value").asText(),
-                                    json.path("fields")
-                                            .path("Back")
-                                            .path("value")
-                                            .asText(),
-                                    json.path("fields")
-                                            .path("Beispiel")
-                                            .path("value")
-                                            .asText(),
-                                    Jsoup.parse(
-                                                    json.path("fields").path("DisplayTags").path("value").asText()
-                                            ).select(".tag")
-                                            .eachText(),
-                                    readIntegerList(json.get("buttons"))
-                                    , AnkiTemplate.TEMPLATE_1.getTitile().equals(json.get("template").asText()) ? AnkiTemplate.TEMPLATE_1 : AnkiTemplate.TEMPLATE_2);
+                    return invoke("cardsInfo", Map.of("cards", List.of(cardId)))
+                            .map(cardsInfoJson -> {
+                                var currentCard = new AnkiCurrentCard(
+                                        cardId,
+                                        currentCardJson.path("deckName").asText(),
+                                        currentCardJson.path("fields").path("Front").path("value").asText(),
+                                        currentCardJson.path("fields").path("Back").path("value").asText(),
+                                        currentCardJson.path("fields").path("Beispiel").path("value").asText(),
+                                        Jsoup.parse(
+                                                        currentCardJson.path("fields").path("DisplayTags").path("value").asText()
+                                                ).select(".tag")
+                                                .eachText(),
+                                        readIntegerList(currentCardJson.get("buttons")),
+                                        AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCardJson.get("template").asText())
+                                                ? AnkiTemplate.TEMPLATE_1
+                                                : AnkiTemplate.TEMPLATE_2,
+                                        extractFlag(cardsInfoJson)
+                                );
 
-                            System.out.println("***GET ANKI CARD:" + currentCard);
-                            return currentCard;
-                        }
-                );
+                                System.out.println("***GET ANKI CARD:" + currentCard);
+                                return currentCard;
+                            });
+                });
+    }
+
+    private Integer extractFlag(JsonNode cardsInfoResult) {
+        if (cardsInfoResult == null || !cardsInfoResult.isArray() || cardsInfoResult.isEmpty()) {
+            return 0;
+        }
+
+        return cardsInfoResult.get(0).path("flags").asInt(0);
     }
 
     @Override
@@ -456,5 +468,33 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 .toInstant()
                 .toEpochMilli();
     }
+
+
+    private Boolean parseSetValueResult(JsonNode root) {
+        if (root == null || !root.isArray() || root.isEmpty()) {
+            System.out.println("***ANKI setSpecificValueOfCard: empty or unexpected response: " + root);
+            return false;
+        }
+
+        boolean allSucceeded = true;
+
+        for (JsonNode keyResult : root) {
+            if (keyResult.isArray()) {
+                // Формат при ошибке: [false, "error message"]
+                boolean success = keyResult.get(0).asBoolean();
+                if (!success) {
+                    String errorMessage = keyResult.size() > 1 ? keyResult.get(1).asText() : "unknown error";
+                    System.out.println("***ANKI setSpecificValueOfCard error: " + errorMessage);
+                }
+                allSucceeded &= success;
+            } else {
+                // Формат при успехе: true / false напрямую
+                allSucceeded &= keyResult.asBoolean();
+            }
+        }
+
+        return allSucceeded;
+    }
+
 
 }

@@ -127,8 +127,8 @@ public class AnkiServiceImpl implements AnkiService{
     }
 
     @Override
-    public Mono<Boolean> markCard(long cardId) {
-        return ankiClient.setSpecificValueOfCard(cardId);
+    public Mono<Boolean> markCard(long cardId, int flag) {
+        return ankiClient.setSpecificValueOfCard(cardId, flag);
     }
 
     public Mono<Integer> getNumCardsReviewedToday() {

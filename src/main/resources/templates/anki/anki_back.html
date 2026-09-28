@@ -20,17 +20,18 @@
     </tr>
 </table>
 
-
-
-<footer th:if="${tags != null and !tags.isEmpty()}">
+<th:block th:if="${tags != null and !tags.isEmpty()}">
 
     <hr/>
 
-    🏷 <b>Теги:</b>
-    <i th:text="${#strings.listJoin(tags, ', ')}">
-        physics, mechanics
-    </i>
-</footer>
+    <footer >
+        🏷 <b>Теги:</b>
+        <i th:text="${#strings.listJoin(tags, ', ')}">
+            physics, mechanics
+        </i>
+    </footer>
+
+</th:block>
 
 <hr/>
 

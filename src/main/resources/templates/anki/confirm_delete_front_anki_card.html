@@ -18,17 +18,22 @@
     </tr>
 </table>
 
-<hr/>
 
-<footer th:if="${tags != null and !tags.isEmpty()}">
 
-    🏷 <b>Теги:</b>
-    <i th:text="${#strings.listJoin(tags, ', ')}">
-        physics, mechanics
-    </i>
+<th:block th:if="${tags != null and !tags.isEmpty()}">
 
     <hr/>
-</footer>
+
+    <footer>
+        🏷 <b>Теги:</b>
+        <i th:text="${#strings.listJoin(tags, ', ')}">
+            physics, mechanics
+        </i>
+    </footer>
+
+</th:block>
+
+<hr/>
 
 <blockquote>
     ⚠️Вы уверены что хотит удалить эту карточку?

@@ -1,19 +1,15 @@
 package com.arduino.telegrambot.builder.keyboard;
 
-import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.button.ButtonBuilder;
 import com.arduino.telegrambot.builder.button.procesor.ButtonProcessor;
 import com.arduino.telegrambot.enummeration.AnkiAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class KeyboardBuilderImpl implements KeyboardBuilder {
@@ -240,14 +236,19 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(startDuoCards);
 
+        var addNewNote = buttonBuilder.buildAddNewDuoCardButton();
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(addNewNote);
+
         var showDecksButton = buttonBuilder.buildMainMenuButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
-        var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(backToShowDeckNames);
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(backToShowDeckNames);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+        rows.add(row3);
 
         return new InlineKeyboardMarkup(rows);
     }
@@ -298,6 +299,45 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(confirm);
         row1.add(cancel);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildCancelAddNewNoteKeyboard() {
+        var cancelAddNewNoteButton = buttonBuilder.buildCancelAddNewNoteButton();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(cancelAddNewNoteButton);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildProcessNewDuoCardKeyboard() {
+        var changeExampleButton = buttonBuilder.buildChangeExampleButton();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(changeExampleButton);
+
+        var acceptNewNote = buttonBuilder.buildSaveNewDuoCardButton();
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(acceptNewNote);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildPreviewSaveDuoCardKeyboard() {
+        var duoCardsMenuButton = buttonBuilder.buildDuoCardsMenuButton();
+        var OkButton = buttonProcessor.renameButton(duoCardsMenuButton, "Ok ✅");
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(OkButton);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);

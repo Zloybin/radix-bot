@@ -47,4 +47,10 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildAppsInfoMenu();
 
     InlineKeyboardMarkup buildConfirmDeleteCardKeyboard();
+
+    InlineKeyboardMarkup buildCancelAddNewNoteKeyboard();
+
+    InlineKeyboardMarkup buildProcessNewDuoCardKeyboard();
+
+    InlineKeyboardMarkup buildPreviewSaveDuoCardKeyboard();
 }

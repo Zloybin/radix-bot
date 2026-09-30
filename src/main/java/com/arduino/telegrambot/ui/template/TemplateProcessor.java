@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.ui.template;
 
+import com.arduino.telegrambot.entity.DuoCardExample;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
@@ -36,4 +37,10 @@ public interface TemplateProcessor {
 
     String processConfirmDeleteFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats);
     String processConfirmDeleteBackCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats);
+
+    String processAddNewNoteMessageTemplate();
+
+    String processExampleNewCard(String newNote, String translation, String example);
+
+    String processPreviewSavedDuoCard(String newNote, String translation, String example);
 }

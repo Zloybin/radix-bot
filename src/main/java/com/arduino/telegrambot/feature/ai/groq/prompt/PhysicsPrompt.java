@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 public class PhysicsPrompt {
 
     private final String prompt;
+    private final String duoCardsPrompt;
 
     public PhysicsPrompt() throws IOException {
         var resource = new ClassPathResource(
@@ -19,9 +20,21 @@ public class PhysicsPrompt {
         this.prompt = resource.getContentAsString(
                 StandardCharsets.UTF_8
         );
+
+        var duoResource = new ClassPathResource(
+                "prompts/german-example-matcher.txt"
+        );
+
+        this.duoCardsPrompt = duoResource.getContentAsString(
+                StandardCharsets.UTF_8
+        );
     }
 
     public String get() {
         return prompt;
+    }
+
+    public String getDuoCardsPrompt() {
+        return duoCardsPrompt;
     }
 }

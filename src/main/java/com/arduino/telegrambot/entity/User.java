@@ -51,4 +51,7 @@ public class User {
     private List<DeckProgress> deckProgress;
 
     private boolean isAnswerSide;
+
+    @Embedded
+    private DuoCardExample duoCardExample;
 }

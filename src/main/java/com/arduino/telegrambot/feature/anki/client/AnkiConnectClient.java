@@ -3,6 +3,7 @@ package com.arduino.telegrambot.feature.anki.client;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
+import com.arduino.telegrambot.feature.anki.model.Note;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -36,4 +37,7 @@ public interface AnkiConnectClient {
     Mono<Integer> cardReviews(String deck, long now);
     Mono<InitStrikeStatDate> initialStrikeStat(String deck);
     Mono<Long> lastReviewTime(String deck);
+
+    Mono<Long> addNote(Note note);
+    Mono<List<Long>> addNotes(List<Note> notes);
 }

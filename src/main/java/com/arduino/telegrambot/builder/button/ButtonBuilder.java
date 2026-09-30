@@ -12,18 +12,14 @@ public interface ButtonBuilder {
     //physTask
     InlineKeyboardButton buildPhysTaskMenuButton();
     InlineKeyboardButton buildStatisticsButton();
-
     InlineKeyboardButton buildSettingButton();
     InlineKeyboardButton buildExcludeCompletedTaskButton(boolean isExclude);
     InlineKeyboardButton buildFilterButton();
-
     InlineKeyboardButton buildPhysTaskStartButton();
-
     InlineKeyboardButton buildGiveAnswerPhysButton();
     InlineKeyboardButton buildCancelPhysTaskButton();
     InlineKeyboardButton buildCancelPhysAnswerButton();
     InlineKeyboardButton buildOpenBookButton();
-
     InlineKeyboardButton buildCorrectingResultTrueButton();
     InlineKeyboardButton buildCorrectingResultFalseButton();
     InlineKeyboardButton buildAskAiButton();
@@ -37,7 +33,6 @@ public interface ButtonBuilder {
 
     //Anki
     InlineKeyboardButton buildAnkiMenuButton();
-    InlineKeyboardButton buildShowDecksButton();
     InlineKeyboardButton buildDeckNameButton(String deckName);
     InlineKeyboardButton buildShowAnkiAnswerButton();
     InlineKeyboardButton buildDeleteAnkiCardButton();
@@ -52,6 +47,8 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildYouglishStartButton(String word);
     InlineKeyboardButton buildShowAnswerDuoCardsButton();
     InlineKeyboardButton buildAnswerOptionDuoCardsButton(AnkiAnswer ankiAnswer);
-
-
+    InlineKeyboardButton buildAddNewDuoCardButton();
+    InlineKeyboardButton buildCancelAddNewNoteButton();
+    InlineKeyboardButton buildChangeExampleButton();
+    InlineKeyboardButton buildSaveNewDuoCardButton();
 }

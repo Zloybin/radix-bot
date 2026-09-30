@@ -1,0 +1,54 @@
+<blockquote>
+    <h2>❔</h2>
+
+    <hr/>
+
+    <aside align="center" th:utext="${sentence}">
+        Текст вопроса
+    </aside>
+
+    <hr/>
+    <br/>
+
+    <!--    <figure>-->
+    <!--        <audio src="tg://audio?id=audio_1"></audio>-->
+    <!--    </figure>-->
+
+</blockquote>
+
+<blockquote>
+    <h2>💡</h2>
+
+    <hr/>
+
+    <aside align="center" th:utext="${translation}">
+        Ответ на вопрос
+    </aside>
+    <hr/>
+    <br/>
+
+    <!--<figure>
+        <audio src="tg://audio?id=audio_1"></audio>
+    </figure>-->
+</blockquote>
+<details>
+    <summary>
+        📝 <b>Пример:</b>
+    </summary>
+    <p th:if="${example != null and !example.isEmpty()}"
+       th:utext="${example}">
+        Пример использования
+    </p>
+</details>
+
+<!--<hr/>-->
+
+<!--<details>-->
+<!--    <summary>-->
+<!--        📹 Видео-->
+<!--    </summary>-->
+
+<!--    <figure>-->
+<!--        <video src="tg://video?id=video_1"></video>-->
+<!--    </figure>-->
+<!--</details>-->

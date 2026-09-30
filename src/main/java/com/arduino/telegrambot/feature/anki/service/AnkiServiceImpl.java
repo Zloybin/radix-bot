@@ -7,6 +7,7 @@ import com.arduino.telegrambot.feature.anki.client.AnkiConnectClient;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
+import com.arduino.telegrambot.feature.anki.model.Note;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -146,6 +147,16 @@ public class AnkiServiceImpl implements AnkiService{
 
     public byte[] getVideo() {
         return ankiClient.getCurrentCardVideo().block();
+    }
+
+    @Override
+    public Mono<Long> addNote(Note note) {
+        return ankiClient.addNote(note);
+    }
+
+    @Override
+    public Mono<List<Long>> addNotes(List<Note> notes) {
+        return ankiClient.addNotes(notes);
     }
 
     public Integer getDecksStrikeStat(String deckName, long lastReviewedDate) {

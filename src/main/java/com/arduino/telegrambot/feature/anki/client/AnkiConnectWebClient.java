@@ -6,6 +6,7 @@ import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
+import com.arduino.telegrambot.feature.anki.model.Note;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.jsoup.Jsoup;
@@ -494,6 +495,23 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         }
 
         return allSucceeded;
+    }
+
+    @Override
+    public Mono<Long> addNote(Note note) {
+        return invoke("addNote", Map.of("note", note))
+                .map(JsonNode::asLong);
+    }
+
+    @Override
+    public Mono<List<Long>> addNotes(List<Note> notes) {
+        return invoke("addNotes", Map.of("notes", notes))
+                .map(result -> {
+                    List<Long> ids = new ArrayList<>();
+                    // null в массиве означает, что эта заметка не добавлена (например, дубликат)
+                    result.forEach(node -> ids.add(node.isNull() ? null : node.asLong()));
+                    return ids;
+                });
     }
 
 

@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.feature.ai.gemini;
 
+import com.arduino.telegrambot.entity.DuoCardExample;
 import com.google.genai.Client;
 import com.google.genai.types.Content;
 import com.google.genai.types.GenerateContentConfig;
@@ -60,5 +61,10 @@ public class LLMGeminiService implements com.arduino.telegrambot.feature.ai.LLMS
     @Override
     public String process(String taskText, String userAnswer) {
         return "";
+    }
+
+    @Override
+    public DuoCardExample processTranslationMatching(String original) {
+        return null;
     }
 }

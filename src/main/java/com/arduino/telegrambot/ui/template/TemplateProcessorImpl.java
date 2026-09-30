@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.ui.template;
 
+import com.arduino.telegrambot.entity.DuoCardExample;
 import com.arduino.telegrambot.enummeration.AnkiTemplate;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
@@ -364,6 +365,33 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("answer", parsedAnswer);
         context.setVariable("flag", flag);
         return engine.process("./anki/confirm_delete_back_anki_card", context);
+    }
+
+    @Override
+    public String processAddNewNoteMessageTemplate() {
+        Context context = new Context();
+        return engine.process("./anki/add_new_note_message", context);
+    }
+
+    @Override
+    public String processExampleNewCard(String newNote, String translation, String example) {
+
+        Context context = new Context();
+        context.setVariable("sentence", newNote);
+        context.setVariable("translation", translation);
+        context.setVariable("example", example);
+        return engine.process("./anki/accept_new_note_template", context);
+    }
+
+    @Override
+    public String processPreviewSavedDuoCard(String newNote, String translation, String example) {
+        Context context = new Context();
+
+        translation = translation + "<br/><br/><cite>" + newNote +"</cite>";
+        context.setVariable("sentence", newNote);
+        context.setVariable("translation", translation);
+        context.setVariable("example", example);
+        return engine.process("./duocards/duocard_new_preview", context);
     }
 
 }

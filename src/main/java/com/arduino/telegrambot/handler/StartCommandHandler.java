@@ -2,6 +2,9 @@ package com.arduino.telegrambot.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
+import com.arduino.telegrambot.feature.anki.client.AnkiConnectClient;
+import com.arduino.telegrambot.feature.anki.model.Note;
+import com.arduino.telegrambot.feature.anki.model.Options;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
@@ -26,6 +29,9 @@ public class StartCommandHandler implements UpdateHandler {
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
+
+    @Autowired
+    private AnkiConnectClient ankiClient;
 
 
 

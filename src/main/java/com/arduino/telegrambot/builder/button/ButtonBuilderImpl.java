@@ -263,17 +263,6 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
-    public InlineKeyboardButton buildShowDecksButton() {
-
-        var hash = getHashWithoutRequest("showDecks");
-
-        var button = new InlineKeyboardButton();
-        button.setText("📨 Колоды");
-        button.setCallbackData(String.valueOf(hash));
-        return button;
-    }
-
-    @Override
     public InlineKeyboardButton buildDeckNameButton(String deckName) {
         var hash = getHashWithRequest("showAnkiCard", deckName);
 
@@ -343,7 +332,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildYouglishStartButton(String word) {
         WebAppInfo webAppInfo = new WebAppInfo();
 
-        String url = /*"https://app.radixbot.eu.org/?word="*/"https://relating-removal-coaches-heating.trycloudflare.com/?word=" +
+        String url = /*"https://app.radixbot.eu.org/?word="*/"https://lafayette-vampire-cancel-huntington.trycloudflare.com/?word=" +
                 URLEncoder.encode(word, StandardCharsets.UTF_8);
         webAppInfo.setUrl(url);
 
@@ -369,6 +358,42 @@ public class ButtonBuilderImpl implements ButtonBuilder {
 
         var button = new InlineKeyboardButton();
         button.setText(ankiAnswer.getButtonText());
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildAddNewDuoCardButton() {
+        var hash = getHashWithoutRequest("addNewNote");
+        var button = new InlineKeyboardButton();
+        button.setText("Добавить новую карточку");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCancelAddNewNoteButton() {
+        var hash = getHashWithoutRequest("cancelAddNewNote");
+        var button = new InlineKeyboardButton();
+        button.setText("Отменить добавление новой карточки.");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildChangeExampleButton() {
+        var hash = getHashWithoutRequest("changeExample");
+        var button = new InlineKeyboardButton();
+        button.setText("Сменить пример");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildSaveNewDuoCardButton() {
+        var hash = getHashWithoutRequest("saveDuoCard");
+        var button = new InlineKeyboardButton();
+        button.setText("Сохранить новую карточку");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }

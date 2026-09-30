@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.feature.ai.groq;
 
+import com.arduino.telegrambot.entity.DuoCardExample;
 import com.arduino.telegrambot.feature.ai.groq.service.GroqService;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,10 @@ public class GroqLLMService implements com.arduino.telegrambot.feature.ai.LLMSer
     @Override
     public String process(String taskText, String userAnswer) {
         return groqService.checkPhysicsSolution(taskText, userAnswer).block();
+    }
+
+    @Override
+    public DuoCardExample processTranslationMatching(String original) {
+        return groqService.matchTranslation(original).block();
     }
 }

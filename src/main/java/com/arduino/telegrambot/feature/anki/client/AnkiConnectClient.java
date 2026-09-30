@@ -40,4 +40,5 @@ public interface AnkiConnectClient {
 
     Mono<Long> addNote(Note note);
     Mono<List<Long>> addNotes(List<Note> notes);
+    Mono<List<Long>> findCards(String deckName);
 }

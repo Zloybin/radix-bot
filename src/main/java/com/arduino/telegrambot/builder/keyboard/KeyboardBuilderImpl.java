@@ -236,19 +236,24 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(startDuoCards);
 
-        var addNewNote = buttonBuilder.buildAddNewDuoCardButton();
+        var sentenceExampleExercise = buttonBuilder.buildSentenceExampleExercise();
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(addNewNote);
+        row2.add(sentenceExampleExercise);
+
+        var addNewNote = buttonBuilder.buildAddNewDuoCardButton();
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(addNewNote);
 
         var showDecksButton = buttonBuilder.buildMainMenuButton();
         var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
-        var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(backToShowDeckNames);
+        var row4 = new ArrayList<InlineKeyboardButton>();
+        row4.add(backToShowDeckNames);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
 
         return new InlineKeyboardMarkup(rows);
     }

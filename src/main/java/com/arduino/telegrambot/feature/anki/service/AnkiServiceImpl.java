@@ -159,6 +159,17 @@ public class AnkiServiceImpl implements AnkiService{
         return ankiClient.addNotes(notes);
     }
 
+    @Override
+    public List<Long> findCards(String deckName) {
+        return ankiClient.findCards(deckName).block();
+    }
+
+    @Override
+    public String cardsInfo(long cardId) {
+        return "";
+    }
+
+
     public Integer getDecksStrikeStat(String deckName, long lastReviewedDate) {
         return ankiClient.cardReviews(deckName, lastReviewedDate).block();
     }

@@ -399,6 +399,15 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildSentenceExampleExercise() {
+        var hash = getHashWithoutRequest("sentenceExercise");
+        var button = new InlineKeyboardButton();
+        button.setText("Упражнение с предложениями.");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildCancelDeleteCardButton() {
         var hash = getHashWithoutRequest("cancelDeleteCard");
 

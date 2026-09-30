@@ -14,7 +14,6 @@ import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
 public class SaveNewDuoCardHandler implements UpdateHandler {
@@ -36,8 +35,6 @@ public class SaveNewDuoCardHandler implements UpdateHandler {
 
     @Autowired
     private DuoCardsService duoCardsService;
-
-
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {

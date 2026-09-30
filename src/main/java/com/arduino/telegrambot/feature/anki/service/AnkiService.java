@@ -41,4 +41,6 @@ public interface AnkiService {
 
     Mono<Long> addNote(Note note);
     Mono<List<Long>> addNotes(List<Note> notes);
+    List<Long> findCards(String deckName);
+    String cardsInfo(long cardId);
 }

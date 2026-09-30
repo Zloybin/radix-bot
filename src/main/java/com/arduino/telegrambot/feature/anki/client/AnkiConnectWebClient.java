@@ -514,5 +514,14 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
                 });
     }
 
+    @Override
+    public Mono<List<Long>> findCards(String deckName) {
+        return invoke("findCards", Map.of("query", String.format("deck:\"%s\"", deckName))).map(result -> {
+            List<Long> ids = new ArrayList<>();
+            result.forEach(node -> ids.add(node.isNull() ? null : node.asLong()));
+            return ids;
+        });
+    }
+
 
 }

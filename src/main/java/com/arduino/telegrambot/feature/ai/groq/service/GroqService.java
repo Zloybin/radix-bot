@@ -1,10 +1,12 @@
 package com.arduino.telegrambot.feature.ai.groq.service;
 
 import com.arduino.telegrambot.entity.DuoCardExample;
-import com.arduino.telegrambot.feature.anki.ai.prompt.PhysicsPrompt;
+import com.arduino.telegrambot.feature.ai.groq.prompt.PhysicsPrompt;
 import com.arduino.telegrambot.feature.ai.groq.configuration.GroqProperties;
 import com.arduino.telegrambot.feature.ai.groq.model.GroqChatRequest;
 import com.arduino.telegrambot.feature.ai.groq.model.GroqChatResponse;
+import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
+import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -67,7 +69,7 @@ public class GroqService {
         String userMessage = """
                 Условие задачи:
                 %s
-
+                
                 Решение пользователя:
                 %s
                 """.formatted(taskText, userAnswer);
@@ -149,4 +151,91 @@ public class GroqService {
             throw new IllegalStateException("Не удалось распарсить ответ модели: " + raw, e);
         }
     }
+
+    private GeneratedExample parseExample(String raw, String originalSentence) {
+        var objectMapper = new ObjectMapper();
+        String cleaned = raw.trim();
+        if (cleaned.startsWith("```")) {
+            cleaned = cleaned.replaceAll("^```(json)?", "").replaceAll("```$", "").trim();
+        }
+        try {
+            var result = objectMapper.readValue(cleaned, GeneratedExample.class);
+            result.setGeneratedSourceExample(originalSentence);
+            return result;
+
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Не удалось распарсить ответ модели: " + raw, e);
+        }
+    }
+
+    public Mono<GeneratedExample> generateFromCard(String originalSentence) {
+        var request = new GroqChatRequest(
+                properties.model(),
+                List.of(
+                        new GroqChatRequest.Message("system", physicsPrompt.getExampleGenerationPrompt()),
+                        new GroqChatRequest.Message("user", originalSentence)
+                )
+        );
+
+        return groqWebClient
+                .post()
+                .uri("/chat/completions")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(GroqChatResponse.class)
+                .map(response -> response.choices().getFirst().message().content())
+                .map(result -> parseExample(result, originalSentence));
+    }
+
+    public Mono<AnswerCheckResult> checkAnswer(
+            String sourcePhrase,
+            String taskTranslation,
+            String expectedAnswer,
+            String userAnswer
+    ) {
+        String userMessage = """
+            Исходная фраза:
+            %s
+
+            Задание (перевод с русского):
+            %s
+
+            Ожидаемый ответ:
+            %s
+
+            Ответ ученика:
+            %s
+            """.formatted(sourcePhrase, taskTranslation, expectedAnswer, userAnswer);
+
+        var request = new GroqChatRequest(
+                properties.model(),
+                List.of(
+                        new GroqChatRequest.Message("system", physicsPrompt.getAnswerCheckPrompt()),
+                        new GroqChatRequest.Message("user", userMessage)
+                )
+        );
+
+        return groqWebClient
+                .post()
+                .uri("/chat/completions")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(GroqChatResponse.class)
+                .map(response -> response.choices().getFirst().message().content())
+                .map(this::parseAnswerCheck);
+    }
+
+    private AnswerCheckResult parseAnswerCheck(String raw) {
+        var objectMapper = new ObjectMapper();
+        String cleaned = raw.trim();
+        if (cleaned.startsWith("```")) {
+            cleaned = cleaned.replaceAll("^```(json)?", "").replaceAll("```$", "").trim();
+        }
+        try {
+            return objectMapper.readValue(cleaned, AnswerCheckResult.class);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Не удалось распарсить ответ модели: " + raw, e);
+        }
+    }
+
 }

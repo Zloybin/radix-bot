@@ -53,4 +53,10 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildProcessNewDuoCardKeyboard();
 
     InlineKeyboardMarkup buildPreviewSaveDuoCardKeyboard();
+
+    InlineKeyboardMarkup buildExerciseSentenceKeyboard();
+
+    InlineKeyboardMarkup buildCancelSentenceExerciseKeyboard();
+
+    InlineKeyboardMarkup buildResultSentenceExerciseKeyboard();
 }

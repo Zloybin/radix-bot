@@ -1,6 +1,7 @@
 package com.arduino.telegrambot.entity;
 
 import com.arduino.telegrambot.enummeration.UserState;
+import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,4 +55,7 @@ public class User {
 
     @Embedded
     private DuoCardExample duoCardExample;
+
+    @Embedded
+    private GeneratedExample generatedExample;
 }

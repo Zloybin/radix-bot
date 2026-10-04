@@ -349,6 +349,58 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public InlineKeyboardMarkup buildExerciseSentenceKeyboard() {
+        var acceptSentenceExercise = buttonBuilder.buildAcceptSentenceExercise();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(acceptSentenceExercise);
+
+        var newSentenceExerciseButton = buttonBuilder.buildSentenceExampleExercise();
+        InlineKeyboardButton changeSentenceExerciseButton = buttonProcessor.renameButton(newSentenceExerciseButton, "Сменить задание");
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(changeSentenceExerciseButton);
+
+        var mainMenuButton = buttonBuilder.buildDuoCardsMenuButton();
+        var backToMainMenu = buttonProcessor.renameButton(mainMenuButton, "В меню DuoCard");
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(backToMainMenu);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        rows.add(row3);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildCancelSentenceExerciseKeyboard() {
+        var cancelExercise = buttonBuilder.buildCancelSentenceExercise();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(cancelExercise);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildResultSentenceExerciseKeyboard() {
+        var sentenceExampleExercise = buttonBuilder.buildSentenceExampleExercise();
+        var newSentenceExercise = buttonProcessor.renameButton(sentenceExampleExercise, "Новое задание");
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(newSentenceExercise);
+
+        var duoCardsMenuButton = buttonBuilder.buildDuoCardsMenuButton();
+        var backToDuoCcardsMenu = buttonProcessor.renameButton(duoCardsMenuButton, "В меню DuoCards.");
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(backToDuoCcardsMenu);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        return new InlineKeyboardMarkup(rows);
+    }
+
     //radTask
 
     @Override

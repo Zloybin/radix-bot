@@ -1,0 +1,143 @@
+<h3>🇩🇪 Проверка перевода</h3>
+
+<table>
+    <tr>
+        <td>
+            <b>🇷🇺</b>
+        </td>
+        <td>
+            <th:block th:text="${generatedExample.generatedTranslation}">
+                Я вчера ходил в кино.
+            </th:block>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <b>🇩🇪</b>
+        </td>
+        <td>
+            <th:block th:text="${userRequest}">
+                Ich habe gestern ins Kino gegangen.
+            </th:block>
+        </td>
+    </tr>
+
+    <tr th:if="${!answerCheckResult.isCorrect}">
+        <td>
+            <b>📝</b>
+        </td>
+        <td>
+            <th:block th:text="${generatedExample.generatedSentence}">
+                Ich bin gestern ins Kino gegangen.
+            </th:block>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <b>🤖</b>
+        </td>
+        <td>
+            <th:block th:text="${answerCheckResult.correctedSentence}">
+                Ich bin gestern ins Kino gegangen.
+            </th:block>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <b>🧱</b>
+        </td>
+        <td>
+            <th:block th:text="${generatedExample.generatedSourceExample}">
+                Ich bin am Samstag ins Kino gegangen.
+            </th:block>
+        </td>
+    </tr>
+</table>
+
+<hr/>
+
+<h3>
+    <th:block th:if="${answerCheckResult.isCorrect}">
+        ✅ Ответ правильный
+    </th:block>
+
+    <th:block th:unless="${answerCheckResult.isCorrect}">
+        ❌ В ответе есть ошибки
+    </th:block>
+</h3>
+
+<hr/>
+
+<h3>💬 Обратная связь</h3>
+
+<th:block th:text="${answerCheckResult.feedback}">
+    Обрати внимание на выбор вспомогательного глагола в Perfekt.
+</th:block>
+
+<hr/>
+
+<h3>📊 Анализ ответа</h3>
+
+<table>
+    <tr>
+        <td>🎯 Целевая конструкция</td>
+        <td align="right">
+            <b th:text="${answerCheckResult.targetConstructionUsedCorrectly ? '✅' : '❌'}">
+                ❌
+            </b>
+        </td>
+    </tr>
+
+    <tr>
+        <td>⏱ Время</td>
+        <td align="right">
+            <b th:text="${answerCheckResult.tenseCorrect ? '✅' : '❌'}">
+                ❌
+            </b>
+        </td>
+    </tr>
+</table>
+
+<th:block th:if="${answerCheckResult.errors != null and !answerCheckResult.errors.isEmpty()}">
+
+    <hr/>
+
+    <h3>🔎 Ошибки</h3>
+
+    <th:block th:each="error : ${answerCheckResult.errors}">
+
+        <blockquote>
+
+            <b th:text="${error.category}">
+                Грамматика
+            </b>
+
+            <br/>
+
+            ❌
+            <b th:text="${error.original}">
+                habe gegangen
+            </b>
+
+            <br/>
+
+            ✅
+            <b th:text="${error.correction}">
+                bin gegangen
+            </b>
+
+            <br/><br/>
+
+            <i th:text="${error.explanation}">
+                С глаголом gehen в Perfekt используется вспомогательный
+                глагол sein.
+            </i>
+
+        </blockquote>
+
+    </th:block>
+
+</th:block>

@@ -4,6 +4,7 @@ import com.arduino.telegrambot.entity.DeckProgress;
 import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.anki.model.CardInfo;
 import com.arduino.telegrambot.feature.anki.model.Note;
 import reactor.core.publisher.Mono;
 
@@ -42,5 +43,5 @@ public interface AnkiService {
     Mono<Long> addNote(Note note);
     Mono<List<Long>> addNotes(List<Note> notes);
     List<Long> findCards(String deckName);
-    String cardsInfo(long cardId);
+    CardInfo cardsInfo(long cardId);
 }

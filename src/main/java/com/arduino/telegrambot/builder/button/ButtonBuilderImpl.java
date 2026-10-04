@@ -408,6 +408,33 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     }
 
     @Override
+    public InlineKeyboardButton buildChangeSentenceExercise() {
+        var hash = getHashWithoutRequest("changeSentenceExercise");
+        var button = new InlineKeyboardButton();
+        button.setText("Сменить задание");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCancelSentenceExercise() {
+        var hash = getHashWithoutRequest("cancelSentenceExercise");
+        var button = new InlineKeyboardButton();
+        button.setText("Отменить ответ");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildAcceptSentenceExercise() {
+        var hash = getHashWithoutRequest("acceptSentenceExercise");
+        var button = new InlineKeyboardButton();
+        button.setText("Дать ответ");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
     public InlineKeyboardButton buildCancelDeleteCardButton() {
         var hash = getHashWithoutRequest("cancelDeleteCard");
 

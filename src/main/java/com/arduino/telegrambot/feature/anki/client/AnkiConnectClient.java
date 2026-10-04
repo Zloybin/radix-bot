@@ -1,9 +1,6 @@
 package com.arduino.telegrambot.feature.anki.client;
 
-import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
-import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
-import com.arduino.telegrambot.feature.anki.model.Note;
+import com.arduino.telegrambot.feature.anki.model.*;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -41,4 +38,5 @@ public interface AnkiConnectClient {
     Mono<Long> addNote(Note note);
     Mono<List<Long>> addNotes(List<Note> notes);
     Mono<List<Long>> findCards(String deckName);
+    Mono<CardInfo> cardsInfo(long cardId);
 }

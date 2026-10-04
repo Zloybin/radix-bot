@@ -3,12 +3,12 @@ package com.arduino.telegrambot.feature.anki.client;
 import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.enummeration.AnkiTemplate;
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
-import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
-import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
-import com.arduino.telegrambot.feature.anki.model.Note;
+import com.arduino.telegrambot.feature.anki.model.*;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 @Component
 public class AnkiConnectWebClient implements AnkiConnectClient {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final TypeReference<List<CardInfo>> CARD_LIST = new TypeReference<>() {};
     private static final int API_VERSION = 6;
 
     private final String ankiBaseUrl;
@@ -523,5 +525,44 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
         });
     }
 
+    @Override
+    public Mono<CardInfo> cardsInfo(long cardId) {
+        return invoke("cardsInfo", Map.of(
+                "cards", List.of(cardId)))
+                .flatMap(json -> Mono.justOrEmpty(parseCardInfo(String.valueOf(json))));
+    }
+
+
+    private CardInfo parseCardInfo(String json) {
+
+        System.out.println("parseCardInfo input: " + json.substring(0, Math.min(json.length(), 200)));
+
+        try {
+            JsonNode root = MAPPER.readTree(json);
+
+            JsonNode resultNode = root;
+            if (root.isObject()) {
+                JsonNode error = root.get("error");
+                if (error != null && !error.isNull()) {
+                    throw new IllegalStateException("AnkiConnect error: " + error.asText());
+                }
+                resultNode = root.get("result");
+            }
+
+            if (resultNode == null || !resultNode.isArray()) {
+                throw new IllegalStateException("Unexpected cardsInfo response: " + json);
+            }
+
+            List<CardInfo> cards = MAPPER.convertValue(resultNode, CARD_LIST);
+
+            // для несуществующего ID AnkiConnect возвращает пустой объект {}, у него cardId == 0
+            return cards.stream()
+                    .filter(card -> card.getCardId() != 0)
+                    .findFirst()
+                    .orElse(null);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to parse cardsInfo response: " + json, e);
+        }
+    }
 
 }

@@ -4,10 +4,7 @@ import com.arduino.telegrambot.entity.DeckProgress;
 import com.arduino.telegrambot.entity.DeckStrikeInfo;
 import com.arduino.telegrambot.enummeration.DeckStatus;
 import com.arduino.telegrambot.feature.anki.client.AnkiConnectClient;
-import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
-import com.arduino.telegrambot.feature.anki.model.InitStrikeStatDate;
-import com.arduino.telegrambot.feature.anki.model.Note;
+import com.arduino.telegrambot.feature.anki.model.*;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -165,8 +162,8 @@ public class AnkiServiceImpl implements AnkiService{
     }
 
     @Override
-    public String cardsInfo(long cardId) {
-        return "";
+    public CardInfo cardsInfo(long cardId) {
+        return ankiClient.cardsInfo(cardId).block();
     }
 
 

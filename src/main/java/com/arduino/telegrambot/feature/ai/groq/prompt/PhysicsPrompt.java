@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.feature.anki.ai.prompt;
+package com.arduino.telegrambot.feature.ai.groq.prompt;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -11,6 +11,8 @@ public class PhysicsPrompt {
 
     private final String prompt;
     private final String duoCardsPrompt;
+    private final String exampleGenerationPrompt;
+    private final String answerCheckPrompt;
 
     public PhysicsPrompt() throws IOException {
         var resource = new ClassPathResource(
@@ -28,6 +30,23 @@ public class PhysicsPrompt {
         this.duoCardsPrompt = duoResource.getContentAsString(
                 StandardCharsets.UTF_8
         );
+
+        var exampleGenerationResource = new ClassPathResource(
+                "prompts/example-generation.txt"
+        );
+
+        this.exampleGenerationPrompt = exampleGenerationResource.getContentAsString(
+                StandardCharsets.UTF_8
+        );
+
+        var answerCheckPrompt = new ClassPathResource(
+                "prompts/answer-check.txt"
+        );
+
+        this.answerCheckPrompt = answerCheckPrompt.getContentAsString(
+                StandardCharsets.UTF_8
+        );
+
     }
 
     public String get() {
@@ -36,5 +55,13 @@ public class PhysicsPrompt {
 
     public String getDuoCardsPrompt() {
         return duoCardsPrompt;
+    }
+
+    public String getExampleGenerationPrompt() {
+        return exampleGenerationPrompt;
+    }
+
+    public String getAnswerCheckPrompt() {
+        return answerCheckPrompt;
     }
 }

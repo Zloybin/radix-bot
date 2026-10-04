@@ -53,4 +53,9 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildSaveNewDuoCardButton();
 
     InlineKeyboardButton buildSentenceExampleExercise();
+
+    InlineKeyboardButton buildChangeSentenceExercise();
+    InlineKeyboardButton buildCancelSentenceExercise();
+
+    InlineKeyboardButton buildAcceptSentenceExercise();
 }

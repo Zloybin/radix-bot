@@ -6,6 +6,8 @@ import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.parser.TelegramLatexParser;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
+import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
+import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -392,6 +394,31 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("translation", translation);
         context.setVariable("example", example);
         return engine.process("./duocards/duocard_new_preview", context);
+    }
+
+    @Override
+    public String processExerciseSentanceTemplate(String translation) {
+        Context context = new Context();
+
+        context.setVariable("translation", translation);
+        return engine.process("./duocards/exercise_sentence", context);
+    }
+
+    @Override
+    public String processResultSentenceExercise() {
+        return "";
+    }
+
+    @Override
+    public String processDuoCardResultSentenceExercise(AnswerCheckResult answerCheckResult, GeneratedExample generatedExample, String userRequest) {
+
+        Context context = new Context();
+
+        context.setVariable("userRequest", userRequest);
+        context.setVariable("answerCheckResult", answerCheckResult);
+        context.setVariable("generatedExample", generatedExample);
+
+        return engine.process("./duocards/result_sentences_exercise", context);
     }
 
 }

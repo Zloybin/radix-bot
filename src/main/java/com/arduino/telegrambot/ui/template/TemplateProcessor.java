@@ -3,6 +3,8 @@ package com.arduino.telegrambot.ui.template;
 import com.arduino.telegrambot.entity.DuoCardExample;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
+import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
 
 import java.util.HashMap;
@@ -43,4 +45,10 @@ public interface TemplateProcessor {
     String processExampleNewCard(String newNote, String translation, String example);
 
     String processPreviewSavedDuoCard(String newNote, String translation, String example);
+
+    String processExerciseSentanceTemplate(String translation);
+
+    String processResultSentenceExercise();
+
+    String processDuoCardResultSentenceExercise(AnswerCheckResult answerCheckResult, GeneratedExample generatedExample, String handler);
 }

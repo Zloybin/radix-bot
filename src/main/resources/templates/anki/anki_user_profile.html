@@ -2,6 +2,42 @@
 
 <hr/>
 
+<h3>📅 Сегодня</h3>
+
+<table>
+    <tr>
+        <th align="left">
+            <b>Карточек пройдено:</b>
+        </th>
+
+        <th align="right">
+            <b th:text="${numCardsReviewedToday}">25</b> 🎯
+        </th>
+    </tr>
+
+    <tr>
+        <td align="left">
+            <b>Карточек добавлено:</b>
+        </td>
+
+        <td align="right">
+            <b th:text="${numCardsReviewedToday}">25</b> 📨
+        </td>
+    </tr>
+
+    <tr>
+        <th align="left">
+            <b>Карточек удалено:</b>
+        </th>
+
+        <th align="right">
+            <b th:text="${numCardsReviewedToday}">25</b> 🗑️
+        </th>
+    </tr>
+</table>
+
+<hr/>
+
 <h3>📚 Статистика колод</h3>
 
 <table>
@@ -29,8 +65,3 @@
 </table>
 
 <hr/>
-
-📚 <b>Карточек сегодня:</b>
-<b th:text="${numCardsReviewedToday}">25</b> 🎯
-<br/>
-<br/>

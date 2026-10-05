@@ -10,4 +10,6 @@ public class GeneratedExample {
     String generatedSentence;
     String generatedTranslation;
     String generatedSourceExample;
+    String generatedTense;
+    String generatedSubjunctive;
 }

@@ -51,7 +51,7 @@ public class SaveNewDuoCardHandler implements UpdateHandler {
         String translation = duoCardExample.getTranslation();
         String example = duoCardExample.getExample();
         Note note = Note.builder()
-                .deckName("Test")
+                .deckName("Deutsch")
                 .modelName("Deutsch (с обратной карточкой)")
                 .field("Front", sentence)
                 .field("Back", translation)

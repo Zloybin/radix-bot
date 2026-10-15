@@ -9,6 +9,7 @@ import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
 import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
+import com.arduino.telegrambot.model.UserStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
@@ -25,19 +26,14 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     private TemplateEngine engine;
 
     @Override
-    public String processGreetingsTemplate(){
+    public String processGreetingsTemplate(UserStatistics userStatistics){
 
         var context = new Context();
-//        context.setVariable("duoCardsStreak", "");
-//        context.setVariable("duoCardsRemaining", "");
-//        context.setVariable("physicsLastDay", "");
-//        context.setVariable("physicsLastDayTasks", "");
-//        context.setVariable("ankiDecks", "");
-//        context.setVariable("deckName", "");
-//        context.setVariable("deckTotalInDeck", "");
-//        context.setVariable("deckNewCount", "");
-//        context.setVariable("deckLearnCount", "");
-//        context.setVariable("deckReviewCount", "");
+        context.setVariable("completedDuoCardsSentenceTaskCount", userStatistics.getCompletedDuoCardsSentenceTaskCount());
+        context.setVariable("completedPhysTaskCount", userStatistics.getCompletedPhysTaskCount());
+        context.setVariable("isPhysTasksComplete", userStatistics.isPhysTasksComplete());
+        context.setVariable("isDuoCardsSentenceTaskComplete", userStatistics.isDuoCardsSentenceTaskComplete());
+        context.setVariable("weekStrikeInfo", userStatistics.getWeekStrikeInfo());
         return engine.process("greetings", context);
     }
 
@@ -419,6 +415,26 @@ public class TemplateProcessorImpl implements TemplateProcessor{
         context.setVariable("generatedExample", generatedExample);
 
         return engine.process("./duocards/result_sentences_exercise", context);
+    }
+
+    @Override
+    public String processSaveMediaMessage() {
+        Context context = new Context();
+        return engine.process("save_media", context);
+    }
+
+    @Override
+    public String processAdminMenuTemplate() {
+        Context context = new Context();
+        return engine.process("admin_menu", context);
+    }
+
+    @Override
+    public String processSuccessSaveMediaMessage(String fileId, String key) {
+        Context context = new Context();
+        context.setVariable("key", key);
+        context.setVariable("fileId", fileId);
+        return engine.process("success_save_media", context);
     }
 
 }

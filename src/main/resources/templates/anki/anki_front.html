@@ -1,4 +1,75 @@
+<a name="chapter-0">ABCD</a>
+<mark>marked text</mark>
+<sub>subscript text</sub>
+<sup>superscript text</sup>
+
+<tg-spoiler>spoiler</tg-spoiler>
+
 <h3>📝 Вопрос</h3>
+
+
+<tg-spoiler>spoiler</tg-spoiler>
+
+
+#hashtag $USD +12345678901, card: 4242 4242 4242 4242, https://t.me t.me a@t.me /command @username
+
+<tg-reference name="note-1">Referenced text</tg-reference>
+
+<ol start="3" type="a" reversed><li>ordered list item</li></ol>
+
+<ul>
+    <li><input type="checkbox" checked>Checked checkbox</li>
+    <li><input type="checkbox">Unchecked checkbox</li>
+</ul>
+
+<blockquote expandable>Expandable block quotation started<br>Expandable block quotation continued<br>Expandable block quotation continued<br>Expandable block quotation continued<br>The last line of the expandable block quotation<cite>The Author</cite></blockquote>
+
+
+<figure><img src="https://telegram.org/example/photo.jpg" tg-spoiler/><figcaption>Photo caption<cite>Photo credit</cite></figcaption></figure>
+
+<tg-slideshow><video src="https://telegram.org/example/video.mp4"/><img src="https://telegram.org/example/photo.jpg"/><figcaption>Slideshow caption</figcaption></tg-slideshow>
+
+<table bordered striped compact><caption>Table caption</caption>
+    <tr><td colspan="2" rowspan="2" align="left">Value</td><td align="center">Value2</td><td align="right">Value3</td></tr>
+    <tr><td valign="top">Value4</td><td valign="middle">Value5</td><td valign="bottom">Value6</td></tr>
+    <tr><td>Value7</td></tr></table>
+
+
+<details><summary>Title</summary>Content</details>
+
+<p>Inline buttons:
+<!--    <tg-button type="url" style="success" url="https://t.me">url</tg-button>-->
+<!--    <tg-button type="url" url="tg://user?id=777000">user</tg-button>-->
+<!--    <tg-button type="callback_data" style="link" data="callback">callback with the date <tg-time unix="1647531900" format="wDT">22:45 tomorrow</tg-time> and the custom emoji <tg-emoji emoji-id="5368324170671202286">👍</tg-emoji></tg-button>-->
+    <tg-button type="web_app" style="danger" url="https://telegram.org">Mini App (private chats only)</tg-button>
+<!--    <tg-button type="login_url" url="https://t.me" forward-text="forward text" request-write-access>login (requires domain set up via @BotFather)</tg-button>-->
+    <tg-button type="switch_inline_query" style="primary" query="inline">inline</tg-button>
+    <tg-button type="switch_inline_query_current_chat" query="inline 2">inline 2</tg-button>
+<!--    <tg-button type="switch_inline_query_chosen_chat" query="inline 3" allow-user-chats allow-bot-chats allow-group-chats allow-channel-chats>inline 3</tg-button>-->
+    <tg-button type="copy_text" text="...copy">Copy</tg-button>
+    <tg-button type="disabled">Disabled</tg-button>
+</p>
+
+<tg-button-row align="left">
+    <tg-button type="url" url="https://t.me">url</tg-button>
+    <tg-button type="url" style="success" url="tg://user?id=777000">user</tg-button>
+    <tg-button type="callback_data" style="link" data="callback">callback</tg-button>
+</tg-button-row>
+<tg-button-row align="center">
+    <tg-button type="web_app" url="https://telegram.org">Mini App (private chats only)</tg-button>
+</tg-button-row>
+<!--<tg-button-row align="center">-->
+<!--    <tg-button type="login_url" style="danger" url="https://t.me" forward-text="forward text" request-write-access>login (requires domain set up via @BotFather)</tg-button>-->
+<!--</tg-button-row>-->
+<tg-button-row align="right">
+    <tg-button type="switch_inline_query" query="inline">inline</tg-button>
+    <tg-button type="switch_inline_query_current_chat" query="inline 2">inline 2</tg-button>
+    <tg-button type="switch_inline_query_chosen_chat" query="inline 3" allow-user-chats allow-group-chats allow-channel-chats>inline 3</tg-button>
+</tg-button-row>
+<tg-button-row>
+    <tg-button type="copy_text" text="...copy">Copy</tg-button>
+    <tg-button type="disabled" style="primary">Disabled</tg-button>
+</tg-button-row>
 
 <blockquote th:utext="${question}">
     Текст вопроса

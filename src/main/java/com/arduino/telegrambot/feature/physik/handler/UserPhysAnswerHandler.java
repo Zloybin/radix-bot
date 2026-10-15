@@ -3,6 +3,7 @@ package com.arduino.telegrambot.feature.physik.handler;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handler.UpdateHandler;
+import com.arduino.telegrambot.model.DayStrikeInfo;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.ResultService;
 import com.arduino.telegrambot.service.TaskService;
@@ -13,6 +14,8 @@ import com.arduino.telegrambot.feature.rad.validator.AnswerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 @Order()
@@ -54,6 +57,18 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         resultService.save(result);
         user.getResults().add(result);
         user.setState(UserState.FREE);
+        var today = LocalDate.now();
+        var dayStrikeInfo = user.getDaysStrikeInfoList().get(today);
+        if(dayStrikeInfo == null){
+            dayStrikeInfo = DayStrikeInfo.builder()
+                    .isAnkiDecksCompleted(false)
+                    .completedDuoCardsSentenceTaskCount(0)
+                    .completedPhysTaskCount(0)
+                    .build();
+        }
+
+        dayStrikeInfo.setCompletedPhysTaskCount(dayStrikeInfo.getCompletedPhysTaskCount() + 1);
+        user.getDaysStrikeInfoList().put(today, dayStrikeInfo);
         userService.save(user);
 
         var physTask = taskService.findById(user.getPhysTaskId());

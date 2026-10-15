@@ -23,27 +23,28 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
     @Override
     public InlineKeyboardMarkup buildMainMenu() {
 
-        var appsInfo = buttonBuilder.buildAppsInfoButton();
-        var radConverterButton = buttonBuilder.buildRadConverterStartButton();
         var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
         var ankiTaskButton = buttonBuilder.buildAnkiMenuButton();
         var duoCards = buttonBuilder.buildDuoCardsMenuButton();
+        var admin = buttonBuilder.buildAdminButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
-        row1.add(appsInfo);
+        row1.add(physTaskButton);
 
         var row2 = new ArrayList<InlineKeyboardButton>();
-        row2.add(radConverterButton);
         row2.add(ankiTaskButton);
 
         var row3 = new ArrayList<InlineKeyboardButton>();
-        row3.add(physTaskButton);
         row3.add(duoCards);
+
+        var row4 = new ArrayList<InlineKeyboardButton>();
+        row4.add(admin);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
+        rows.add(row4);
         return new InlineKeyboardMarkup(rows);
     }
 
@@ -398,6 +399,46 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildCancelSaveMediaKeyboard() {
+        var cancelSaveMedia = buttonBuilder.buildCancelSaveMedia();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(cancelSaveMedia);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildAdminMenuKeyboard() {
+        var saveMedia = buttonBuilder.buildSaveMediaButton();
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(saveMedia);
+
+        var mainMenuButton = buttonBuilder.buildMainMenuButton();
+        var backToMainMenu = buttonProcessor.renameButton(mainMenuButton, "Назад");
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(backToMainMenu);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        return new InlineKeyboardMarkup(rows);
+    }
+
+    @Override
+    public InlineKeyboardMarkup buildBackToAdminMenu() {
+        var mainMenuButton = buttonBuilder.buildAdminButton();
+        var backToMainMenu = buttonProcessor.renameButton(mainMenuButton, "Назад");
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(backToMainMenu);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
         return new InlineKeyboardMarkup(rows);
     }
 

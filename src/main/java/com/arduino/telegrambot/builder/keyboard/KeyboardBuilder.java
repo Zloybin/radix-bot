@@ -59,4 +59,10 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildCancelSentenceExerciseKeyboard();
 
     InlineKeyboardMarkup buildResultSentenceExerciseKeyboard();
+
+    InlineKeyboardMarkup buildCancelSaveMediaKeyboard();
+
+    InlineKeyboardMarkup buildAdminMenuKeyboard();
+
+    InlineKeyboardMarkup buildBackToAdminMenu();
 }

@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.telegram;
 
+import com.arduino.telegrambot.entity.TelegramMedia;
 import com.arduino.telegrambot.feature.rich.TelegramRichMessageServiceImpl;
 import com.arduino.telegrambot.telegram.sender.BotSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
@@ -181,9 +182,19 @@ public class TelegramService {
         telegramRichMessageServiceImpl.sendRichMessage(chatId, html, keyboard).block();
     }
 
+    public void sendRichMessageWithMedia(
+            Long chatId, InlineKeyboardMarkup keyboard, String html, TelegramMedia media) {
+        telegramRichMessageServiceImpl.sendRichMessageWithMedia(chatId, html, keyboard, media).block();
+    }
+
     public void editRichMessage(
             Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html) {
         telegramRichMessageServiceImpl.editRichMessage(chatId, messageId, html, keyboard).block();
+    }
+
+    public void editRichMessageWithMedia(
+            Long chatId, long messageId, InlineKeyboardMarkup keyboard, String html, TelegramMedia media) {
+        telegramRichMessageServiceImpl.editRichMessageWithMedia(chatId, messageId, html, keyboard, media).block();
     }
 
     public void editRichMessageKeyboard(

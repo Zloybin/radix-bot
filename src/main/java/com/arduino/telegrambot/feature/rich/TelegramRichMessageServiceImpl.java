@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.feature.rich;
 
+import com.arduino.telegrambot.entity.TelegramMedia;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,6 +41,48 @@ public class TelegramRichMessageServiceImpl implements TelegramRichMessageServic
         this.objectMapper = objectMapper;
     }
 
+    @Override
+    public Mono<Long> sendRichMessageWithMedia(
+            long chatId,
+            String html,
+            ReplyKeyboard keyboard,
+            TelegramMedia media
+    ) {
+
+        Map<String, Object> headerMedia = Map.of(
+                "id", media.getKey(),
+                "media", Map.of(
+                        "type", media.getMediaType().getField(),
+                        "media", media.getFileId()
+                )
+        );
+
+        Map<String, Object> richMessage = Map.of(
+                "html", html,
+                "media", List.of(headerMedia)
+        );
+
+
+
+        Map<String, Object> request = new HashMap<>();
+        request.put("chat_id", chatId);
+        request.put("rich_message", richMessage);
+        request.put("reply_markup", keyboard);
+
+        return webClient.post()
+                .uri("/bot{token}/sendRichMessage", botToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(String.class)
+                .doOnNext(body -> System.out.println(String.format("Telegram response: %s", body)))
+                .map(this::extractMessageId)
+                .onErrorResume(WebClientResponseException.class, ex -> {
+                    System.err.println(String.format("Telegram API error %s: %s", ex.getStatusCode(), ex.getResponseBodyAsString()));
+                    return Mono.error(new RuntimeException(ex.getResponseBodyAsString(), ex));
+                });
+    }
+
     public Mono<Long> sendRichMessage(
             long chatId,
             String html,
@@ -76,6 +119,48 @@ public class TelegramRichMessageServiceImpl implements TelegramRichMessageServic
     ) {
         Map<String, Object> richMessage = Map.of(
                 "html", html
+        );
+
+        Map<String, Object> request = new HashMap<>();
+
+        request.put("chat_id", chatId);
+        request.put("message_id", messageId);
+        request.put("rich_message", richMessage);
+        request.put("reply_markup", keyboard);
+
+        return webClient.post()
+                .uri("/bot{token}/editMessageText", botToken)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(String.class)
+                .onErrorResume(WebClientResponseException.class, ex -> {
+                    System.out.println(String.format("Telegram API error %s: %s", ex.getStatusCode().toString(), ex.getResponseBodyAsString()));
+                    return Mono.error(new RuntimeException(
+                            "Telegram API error: " + ex.getStatusCode() + " - " + ex.getResponseBodyAsString(), ex
+                    ));
+
+                });
+    }
+
+    @Override
+    public Mono<String> editRichMessageWithMedia(
+            long chatId,
+            long messageId,
+            String html,
+            InlineKeyboardMarkup keyboard,
+            TelegramMedia media
+    ) {
+        Map<String, Object> headerMedia = Map.of(
+                "id", media.getKey(),
+                "media", Map.of(
+                        "type", media.getMediaType().getField(),
+                        "media", media.getFileId()
+                )
+        );
+
+        Map<String, Object> richMessage = Map.of(
+                "html", html,
+                "media", List.of(headerMedia)
         );
 
         Map<String, Object> request = new HashMap<>();

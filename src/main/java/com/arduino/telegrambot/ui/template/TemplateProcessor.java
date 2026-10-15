@@ -6,13 +6,14 @@ import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
 import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
+import com.arduino.telegrambot.model.UserStatistics;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface TemplateProcessor {
-    String processGreetingsTemplate();
+    String processGreetingsTemplate(UserStatistics userStatistics);
     String processUserProfileTemplate(String userName, long tasksCount, long completedTaskCount);
     String processRadTaskTemplate(String source, String target, String task);
     String processPhysTaskTemplate(String section, String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber);
@@ -51,4 +52,10 @@ public interface TemplateProcessor {
     String processResultSentenceExercise();
 
     String processDuoCardResultSentenceExercise(AnswerCheckResult answerCheckResult, GeneratedExample generatedExample, String handler);
+
+    String processSaveMediaMessage();
+
+    String processAdminMenuTemplate();
+
+    String processSuccessSaveMediaMessage(String fileId, String key);
 }

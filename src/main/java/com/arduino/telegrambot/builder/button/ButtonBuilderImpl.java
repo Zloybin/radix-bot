@@ -56,7 +56,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
     public InlineKeyboardButton buildPhysTaskMenuButton() {
         var hash = getHashWithoutRequest("physTaskMenu");
         var button = new InlineKeyboardButton();
-        button.setText("⚛\uFE0F Задачи по физике");
+        button.setText("Задачи по физике");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
@@ -257,7 +257,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("ankiMenu");
 
         var button = new InlineKeyboardButton();
-        button.setText("🧠 Карточки Anki");
+        button.setText("Карточки Anki");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
@@ -312,7 +312,7 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("duoCardsMenu");
 
         var button = new InlineKeyboardButton();
-        button.setText("🇩🇪 DuoCards");
+        button.setText("DuoCards");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
@@ -430,6 +430,33 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("acceptSentenceExercise");
         var button = new InlineKeyboardButton();
         button.setText("Дать ответ");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildCancelSaveMedia() {
+        var hash = getHashWithoutRequest("cancelSaveMedia");
+        var button = new InlineKeyboardButton();
+        button.setText("Отменить сохранение файла");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildAdminButton() {
+        var hash = getHashWithoutRequest("adminMenu");
+        var button = new InlineKeyboardButton();
+        button.setText("Админка");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildSaveMediaButton() {
+        var hash = getHashWithoutRequest("saveMedia");
+        var button = new InlineKeyboardButton();
+        button.setText("Сохранить медиа");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }

@@ -1,9 +1,70 @@
-<h2>👋 Добро пожаловать в radix!</h2>
+<img src="tg://photo?id=header"/>
 
-<hr/>
+<table bordered striped compact>
+    <tr>
+        <th colspan="9" align="center">Страйки</th>
+    </tr>
+    <tr>
+        <td align="center">Пн</td>
+        <td align="center">Вт</td>
+        <td align="center">Ср</td>
+        <td align="center">Чт</td>
+        <td align="center">Пт</td>
+        <td align="center">Сб</td>
+        <td align="center">Вс</td>
+        <td align="center">Тек</td>
+        <td align="center">🏆</td>
+    </tr>
+    <tr>
+        <td align="center"
+            th:each="entry : ${weekStrikeInfo}"
+            th:title="${#temporals.format(entry.key, 'dd.MM')}"
+            th:text="${entry.value == null} ? '' : (${entry.value} ? '🔥' : '🧊')">
+        </td>
+        <td align="center">17</td>
+        <td align="center">25</td>
+    </tr>
+</table>
 
-<aside align="center">
-    <b>👇 Выбери направление ниже и начни обучение!</b>
-</aside>
+<summary>🗓️ Прогресс за сегодня:</summary>
+<table bordered striped compact>
+    <tr>
+        <td rowspan="2" align="left">Anki 🧠</td>
+        <td align="center">Java</td>
+        <td align="center">Dev</td>
+        <td align="center">Phys</td>
+    </tr>
+    <tr>
+        <td align="center">✅</td>
+        <td align="center">✅</td>
+        <td align="center">✅</td>
+    </tr>
+</table>
 
-<footer>Подробнее о приложениях в "ℹ Apps Info"</footer>
+<table bordered striped compact>
+    <tr>
+        <td rowspan="2">Задачи ⚛️</td>
+        <td  align="center">🆕</td>
+        <td  align="center">🔄</td>
+        <td  align="center"></td>
+    </tr>
+
+    <tr>
+        <td  align="center">0</td>
+        <td align="center"><th:block th:text="${completedPhysTaskCount}">Название</th:block></td>
+        <td  align="center"><b th:text="${isPhysTasksComplete ? '✅' : '❌'}">✅</b></td>
+    </tr>
+</table>
+
+<table bordered striped compact>
+    <tr>
+        <td rowspan="2">DuoCards 🇩🇪</td>
+        <td align="center">✏️</td>
+        <td align="center"></td>
+    </tr>
+
+    <tr>
+        <td  align="center"><th:block th:text="${completedDuoCardsSentenceTaskCount}">10</th:block></td>
+        <td  align="center"><b th:text="${isDuoCardsSentenceTaskComplete ? '✅' : '❌'}">✅</b></td>
+    </tr>
+</table>

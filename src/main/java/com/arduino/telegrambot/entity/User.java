@@ -2,10 +2,13 @@ package com.arduino.telegrambot.entity;
 
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
+import com.arduino.telegrambot.model.DayStrikeInfo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 @Entity
@@ -58,4 +61,12 @@ public class User {
 
     @Embedded
     private GeneratedExample generatedExample;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "strike_days_info",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @MapKeyColumn(name = "date")
+    private Map<LocalDate, DayStrikeInfo> daysStrikeInfoList;
 }

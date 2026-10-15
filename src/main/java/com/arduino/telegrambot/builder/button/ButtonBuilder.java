@@ -58,4 +58,10 @@ public interface ButtonBuilder {
     InlineKeyboardButton buildCancelSentenceExercise();
 
     InlineKeyboardButton buildAcceptSentenceExercise();
+
+    InlineKeyboardButton buildCancelSaveMedia();
+
+    InlineKeyboardButton buildAdminButton();
+
+    InlineKeyboardButton buildSaveMediaButton();
 }

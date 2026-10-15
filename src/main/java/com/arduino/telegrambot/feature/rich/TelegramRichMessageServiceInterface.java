@@ -1,5 +1,6 @@
 package com.arduino.telegrambot.feature.rich;
 
+import com.arduino.telegrambot.entity.TelegramMedia;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -55,5 +56,20 @@ public interface TelegramRichMessageServiceInterface {
             int messageId,
             String text,
             ReplyKeyboard replyKeyboardMarkup
+    );
+
+    Mono<Long> sendRichMessageWithMedia(
+            long chatId,
+            String html,
+            ReplyKeyboard keyboard,
+            TelegramMedia media
+    );
+
+    Mono<String> editRichMessageWithMedia(
+            long chatId,
+            long messageId,
+            String html,
+            InlineKeyboardMarkup keyboard,
+            TelegramMedia media
     );
 }

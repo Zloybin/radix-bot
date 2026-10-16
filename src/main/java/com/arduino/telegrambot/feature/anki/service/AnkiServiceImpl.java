@@ -65,7 +65,15 @@ public class AnkiServiceImpl implements AnkiService{
     public Mono<AnkiDeckStats> getDeckStats(
             String deckName
     ) {
-        return ankiClient.getDeckStats(List.of(deckName)).map(deckNames -> deckNames.get(deckName));
+        String deckFullName;
+        if(deckName.contains("::")){
+            String[] split = deckName.split("::");
+            deckFullName = split[1];
+        }else{
+            deckFullName = deckName;
+        }
+
+        return ankiClient.getDeckStats(List.of(deckName)).map(deckNames -> deckNames.get(deckFullName));
     }
 
     /**

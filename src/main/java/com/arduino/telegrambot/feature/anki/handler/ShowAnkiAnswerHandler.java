@@ -62,7 +62,18 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
         var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
 
         Map<String, AnkiDeckStats> deckStats = ankiService.getDecksStats(List.of(deckName)).block();
-        AnkiDeckStats ankiDeckStats = deckStats.get(deckName);
+
+
+
+        String fullDeckName;
+        if(deckName.contains("::")){
+            String[] split = deckName.split("::");
+            fullDeckName = split[1];
+        }else{
+            fullDeckName = deckName;
+        }
+
+        AnkiDeckStats ankiDeckStats = deckStats.get(fullDeckName);
 
         var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckStats);
 

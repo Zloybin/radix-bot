@@ -3,7 +3,7 @@ package com.arduino.telegrambot.feature.physik.handler;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handler.UpdateHandler;
-import com.arduino.telegrambot.model.DayStrikeInfo;
+import com.arduino.telegrambot.statistick.model.DayTaskCompletionInfo;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.ResultService;
 import com.arduino.telegrambot.service.TaskService;
@@ -58,17 +58,16 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         user.getResults().add(result);
         user.setState(UserState.FREE);
         var today = LocalDate.now();
-        var dayStrikeInfo = user.getDaysStrikeInfoList().get(today);
+        var dayStrikeInfo = user.getDayStrikeInfoMap().get(today);
         if(dayStrikeInfo == null){
-            dayStrikeInfo = DayStrikeInfo.builder()
-                    .isAnkiDecksCompleted(false)
+            dayStrikeInfo = DayTaskCompletionInfo.builder()
                     .completedDuoCardsSentenceTaskCount(0)
                     .completedPhysTaskCount(0)
                     .build();
         }
 
         dayStrikeInfo.setCompletedPhysTaskCount(dayStrikeInfo.getCompletedPhysTaskCount() + 1);
-        user.getDaysStrikeInfoList().put(today, dayStrikeInfo);
+        user.getDayStrikeInfoMap().put(today, dayStrikeInfo);
         userService.save(user);
 
         var physTask = taskService.findById(user.getPhysTaskId());

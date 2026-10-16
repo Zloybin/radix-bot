@@ -78,6 +78,17 @@ public class AnkiConnectWebClient implements AnkiConnectClient {
     }
 
     @Override
+    public Mono<List<String>> getFilteredMajorDeckNames() {
+        return getDeckNames()
+                .map(list -> list
+                        .stream()
+                        .filter(deckName -> !AnkiUtility.EXCLUDED_DECKS.contains(deckName))
+                        .filter(deckName -> !deckName.contains("::"))
+                        .toList()
+                );
+    }
+
+    @Override
     public Mono<Map<String, Long>> getDeckNamesAndIds() {
         return invoke("deckNamesAndIds", Map.of())
                 .map(json -> {

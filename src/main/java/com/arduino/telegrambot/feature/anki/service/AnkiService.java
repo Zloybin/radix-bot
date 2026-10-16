@@ -17,6 +17,7 @@ public interface AnkiService {
     Mono<List<String>> getDecks();
 
 
+
     //card
     Mono<Boolean> startStudy(String deckName);
     Mono<AnkiCurrentCard> getCurrentCard();
@@ -44,4 +45,5 @@ public interface AnkiService {
     Mono<List<Long>> addNotes(List<Note> notes);
     List<Long> findCards(String deckName);
     CardInfo cardsInfo(long cardId);
+    Mono<List<String>> getFilteredMajorDecks();
 }

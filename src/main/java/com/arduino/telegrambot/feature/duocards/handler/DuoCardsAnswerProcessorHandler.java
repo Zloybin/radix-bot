@@ -114,6 +114,6 @@ public class DuoCardsAnswerProcessorHandler implements UpdateHandler {
     }
 
     private static boolean isAllCountsNull(AnkiDeckStats deckStats) {
-        return deckStats.newCount() == COUNT_NULL && deckStats.learnCount() == COUNT_NULL && deckStats.reviewCount() == COUNT_NULL;
+        return deckStats.getNewCount() == COUNT_NULL && deckStats.getLearnCount() == COUNT_NULL && deckStats.getReviewCount() == COUNT_NULL;
     }
 }

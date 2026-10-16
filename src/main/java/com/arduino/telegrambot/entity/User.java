@@ -2,7 +2,7 @@ package com.arduino.telegrambot.entity;
 
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
-import com.arduino.telegrambot.model.DayStrikeInfo;
+import com.arduino.telegrambot.statistick.model.DayTaskCompletionInfo;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -62,11 +62,7 @@ public class User {
     @Embedded
     private GeneratedExample generatedExample;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "strike_days_info",
-            joinColumns = @JoinColumn(name = "user_id")
-    )
-    @MapKeyColumn(name = "date")
-    private Map<LocalDate, DayStrikeInfo> daysStrikeInfoList;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @MapKey(name = "day")
+    private Map<LocalDate, DayTaskCompletionInfo> dayStrikeInfoMap;
 }

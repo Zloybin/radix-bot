@@ -1,6 +1,5 @@
 package com.arduino.telegrambot.ui.template;
 
-import com.arduino.telegrambot.entity.DuoCardExample;
 import com.arduino.telegrambot.enummeration.AnkiTemplate;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
@@ -9,7 +8,7 @@ import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
 import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
-import com.arduino.telegrambot.model.UserStatistics;
+import com.arduino.telegrambot.statistick.model.DayUserStatisticsTemplateDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
@@ -26,14 +25,15 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     private TemplateEngine engine;
 
     @Override
-    public String processGreetingsTemplate(UserStatistics userStatistics){
+    public String processGreetingsTemplate(DayUserStatisticsTemplateDate dayUserStatisticsTemplateDate){
 
         var context = new Context();
-        context.setVariable("completedDuoCardsSentenceTaskCount", userStatistics.getCompletedDuoCardsSentenceTaskCount());
-        context.setVariable("completedPhysTaskCount", userStatistics.getCompletedPhysTaskCount());
-        context.setVariable("isPhysTasksComplete", userStatistics.isPhysTasksComplete());
-        context.setVariable("isDuoCardsSentenceTaskComplete", userStatistics.isDuoCardsSentenceTaskComplete());
-        context.setVariable("weekStrikeInfo", userStatistics.getWeekStrikeInfo());
+        context.setVariable("completedPhysTaskCount", dayUserStatisticsTemplateDate.getCompletedPhysTaskCount());
+        context.setVariable("isPhysTaskCompleted", dayUserStatisticsTemplateDate.isPhysTaskCompleted());
+        context.setVariable("completedDuoCardsSentenceTaskCount", dayUserStatisticsTemplateDate.getCompletedDuoCardsSentenceTaskCount());
+        context.setVariable("isDuoCardsSentenceTaskCompleted", dayUserStatisticsTemplateDate.isDuoCardsSentenceTaskCompleted());
+        context.setVariable("strikeListTemplateDate", dayUserStatisticsTemplateDate.getStrikeListTemplateDate());
+        context.setVariable("deckListTemplateDate", dayUserStatisticsTemplateDate.getDeckListTemplateDate());
         return engine.process("greetings", context);
     }
 
@@ -192,9 +192,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("newCount", ankiDeckStats.newCount());
-        context.setVariable("learnCount", ankiDeckStats.learnCount());
-        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+        context.setVariable("newCount", ankiDeckStats.getNewCount());
+        context.setVariable("learnCount", ankiDeckStats.getLearnCount());
+        context.setVariable("reviewCount", ankiDeckStats.getReviewCount());
 
 
         var parsedQuestion = TelegramLatexParser.parse(question);
@@ -214,9 +214,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("newCount", ankiDeckStats.newCount());
-        context.setVariable("learnCount", ankiDeckStats.learnCount());
-        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+        context.setVariable("newCount", ankiDeckStats.getNewCount());
+        context.setVariable("learnCount", ankiDeckStats.getLearnCount());
+        context.setVariable("reviewCount", ankiDeckStats.getReviewCount());
 
 
         var parsedQuestion = TelegramLatexParser.parse(question);
@@ -235,9 +235,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("newCount", ankiDeckStats.newCount());
-        context.setVariable("learnCount", ankiDeckStats.learnCount());
-        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+        context.setVariable("newCount", ankiDeckStats.getNewCount());
+        context.setVariable("learnCount", ankiDeckStats.getLearnCount());
+        context.setVariable("reviewCount", ankiDeckStats.getReviewCount());
 
         context.setVariable("question", question);
         context.setVariable("tags", tags);
@@ -258,9 +258,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("newCount", ankiDeckStats.newCount());
-        context.setVariable("learnCount", ankiDeckStats.learnCount());
-        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+        context.setVariable("newCount", ankiDeckStats.getNewCount());
+        context.setVariable("learnCount", ankiDeckStats.getLearnCount());
+        context.setVariable("reviewCount", ankiDeckStats.getReviewCount());
 
         var parsedQuestion = TelegramLatexParser.parse(question);
         var parsedAnswer = TelegramLatexParser.parse(answer);
@@ -291,9 +291,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("newCount", ankiDeckStats.newCount());
-        context.setVariable("learnCount", ankiDeckStats.learnCount());
-        context.setVariable("reviewCount", ankiDeckStats.reviewCount());
+        context.setVariable("newCount", ankiDeckStats.getNewCount());
+        context.setVariable("learnCount", ankiDeckStats.getLearnCount());
+        context.setVariable("reviewCount", ankiDeckStats.getReviewCount());
 
         context.setVariable("question", question);
         context.setVariable("tags", tags);
@@ -318,7 +318,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processConfirmDeleteFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats) {
+    public String processConfirmDeleteFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
         var question = currentCard.question();
         var tags = currentCard.tags();
         var flagValue = currentCard.flag();
@@ -326,10 +326,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("newCount", deckStats.newCount());
-        context.setVariable("learnCount", deckStats.learnCount());
-        context.setVariable("reviewCount", deckStats.reviewCount());
-
+        context.setVariable("newCount", ankiDeckStats.getNewCount());
+        context.setVariable("learnCount", ankiDeckStats.getLearnCount());
+        context.setVariable("reviewCount", ankiDeckStats.getReviewCount());
 
         var parsedQuestion = TelegramLatexParser.parse(question);
         context.setVariable("question", parsedQuestion);
@@ -339,7 +338,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processConfirmDeleteBackCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats deckStats) {
+    public String processConfirmDeleteBackCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
         var question = currentCard.question();
 
         var flag = AnkiUtility.getFlagView(currentCard.flag());
@@ -351,9 +350,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
         Context context = new Context();
 
-        context.setVariable("newCount", deckStats.newCount());
-        context.setVariable("learnCount", deckStats.learnCount());
-        context.setVariable("reviewCount", deckStats.reviewCount());
+        context.setVariable("newCount", ankiDeckStats.getNewCount());
+        context.setVariable("learnCount", ankiDeckStats.getLearnCount());
+        context.setVariable("reviewCount", ankiDeckStats.getReviewCount());
 
         var parsedQuestion = TelegramLatexParser.parse(question);
         var parsedAnswer = TelegramLatexParser.parse(answer);

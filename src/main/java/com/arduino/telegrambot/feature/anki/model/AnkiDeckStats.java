@@ -1,10 +1,17 @@
 package com.arduino.telegrambot.feature.anki.model;
 
-public record AnkiDeckStats(
+import jakarta.persistence.Embeddable;
+import lombok.*;
 
-        int newCount,
-        int learnCount,
-        int reviewCount,
-        int totalInDeck
-) {
+
+@Embeddable
+@Builder
+@AllArgsConstructor @NoArgsConstructor
+@Getter
+@Setter
+public class AnkiDeckStats{
+    private int newCount;
+    private int learnCount;
+    private int reviewCount;
+    private int totalInDeck;
 }

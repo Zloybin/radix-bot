@@ -44,6 +44,10 @@ public class AnkiServiceImpl implements AnkiService{
         return ankiClient.getFilteredDeckNames();
     }
 
+    public Mono<List<String>> getFilteredMajorDecks() {
+        return ankiClient.getFilteredMajorDeckNames();
+    }
+
     /**
      * Получает названия колод и их ID.
      */
@@ -331,6 +335,6 @@ public class AnkiServiceImpl implements AnkiService{
     }
 
     private boolean isDeckCompleted(AnkiDeckStats ankiDeckStats) {
-        return ankiDeckStats.learnCount() == 0 && ankiDeckStats.newCount() == 0 && ankiDeckStats.reviewCount() == 0;
+        return ankiDeckStats.getLearnCount() == 0 && ankiDeckStats.getNewCount() == 0 && ankiDeckStats.getReviewCount() == 0;
     }
 }

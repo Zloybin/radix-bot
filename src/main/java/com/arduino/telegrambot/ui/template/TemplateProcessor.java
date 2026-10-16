@@ -1,19 +1,18 @@
 package com.arduino.telegrambot.ui.template;
 
-import com.arduino.telegrambot.entity.DuoCardExample;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
 import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
-import com.arduino.telegrambot.model.UserStatistics;
+import com.arduino.telegrambot.statistick.model.DayUserStatisticsTemplateDate;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface TemplateProcessor {
-    String processGreetingsTemplate(UserStatistics userStatistics);
+    String processGreetingsTemplate(DayUserStatisticsTemplateDate dayUserStatisticsTemplateDate);
     String processUserProfileTemplate(String userName, long tasksCount, long completedTaskCount);
     String processRadTaskTemplate(String source, String target, String task);
     String processPhysTaskTemplate(String section, String title, long taskNumber, int selfNumber, String taskLevel, String taskText, int pageNumber);

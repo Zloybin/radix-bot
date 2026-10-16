@@ -16,6 +16,7 @@ public interface AnkiConnectClient {
     // Decks
     Mono<List<String>> getDeckNames();
     Mono<List<String>> getFilteredDeckNames();
+    Mono<List<String>> getFilteredMajorDeckNames();
     Mono<Map<String, Long>> getDeckNamesAndIds();
     Mono<Map<String, AnkiDeckStats>> getDeckStats(List<String> deckNames);
 

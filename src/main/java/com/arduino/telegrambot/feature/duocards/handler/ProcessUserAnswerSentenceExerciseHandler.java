@@ -5,14 +5,13 @@ import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.feature.ai.LLMService;
 import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
 import com.arduino.telegrambot.handler.UpdateHandler;
-import com.arduino.telegrambot.model.DayStrikeInfo;
+import com.arduino.telegrambot.statistick.model.DayTaskCompletionInfo;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.time.LocalDate;
 
@@ -67,19 +66,18 @@ public class ProcessUserAnswerSentenceExerciseHandler implements UpdateHandler {
         user.setState(UserState.FREE);
         user.setMessageId(0L);
         var today = LocalDate.now();
-        var dayStrikeInfo = user.getDaysStrikeInfoList().get(today);
+        var dayStrikeInfo = user.getDayStrikeInfoMap().get(today);
+
         if(dayStrikeInfo == null){
-            dayStrikeInfo = DayStrikeInfo.builder()
-                    .isAnkiDecksCompleted(false)
+            dayStrikeInfo = DayTaskCompletionInfo.builder()
                     .completedDuoCardsSentenceTaskCount(0)
                     .completedPhysTaskCount(0)
                     .build();
         }
 
         dayStrikeInfo.setCompletedDuoCardsSentenceTaskCount(dayStrikeInfo.getCompletedDuoCardsSentenceTaskCount() + 1);
-        user.getDaysStrikeInfoList().put(today, dayStrikeInfo);
+        user.getDayStrikeInfoMap().put(today, dayStrikeInfo);
         userService.save(user);
-
 
     }
 }

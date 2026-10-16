@@ -2,6 +2,8 @@ package com.arduino.telegrambot.config;
 
 import com.arduino.telegrambot.feature.ai.groq.GroqLLMService;
 import com.arduino.telegrambot.feature.ai.LLMService;
+import com.arduino.telegrambot.statistick.processor.StatisticsProcessor;
+import com.arduino.telegrambot.statistick.processor.StatisticsProcessorImpl;
 import com.google.genai.Client;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +42,11 @@ public class AppConfig {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public StatisticsProcessor statisticsProcessor() {
+        return new StatisticsProcessorImpl();
     }
 
 }

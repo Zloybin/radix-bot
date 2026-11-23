@@ -82,6 +82,7 @@ public class UserService {
                 .messageId(0)
                 .isExcluded(false)
                 .isAnswerSide(false)
+                .bestStrikesCount(0)
 //                .lastReviewId(0)
                 .results(new ArrayList<>())
                 .build();

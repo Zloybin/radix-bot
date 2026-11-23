@@ -1,12 +1,11 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
-import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
+import com.arduino.telegrambot.feature.anki.model.raw.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.AnkiAnswer;
+import com.arduino.telegrambot.feature.anki.enummeration.AnkiAnswer;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.telegram.TelegramService;
@@ -47,12 +46,12 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
         AnkiCurrentCard currentCard;
 
         if(ankiService.showAnswer().block()){
-            currentCard = ankiService.getCurrentCard().block();
+            currentCard = ankiService.getCurrentCardInfo().block();
         } else {
             throw new AnkiConnectException("Не смог открыть ответ карточки, т. к. не включен режим Review");
         }
 
-        var deckName = currentCard.deckName();
+        var deckName = currentCard.getDeckName();
 
         String text;
         InlineKeyboardMarkup keyboard;
@@ -68,7 +67,7 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
         user.setAnswerSide(false);
         userService.save(user);
 
-        var deckStats = ankiService.getDeckStats(deckName).block();
+        var deckStats = ankiService.getAnkiDeckStatistics(deckName).block();
 
         if (isAllCountsNull(deckStats)) {
 
@@ -82,13 +81,13 @@ public class AnkiAnswerProcessorHandler implements UpdateHandler {
 
         } else {
 
-            updatedCurrentCard = ankiService.getCurrentCard().block();
+            updatedCurrentCard = ankiService.getCurrentCardInfo().block();
             text = templateProcessor.processFrontCardTemplate(updatedCurrentCard, deckStats);
 
             if (DEUTSCH.equals(deckName)) {
 
                 //Youglish button added in keyboard
-                keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.question());
+                keyboard = keyboardBuilder.buildAnkiShowAnswerDuoCardsKeyboard(currentCard.getQuestion());
 
             } else {
                 keyboard = keyboardBuilder.buildAnkiCardKeyboard();

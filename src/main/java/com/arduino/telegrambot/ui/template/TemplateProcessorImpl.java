@@ -1,14 +1,16 @@
 package com.arduino.telegrambot.ui.template;
 
-import com.arduino.telegrambot.enummeration.AnkiTemplate;
+import com.arduino.telegrambot.feature.anki.model.AnkiMenuDeckInfo;
+import com.arduino.telegrambot.feature.duocards.deck.enummeration.AnkiTemplate;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
+import com.arduino.telegrambot.feature.anki.model.raw.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.parser.TelegramLatexParser;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
-import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
-import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
+import com.arduino.telegrambot.feature.duocards.sentence.model.AnswerCheckResult;
+import com.arduino.telegrambot.feature.duocards.sentence.model.GeneratedExample;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
-import com.arduino.telegrambot.statistick.model.DayUserStatisticsTemplateDate;
+import com.arduino.telegrambot.model.DailyStrikeInfo;
+import com.arduino.telegrambot.model.DailyTaskInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
@@ -19,23 +21,40 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class TemplateProcessorImpl implements TemplateProcessor{
+public class TemplateProcessorImpl implements TemplateProcessor {
 
     @Autowired
     private TemplateEngine engine;
 
     @Override
-    public String processGreetingsTemplate(DayUserStatisticsTemplateDate dayUserStatisticsTemplateDate){
+    public String processGreetingsTemplate(String firstname, String lastname, List<DailyTaskInfo> dailyTaskInfoList, List<DailyStrikeInfo> strikeInfoList, int completedPhysicsTaskCount, int physicsTaskGoalValue, int completedDuoCardsSentenceTaskCount, int duoCardsSentenceTaskGoalValue, int actualStrikeValue, int bestStrikeValue) {
+
+        for (DailyTaskInfo dailyTaskInfo : dailyTaskInfoList) {
+            switch (dailyTaskInfo.getTaskType()){
+                case PHYSICS -> dailyTaskInfo.setTaskDescription(String.format(dailyTaskInfo.getTaskDescription(), completedPhysicsTaskCount, physicsTaskGoalValue));
+                case DUO_CARDS_SENTENCE -> dailyTaskInfo.setTaskDescription(String.format(dailyTaskInfo.getTaskDescription(), completedDuoCardsSentenceTaskCount, duoCardsSentenceTaskGoalValue));
+            }
+        }
 
         var context = new Context();
-        context.setVariable("completedPhysTaskCount", dayUserStatisticsTemplateDate.getCompletedPhysTaskCount());
-        context.setVariable("isPhysTaskCompleted", dayUserStatisticsTemplateDate.isPhysTaskCompleted());
-        context.setVariable("completedDuoCardsSentenceTaskCount", dayUserStatisticsTemplateDate.getCompletedDuoCardsSentenceTaskCount());
-        context.setVariable("isDuoCardsSentenceTaskCompleted", dayUserStatisticsTemplateDate.isDuoCardsSentenceTaskCompleted());
-        context.setVariable("strikeListTemplateDate", dayUserStatisticsTemplateDate.getStrikeListTemplateDate());
-        context.setVariable("deckListTemplateDate", dayUserStatisticsTemplateDate.getDeckListTemplateDate());
+
+        //user data
+        context.setVariable("firstname", firstname);
+        context.setVariable("lastname", lastname);
+
+        //task check-box
+        context.setVariable("dailyTaskInfoList", dailyTaskInfoList);
+
+        //strike info
+        context.setVariable("actualStrikeValue", actualStrikeValue);
+        context.setVariable("bestStrikeValue", bestStrikeValue);
+
+        //strike table
+        context.setVariable("strikeInfoList", strikeInfoList);
+
         return engine.process("greetings", context);
     }
+
 
     @Override
     public String processUserProfileTemplate(String userName, long tasksCount, long completedTaskCount) {
@@ -161,11 +180,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processAnkiUserProfileTemplate(int numCardsReviewedToday, HashMap<String, Integer> strikesTemplateData, HashMap<String, String> progressTemplateData) {
+    public String processAnkiUserProfileTemplate(List<AnkiMenuDeckInfo> ankiMenuDeckInfoList) {
         Context context = new Context();
-        context.setVariable("numCardsReviewedToday", numCardsReviewedToday);
-        context.setVariable("strikesTemplateData", strikesTemplateData);
-        context.setVariable("progressTemplateData", progressTemplateData);
+        context.setVariable("ankiMenuDeckInfoList", ankiMenuDeckInfoList);
         return engine.process("./anki/anki_user_profile", context);
     }
 
@@ -185,9 +202,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     @Override
     public String processFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
 
-        var question = currentCard.question();
-        var tags = currentCard.tags();
-        var flagValue = currentCard.flag();
+        var question = currentCard.getQuestion();
+        var tags = currentCard.getTags();
+        var flagValue = currentCard.getFlag();
         var flag = AnkiUtility.getFlagView(flagValue);
 
         Context context = new Context();
@@ -207,10 +224,10 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     @Override
     public String processMarkedFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
 
-        var question = currentCard.question();
+        var question = currentCard.getQuestion();
 
 
-        var tags = currentCard.tags();
+        var tags = currentCard.getTags();
 
         Context context = new Context();
 
@@ -227,11 +244,11 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
     @Override
     public String processFrontCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
-        var question = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.ankiTemplate().getTitile())
-                ? currentCard.question()
-                : currentCard.answer();
+        var question = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.getAnkiTemplate().getTitile())
+                ? currentCard.getQuestion()
+                : currentCard.getAnswer();
 
-        var tags = currentCard.tags();
+        var tags = currentCard.getTags();
 
         Context context = new Context();
 
@@ -245,16 +262,16 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     }
 
     @Override
-    public String processBackCardTemplate(AnkiCurrentCard currentCard,  AnkiDeckStats ankiDeckStats) {
+    public String processBackCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
 
-        var question = currentCard.question();
+        var question = currentCard.getQuestion();
 
-        var flag = AnkiUtility.getFlagView(currentCard.flag());
+        var flag = AnkiUtility.getFlagView(currentCard.getFlag());
 
 
-        var tags = currentCard.tags();
+        var tags = currentCard.getTags();
 
-        var answer = currentCard.answer();
+        var answer = currentCard.getAnswer();
 
         Context context = new Context();
 
@@ -275,19 +292,19 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     @Override
     public String processBackCardDuoCardsTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
 
-        var question = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.ankiTemplate().getTitile())
-                ? currentCard.question()
-                : currentCard.answer();
+        var question = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.getAnkiTemplate().getTitile())
+                ? currentCard.getQuestion()
+                : currentCard.getAnswer();
 
-        var answer = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.ankiTemplate().getTitile())
-                ? currentCard.answer()
-                : currentCard.question();
+        var answer = AnkiTemplate.TEMPLATE_1.getTitile().equals(currentCard.getAnkiTemplate().getTitile())
+                ? currentCard.getAnswer()
+                : currentCard.getQuestion();
 
 
-        var tags = currentCard.tags();
-        var example = currentCard.example();
+        var tags = currentCard.getTags();
+        var example = currentCard.getExample();
 
-        answer = answer + "<br/><br/><cite>" + question +"</cite>";
+        answer = answer + "<br/><br/><cite>" + question + "</cite>";
 
         Context context = new Context();
 
@@ -319,9 +336,9 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
     @Override
     public String processConfirmDeleteFrontCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
-        var question = currentCard.question();
-        var tags = currentCard.tags();
-        var flagValue = currentCard.flag();
+        var question = currentCard.getQuestion();
+        var tags = currentCard.getTags();
+        var flagValue = currentCard.getFlag();
         var flag = AnkiUtility.getFlagView(flagValue);
 
         Context context = new Context();
@@ -339,14 +356,14 @@ public class TemplateProcessorImpl implements TemplateProcessor{
 
     @Override
     public String processConfirmDeleteBackCardTemplate(AnkiCurrentCard currentCard, AnkiDeckStats ankiDeckStats) {
-        var question = currentCard.question();
+        var question = currentCard.getQuestion();
 
-        var flag = AnkiUtility.getFlagView(currentCard.flag());
+        var flag = AnkiUtility.getFlagView(currentCard.getFlag());
 
 
-        var tags = currentCard.tags();
+        var tags = currentCard.getTags();
 
-        var answer = currentCard.answer();
+        var answer = currentCard.getAnswer();
 
         Context context = new Context();
 
@@ -384,7 +401,7 @@ public class TemplateProcessorImpl implements TemplateProcessor{
     public String processPreviewSavedDuoCard(String newNote, String translation, String example) {
         Context context = new Context();
 
-        translation = translation + "<br/><br/><cite>" + newNote +"</cite>";
+        translation = translation + "<br/><br/><cite>" + newNote + "</cite>";
         context.setVariable("sentence", newNote);
         context.setVariable("translation", translation);
         context.setVariable("example", example);

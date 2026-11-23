@@ -3,13 +3,15 @@ package com.arduino.telegrambot.handler;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.statistick.processor.StatisticsProcessor;
 import com.arduino.telegrambot.service.TelegramMediaService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 @Component
 public class BackToMainMenuHandler implements UpdateHandler {
@@ -29,8 +31,6 @@ public class BackToMainMenuHandler implements UpdateHandler {
     @Autowired
     private TelegramMediaService telegramMediaService;
 
-    @Autowired
-    private StatisticsProcessor statisticsProcessor;
 
 
     @Override
@@ -44,14 +44,18 @@ public class BackToMainMenuHandler implements UpdateHandler {
         var user = userService.findById(chatId);
 
         user.setState(UserState.FREE);
-        var userStatistics = statisticsProcessor.getUserStatistics(user);
+
+        LocalDate today = LocalDate.now();
+        LocalDate monday = today.with(DayOfWeek.MONDAY);
+        LocalDate sunday = today.with(DayOfWeek.SUNDAY);
+
         userService.save(user);
 
-        var text = templateProcessor.processGreetingsTemplate(userStatistics);
+//        var text = templateProcessor.processGreetingsTemplate(userStatistics);
         var keyboard = keyboardBuilder.buildMainMenu();
 //        var media = telegramMediaService.findByKey("header");
 
-        telegramService.editRichMessage(chatId, userRequest.getMessageId(), keyboard, text);
+//        telegramService.editRichMessage(chatId, userRequest.getMessageId(), keyboard, text);
 //        telegramService.editRichMessageWithMedia(chatId, userRequest.getMessageId(), keyboard, text, media);
 
     }

@@ -1,10 +1,10 @@
 package com.arduino.telegrambot.feature.rad.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.NumberSystem;
+import com.arduino.telegrambot.feature.rad.enummeration.NumberSystem;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.TaskService;
+import com.arduino.telegrambot.feature.rad.service.RadTaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -27,7 +27,7 @@ public class RadConverterHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private TaskService taskService;
+    private RadTaskService radTaskService;
 
 
     @Override
@@ -39,7 +39,7 @@ public class RadConverterHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
 
-        String task = user.getTask();
+        String task = user.getRadTask();
 
         if (task == null) {
             throw new RuntimeException("radTask = null");
@@ -48,8 +48,8 @@ public class RadConverterHandler implements UpdateHandler {
         String taskValue;
 
         if(task.equals("")) {
-            taskValue = taskService.generateTask();
-            user.setTask(taskValue);
+            taskValue = radTaskService.generateTask();
+            user.setRadTask(taskValue);
             userService.save(user);
         }else{
             taskValue = task;

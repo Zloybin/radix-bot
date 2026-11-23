@@ -1,12 +1,12 @@
 package com.arduino.telegrambot.feature.ai.groq.service;
 
-import com.arduino.telegrambot.entity.DuoCardExample;
+import com.arduino.telegrambot.feature.duocards.web.entity.DuoCardExample;
 import com.arduino.telegrambot.feature.ai.groq.prompt.PhysicsPrompt;
 import com.arduino.telegrambot.feature.ai.groq.configuration.GroqProperties;
 import com.arduino.telegrambot.feature.ai.groq.model.GroqChatRequest;
 import com.arduino.telegrambot.feature.ai.groq.model.GroqChatResponse;
-import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
-import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
+import com.arduino.telegrambot.feature.duocards.sentence.model.AnswerCheckResult;
+import com.arduino.telegrambot.feature.duocards.sentence.model.GeneratedExample;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;

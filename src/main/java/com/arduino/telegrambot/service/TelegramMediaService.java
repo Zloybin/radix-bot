@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.service;
 
-import com.arduino.telegrambot.entity.TelegramMedia;
+import com.arduino.telegrambot.feature.duocards.deck.entity.TelegramMedia;
 import com.arduino.telegrambot.repository.TelegramMediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

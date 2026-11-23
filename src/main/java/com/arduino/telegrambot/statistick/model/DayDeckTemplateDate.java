@@ -4,10 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+
+
 @Builder
-@Getter
-@Setter
+@Setter @Getter
 public class DayDeckTemplateDate {
-    private String deckName;
-    private boolean isSuccesses;
+    String deckName;
+    int reviewedCardsCount;
+    int uncompletedCardsCount;
+    boolean isSuccesses;
 }

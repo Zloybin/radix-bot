@@ -1,10 +1,9 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
-import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.feature.anki.exception.AnkiConnectException;
+import com.arduino.telegrambot.feature.anki.model.raw.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -50,18 +49,18 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
         AnkiCurrentCard currentCard;
 
         if (ankiService.showAnswer().block()) {
-            currentCard = ankiService.getCurrentCard().block();
+            currentCard = ankiService.getCurrentCardInfo().block();
         } else {
             throw new AnkiConnectException("Не получилось открыть ответ карточки.");
         }
 
-        List<Integer> buttons = currentCard.buttons();
+        List<Integer> buttons = currentCard.getButtons();
 
-        var deckName = currentCard.deckName();
+        var deckName = currentCard.getDeckName();
 
         var keyboardMarkup = keyboardBuilder.buildAnkiAnswerKeyboard(buttons);
 
-        Map<String, AnkiDeckStats> deckStats = ankiService.getDecksStats(List.of(deckName)).block();
+        Map<String, AnkiDeckStats> deckStats = ankiService.getAnkiDecksStatisticsMap(List.of(deckName)).block();
 
 
 
@@ -73,9 +72,9 @@ public class ShowAnkiAnswerHandler implements UpdateHandler {
             fullDeckName = deckName;
         }
 
-        AnkiDeckStats ankiDeckStats = deckStats.get(fullDeckName);
+        AnkiDeckStats ankiDeckDailyInfo = deckStats.get(fullDeckName);
 
-        var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckStats);
+        var text = templateProcessor.processBackCardTemplate(currentCard, ankiDeckDailyInfo);
 
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboardMarkup, text);
 

@@ -1,10 +1,10 @@
 package com.arduino.telegrambot.feature.rad.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.NumberSystem;
+import com.arduino.telegrambot.feature.rad.enummeration.NumberSystem;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.TaskService;
+import com.arduino.telegrambot.feature.rad.service.RadTaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class CancelRadTaskHandler implements UpdateHandler {
 
     @Autowired
-    private TaskService taskService;
+    private RadTaskService radTaskService;
 
     @Autowired
     private UserService userService;
@@ -37,8 +37,8 @@ public class CancelRadTaskHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-        var task = taskService.generateTask();
-        user.setTask(task);
+        var task = radTaskService.generateTask();
+        user.setRadTask(task);
         userService.save(user);
 
         String source = NumberSystem.valueOf(task.substring(0, 3)).getTitle();

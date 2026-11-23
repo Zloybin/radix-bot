@@ -1,49 +1,52 @@
 package com.arduino.telegrambot.feature.anki.service;
 
-import com.arduino.telegrambot.entity.DeckProgress;
-import com.arduino.telegrambot.entity.DeckStrikeInfo;
-import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
-import com.arduino.telegrambot.feature.anki.model.CardInfo;
-import com.arduino.telegrambot.feature.anki.model.Note;
+import com.arduino.telegrambot.entity.User;
+import com.arduino.telegrambot.feature.anki.entity.AnkiDeckDailyInfo;
+import com.arduino.telegrambot.feature.anki.model.*;
+import com.arduino.telegrambot.feature.anki.model.add.Note;
+import com.arduino.telegrambot.feature.anki.model.raw.AnkiDeckStats;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public interface AnkiService {
 
-    //deck
-    Mono<List<String>> getDecks();
-
-
-
-    //card
-    Mono<Boolean> startStudy(String deckName);
-    Mono<AnkiCurrentCard> getCurrentCard();
-    Mono<Boolean> showAnswer();
-    Mono<Boolean> answerCard(int ease);
-    Mono<AnkiCurrentCard> answerAndGetNextCard(int ease);
-    Mono<Boolean> deleteCard(long cardId);
-    Mono<Boolean> markCard(long cardId, int flag);
-
+    //Version
     Mono<Integer> getVersion();
 
+    // Decks
+    Mono<List<String>> getDeckNames();
+    Mono<List<String>> getFilteredDeckNames();
+    Mono<List<String>> getFilteredChildDeckNames();
+    String normalizeDeckName(String deckName);
 
-    //stats
+    //Completion
+    Mono<Boolean> startDeckReview(String deckName);
+    Mono<AnkiCurrentCard> getCurrentCardInfo();
+    Mono<AnkiCurrentCard> getCardInfoById(long cardId);
+    Mono<Boolean> showAnswer();
+    Mono<Boolean> answerCard(int ease);
+
+    //Statistics
+    Mono<Map<String, AnkiDeckStats>> getAnkiDecksStatisticsMap(List<String> deckNames);
+    Mono<AnkiDeckStats> getAnkiDeckStatistics(String deckName);
     Mono<Integer> getNumCardsReviewedToday();
-    Mono<Map<String, AnkiDeckStats>> getDecksStats(List<String> deckNames);
-    Mono<AnkiDeckStats> getDeckStats(String deckName);
-    List<DeckProgress> updateUserDeckStatus(List<String> decks, List<DeckProgress> deckProgress);
-    Integer getDecksStrikeStat(String deckName, long lastReviewedDate);
-    List<DeckStrikeInfo> initialStrikeStats(List<String> deckNames);
-    List<DeckStrikeInfo> refreshStrikeStats(List<DeckStrikeInfo> deckStrikeInfos);
+    Mono<Integer> getDeckStrikeValue(String deck);
+    Mono<Integer> getActualWeekAddedNotesCount(int days);
+    Mono<Integer> getActualWeekReviewedCardsCount(int days);
+    Mono<Integer> getAddedNotesCount(String deckName);
+    Mono<Integer> getReviewedCardsCount(String deckName);
+    Mono<Integer> getNewCardsLearnCount(String deckName);
 
-    byte[] getVideo();
+    //Management
+    Mono<Long> saveNote(Note note);
+    Mono<List<Long>> saveNotes(List<Note> notes);
+    Mono<Boolean> markCard(long cardId, int flag);
+    Mono<Boolean> deleteCard(long cardId);
 
-    Mono<Long> addNote(Note note);
-    Mono<List<Long>> addNotes(List<Note> notes);
-    List<Long> findCards(String deckName);
-    CardInfo cardsInfo(long cardId);
-    Mono<List<String>> getFilteredMajorDecks();
+    //DuoCards
+    Mono<List<Long>> getCardIdsFromDeck(String deckName);
+    List<AnkiDeckDailyInfo> findAnkiDeckDailyInfoListUserByDate(User user, LocalDate date);
 }

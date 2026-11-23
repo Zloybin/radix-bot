@@ -1,19 +1,24 @@
 package com.arduino.telegrambot.feature.anki.model;
 
-import com.arduino.telegrambot.enummeration.AnkiTemplate;
+import com.arduino.telegrambot.feature.duocards.deck.enummeration.AnkiTemplate;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-
-public record AnkiCurrentCard(
-        long cardId,
-        String deckName,
-        String question,
-        String answer,
-        String example,
-        List <String> tags,
-        List<Integer> buttons,
-        AnkiTemplate ankiTemplate,
-        Integer flag
-) {
+@Setter
+@Getter
+@Builder
+public class AnkiCurrentCard {
+        private long cardId;
+        private String deckName;
+        private String question;
+        private String answer;
+        private String example;
+        private List<String> tags;
+        private List<Integer> buttons;
+        private AnkiTemplate ankiTemplate;
+        private Integer flag;
 }
+

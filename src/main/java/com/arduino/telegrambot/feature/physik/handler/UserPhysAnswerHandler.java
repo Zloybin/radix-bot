@@ -2,11 +2,14 @@ package com.arduino.telegrambot.feature.physik.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
+import com.arduino.telegrambot.feature.physik.entity.PhysicsTaskDailyInfo;
+import com.arduino.telegrambot.feature.physik.entity.PhysicsTaskDailyInfoId;
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskDailyInfoService;
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.handler.UpdateHandler;
-import com.arduino.telegrambot.statistick.model.DayTaskCompletionInfo;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.ResultService;
-import com.arduino.telegrambot.service.TaskService;
+import com.arduino.telegrambot.feature.physik.service.ResultService;
+import com.arduino.telegrambot.statistick.processor.PhysTaskInfoProcessor;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -16,6 +19,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Component
 @Order()
@@ -34,13 +38,19 @@ public class UserPhysAnswerHandler implements UpdateHandler {
     private TemplateProcessor templateProcessor;
 
     @Autowired
-    private TaskService taskService;
+    private PhysicsTaskService physicsTaskService;
 
     @Autowired
     private TelegramService telegramService;
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
+
+    @Autowired
+    private PhysTaskInfoProcessor physicsTaskDailyInfo;
+
+    @Autowired
+    private PhysicsTaskDailyInfoService physicsTaskDailyInfoService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -52,25 +62,34 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         var userAnswer = userRequest.getHandler();
 
-        var result = answerValidator.validatePhysAnswer(user.getPhysTaskId(), userAnswer);
+        var result = answerValidator.validatePhysAnswer(user, userAnswer);
 
         resultService.save(result);
         user.getResults().add(result);
         user.setState(UserState.FREE);
         var today = LocalDate.now();
-        var dayStrikeInfo = user.getDayStrikeInfoMap().get(today);
-        if(dayStrikeInfo == null){
-            dayStrikeInfo = DayTaskCompletionInfo.builder()
-                    .completedDuoCardsSentenceTaskCount(0)
-                    .completedPhysTaskCount(0)
+
+        var physicsTaskDailyInfo = physicsTaskDailyInfoService.getByUserAndDate(user, today);
+
+        if(physicsTaskDailyInfo == null){
+
+            var physicsTaskDailyInfoId = PhysicsTaskDailyInfoId.builder()
+                    .date(LocalDate.now(ZoneId.systemDefault()))
+                    .userId(user.getId())
+                    .build();
+            physicsTaskDailyInfo = PhysicsTaskDailyInfo.builder()
+                    .physicsTaskDailyInfoId(physicsTaskDailyInfoId)
+                    .user(user)
+                    .physicsTaskGoal(0)
+                    .completedPhysicsTaskCount(0)
                     .build();
         }
 
-        dayStrikeInfo.setCompletedPhysTaskCount(dayStrikeInfo.getCompletedPhysTaskCount() + 1);
-        user.getDayStrikeInfoMap().put(today, dayStrikeInfo);
+        physicsTaskDailyInfo.setCompletedPhysicsTaskCount(physicsTaskDailyInfo.getCompletedPhysicsTaskCount() + 1);
+        physicsTaskDailyInfoService.save(physicsTaskDailyInfo);
         userService.save(user);
 
-        var physTask = taskService.findById(user.getPhysTaskId());
+        var physTask = physicsTaskService.findById(user.getPhysTaskId());
 
         var section = physTask.getSection().getRussianName();
         var title = physTask.getTitle();
@@ -80,7 +99,7 @@ public class UserPhysAnswerHandler implements UpdateHandler {
         var taskText = physTask.getTaskText();
         var pageNumber = physTask.getPageNumber();
 
-        var html = templateProcessor.processPhysUserResultMessageTemplate(result.isResult(), result.getTask().getAnswer(), result.getUserAnswer(), section, title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
+        var html = templateProcessor.processPhysUserResultMessageTemplate(result.isResult(), result.getPhysicsTask().getAnswer(), result.getUserAnswer(), section, title, taskNumber, selfTaskNumber, taskLevel, taskText, pageNumber);
 
         var keyboard = keyboardBuilder.buildCompletedPhysTaskWithCorrectMenu();
 

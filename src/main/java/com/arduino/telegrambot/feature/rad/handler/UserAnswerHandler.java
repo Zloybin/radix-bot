@@ -1,11 +1,11 @@
 package com.arduino.telegrambot.feature.rad.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.NumberSystem;
+import com.arduino.telegrambot.feature.rad.enummeration.NumberSystem;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.TaskService;
+import com.arduino.telegrambot.feature.rad.service.RadTaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -32,7 +32,7 @@ public class UserAnswerHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private TaskService taskService;
+    private RadTaskService radTaskService;
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
@@ -47,7 +47,7 @@ public class UserAnswerHandler implements UpdateHandler {
         var user = userService.findById(userRequest.getChatId());
         var userAnswer = userRequest.getHandler();
 
-        String taskValue = user.getTask();
+        String taskValue = user.getRadTask();
         var result = answerValidator.validateAnswer(taskValue, userAnswer);
 
         String source = NumberSystem.valueOf(taskValue.substring(0, 3)).getDativ();
@@ -62,7 +62,7 @@ public class UserAnswerHandler implements UpdateHandler {
         telegramService.editRichMessage(userRequest.getChatId(), user.getMessageId(), keyboard, text);
         user.setState(UserState.FREE);
         user.setMessageId(0L);
-        user.setTask("");
+        user.setRadTask("");
         userService.save(user);
     }
 }

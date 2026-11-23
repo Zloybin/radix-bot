@@ -1,65 +1,28 @@
-<h3>⭐️ Anki</h3>
-
-<hr/>
-
-<h3>📅 Сегодня</h3>
-
-<table>
-    <tr>
-        <th align="left">
-            <b>Карточек пройдено:</b>
-        </th>
-
-        <th align="right">
-            <b th:text="${numCardsReviewedToday}">25</b> 🎯
-        </th>
-    </tr>
-
-    <tr>
-        <td align="left">
-            <b>Карточек добавлено:</b>
-        </td>
-
-        <td align="right">
-            <b th:text="${numCardsReviewedToday}">25</b> 📨
-        </td>
-    </tr>
-
-    <tr>
-        <th align="left">
-            <b>Карточек удалено:</b>
-        </th>
-
-        <th align="right">
-            <b th:text="${numCardsReviewedToday}">25</b> 🗑️
-        </th>
-    </tr>
-</table>
-
-<hr/>
-
 <h3>📚 Статистика колод</h3>
 
-<table>
+<table bordered striped compact>
     <tr>
         <th>Колода</th>
-        <th>Статус</th>
+        <th>Пройдено</th>
+        <th>Осталось</th>
         <th>Страйк</th>
     </tr>
 
-    <tr th:each="entry : ${strikesTemplateData}">
+    <tr th:each="deck : ${ankiMenuDeckInfoList}">
         <td>
-            <b th:text="${entry.key}">Java</b>
+            <b th:text="${deck.deckName}">Java</b>
         </td>
 
         <td align="center">
-            <th:block th:text="${progressTemplateData.get(entry.key)}">
-                В процессе
-            </th:block>
+            <b th:text="${deck.reviewedCardCount}">25</b>
         </td>
 
         <td align="center">
-            🔥 <b th:text="${entry.value}">7</b>
+            <b th:text="${deck.uncompletedCardCount}">10</b>
+        </td>
+
+        <td align="center">
+            🔥 <b th:text="${deck.deckStrike}">7</b>
         </td>
     </tr>
 </table>

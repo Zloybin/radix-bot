@@ -1,19 +1,13 @@
 package com.arduino.telegrambot.service;
 
-import com.arduino.telegrambot.entity.DeckProgress;
-import com.arduino.telegrambot.enummeration.DeckStatus;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
 import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.repository.UserRepository;
-import com.arduino.telegrambot.statistick.model.DayTaskCompletionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -59,57 +53,53 @@ public class UserService {
 
     // Default user
 
-    public User buildDefaultUser(Long chatId, String name) {
-        var decks = ankiService.getDecks().block();
+    public User buildDefaultUser(Long chatId, String firstname, String lastname, String username) {
+        var decks = ankiService.getDeckNames().block();
         var filteredDeckList = decks.stream().filter(deck -> !AnkiUtility.EXCLUDED_DECKS.contains(deck)).toList();
+
+
+
+
+//        Map<String, AnkiDeckDailyInfo> defaultDeckStatMap = new HashMap<>();
+//
+//        AnkiDeckDailyInfo defaultAnkiDeckDailyInfo = AnkiDeckDailyInfo.builder()
+//                .newCount(0)
+//                .reviewCount(0)
+//                .learnCount(0)
+//                .totalInDeck(0)
+//                .build();
+
+//        decks.forEach(deckName -> defaultDeckStatMap.put(deckName, defaultAnkiDeckDailyInfo));
 
         var user = User.builder()
                 .id(chatId)
-                .name(name)
-                .messageId(0)
+                .firstname(firstname)
+                .lastname(lastname)
+                .username(username)
                 .state(UserState.FREE)
-                .task("")
+                .physTaskId(0)
+                .radTask("")
+                .messageId(0)
                 .isExcluded(false)
-                .build();
-
-        List<DeckProgress> deckProgressList = new ArrayList<>();
-        for (String deck : filteredDeckList) {
-            var deckProgress = DeckProgress.builder()
-                    .deckStatus(DeckStatus.NOT_STARTED)
-                    .localDate(0L)
-                    .deckName(deck)
-                    .build();
-
-            deckProgressList.add(deckProgress);
-        }
-
-        user.setDeckProgress(deckProgressList);
-
-        Map<String, AnkiDeckStats> defaultDeckStatMap = new HashMap<>();
-
-        AnkiDeckStats defaultAnkiDeckStats = AnkiDeckStats.builder()
-                .newCount(0)
-                .reviewCount(0)
-                .learnCount(0)
-                .totalInDeck(0)
-                .build();
-
-        decks.forEach(deckName -> defaultDeckStatMap.put(deckName, defaultAnkiDeckStats));
-
-
-        DayTaskCompletionInfo defaultDayTaskCompletionInfo = DayTaskCompletionInfo.builder()
-                .user(user)
-                .completedPhysTaskCount(0)
-                .completedDuoCardsSentenceTaskCount(0)
-                .ankiDeckStatsMap(defaultDeckStatMap)
+                .isAnswerSide(false)
+//                .lastReviewId(0)
+                .results(new ArrayList<>())
                 .build();
 
 
-        Map<LocalDate, DayTaskCompletionInfo> dayStrikeInfoMap = new HashMap<>();
-        LocalDate now = LocalDate.now(ZoneId.systemDefault());
-        dayStrikeInfoMap.put(now, defaultDayTaskCompletionInfo);
+//        TaskCompletionDailyInfo defaultTaskCompletionDailyInfo = TaskCompletionDailyInfo.builder()
+//                .user(user)
+//                .completedPhysTaskCount(0)
+//                .completedDuoCardsSentenceTaskCount(0)
+//                .ankiDeckDailyInfoMap(defaultDeckStatMap)
+//                .build();
+//
+//
+//        Map<LocalDate, TaskCompletionDailyInfo> dayStrikeInfoMap = new HashMap<>();
+//        LocalDate now = LocalDate.now(ZoneId.systemDefault());
+//        dayStrikeInfoMap.put(now, defaultTaskCompletionDailyInfo);
 
-        user.setDayStrikeInfoMap(dayStrikeInfoMap);
+//        user.setDayTaskCompletionInfoMap(dayStrikeInfoMap);
 
         return user;
     }

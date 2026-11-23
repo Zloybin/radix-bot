@@ -1,8 +1,8 @@
 package com.arduino.telegrambot.feature.ai.gemini;
 
-import com.arduino.telegrambot.entity.DuoCardExample;
-import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
-import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
+import com.arduino.telegrambot.feature.duocards.web.entity.DuoCardExample;
+import com.arduino.telegrambot.feature.duocards.sentence.model.AnswerCheckResult;
+import com.arduino.telegrambot.feature.duocards.sentence.model.GeneratedExample;
 import com.google.genai.Client;
 import com.google.genai.types.Content;
 import com.google.genai.types.GenerateContentConfig;

@@ -12,16 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 
@@ -45,6 +41,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private AnkiServiceImpl ankiService;
 
 
+
     @Override
     public String getBotUsername() {
         return botProperties.getName();
@@ -58,16 +55,18 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-
         var userRequestBuilder = UserRequest.builder();
 
-        String name;
+        String firstname;
+        String lastname;
+        String username;
 
         if (update.hasMessage()) {
-            name = update.getMessage().getFrom().getUserName();
+            Message message = update.getMessage();
+            firstname = message.getFrom().getFirstName();
+            lastname = message.getFrom().getLastName();
+            username = message.getFrom().getUserName();
             if (update.getMessage().hasPhoto()) {
-
-                var message = update.getMessage();
 
                 var caption = message.getCaption();
 
@@ -85,18 +84,20 @@ public class TelegramBotService extends TelegramLongPollingBot {
                         .request(fileId);
 
             } else if (update.getMessage().hasText()) {
-                name = update.getMessage().getFrom().getUserName();
-
                 userRequestBuilder
-                        .chatId(update.getMessage().getChatId())
-                        .messageId(update.getMessage().getMessageId())
-                        .handler(update.getMessage().getText());
+                        .chatId(message.getChatId())
+                        .messageId(message.getMessageId())
+                        .handler(message.getText());
 
             } else {
                 throw new RuntimeException("Message не содержит ни текста ни изображения.");
             }
         } else if (update.hasCallbackQuery()) {
-            name = update.getCallbackQuery().getFrom().getUserName();
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+
+            firstname = callbackQuery.getFrom().getFirstName();
+            lastname = callbackQuery.getFrom().getLastName();
+            username = callbackQuery.getFrom().getUserName();
             var hash = update.getCallbackQuery().getData().toString();
 
             var callback = callbackService.findById(Long.parseLong(hash));
@@ -113,34 +114,10 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
         var userRequest = userRequestBuilder.build();
         Long chatId = userRequest.getChatId();
-//
-//        var decks = ankiService.getDecks().block();
-//        var filteredDeckList = decks.stream().filter(deck -> !AnkiUtility.EXCLUDED_DECKS.contains(deck)).toList();
-//
-//        User userz = userService.findById(userRequest.getChatId());
-//        List<DeckProgress> deckProgressList = new ArrayList<>();
-//        for (String deck : filteredDeckList) {
-//            var deckProgress = DeckProgress.builder()
-//                    .deckStatus(DeckStatus.NOT_STARTED)
-//                    .localDate(0L)
-//                    .deckName(deck)
-//                    .build();
-//
-//            deckProgressList.add(deckProgress);
-//        }
-//
-//        userz.setDeckProgress(deckProgressList);
-
-
-//        User userT = userService.findById(userRequest.getChatId());
-//        userT.setState(UserState.FREE);
-//        userService.save(userT);
-
-//        saveImageAndGetFileId("img/header.png", userRequest.getChatId());
-
 
         if (!userService.existById(chatId)) {
-            var user = userService.buildDefaultUser(chatId, name);
+
+            var user = userService.buildDefaultUser(chatId, firstname, lastname, username);
             User save = userService.save(user);
             System.out.println(String.format("User с id:%d был зарегестрирован и добавлен в БД.", save.getId()));
         }

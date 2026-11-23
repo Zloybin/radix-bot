@@ -1,43 +1,41 @@
 package com.arduino.telegrambot.feature.anki.client;
 
-import com.arduino.telegrambot.feature.anki.model.*;
+import com.arduino.telegrambot.feature.anki.model.add.Note;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 @Component
 public interface AnkiConnectClient {
 
-    // API
+    // Version
     Mono<Integer> version();
 
     // Decks
-    Mono<List<String>> getDeckNames();
-    Mono<List<String>> getFilteredDeckNames();
-    Mono<List<String>> getFilteredMajorDeckNames();
-    Mono<Map<String, Long>> getDeckNamesAndIds();
-    Mono<Map<String, AnkiDeckStats>> getDeckStats(List<String> deckNames);
+    Mono<JsonNode> getDeckNames();
 
-    // Reviewer
-    Mono<Boolean> startDeckReview(String deckName);
-    Mono<AnkiCurrentCard> getCurrentCard();
-    Mono<Boolean> deleteCard(long cardId);
-    Mono<Boolean> showAnswer();
-    Mono<Boolean> answerCard(int ease);
-    Mono<byte[]> getCurrentCardVideo();
-
-    Mono<Boolean> setSpecificValueOfCard(long cardId, int flag);
+    //Completion
+    Mono<JsonNode> guiDeckReview(String deckName);
+    Mono<JsonNode> getCurrentCard();
+    Mono<JsonNode> cardsInfo(List<Long> cardIds);
+    Mono<JsonNode> showAnswer();
+    Mono<JsonNode> answerCard(int ease);
 
     //Statistic
-    Mono<Integer> getNumCardsReviewedToday();
-    Mono<Integer> cardReviews(String deck, long now);
-    Mono<InitStrikeStatDate> initialStrikeStat(String deck);
-    Mono<Long> lastReviewTime(String deck);
+    Mono<JsonNode> getNumCardsReviewedToday();
+    Mono<JsonNode> getDecksStatistics(List<String> deckNames);
+    Mono<JsonNode> cardReviews(String deck, long start);
+    Mono<JsonNode> findCards(String query);
+    Mono<JsonNode> findNotes(String query);
 
-    Mono<Long> addNote(Note note);
-    Mono<List<Long>> addNotes(List<Note> notes);
-    Mono<List<Long>> findCards(String deckName);
-    Mono<CardInfo> cardsInfo(long cardId);
+    //Features
+    Mono<JsonNode> setSpecificValueOfCard(long cardId, int flag);
+
+    // Management
+    Mono<JsonNode> addNote(Note note);
+    Mono<JsonNode> addNotes(List<Note> notes);
+    Mono<JsonNode> suspendCards(List<Long> cards);
+    Mono<JsonNode> reloadCollection();
 }

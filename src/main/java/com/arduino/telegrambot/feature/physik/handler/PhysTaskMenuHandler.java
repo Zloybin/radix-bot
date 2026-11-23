@@ -1,9 +1,9 @@
 package com.arduino.telegrambot.feature.physik.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -18,7 +18,7 @@ public class PhysTaskMenuHandler implements UpdateHandler {
     private UserService userService;
 
     @Autowired
-    private TaskService taskService;
+    private PhysicsTaskService physicsTaskService;
 
     @Autowired
     private TelegramService telegramService;
@@ -37,8 +37,8 @@ public class PhysTaskMenuHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-        var userName = user.getName();
-        var tasksCount = taskService.count();
+        var userName = user.getFirstname() + " " + user.getLastname();
+        var tasksCount = physicsTaskService.count();
         var completedTaskCount = user.getResults().size();
 
         String text = templateProcessor.processUserProfileTemplate(userName, tasksCount, completedTaskCount);

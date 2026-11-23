@@ -1,19 +1,9 @@
 package com.arduino.telegrambot.feature.rich;
 
-import com.arduino.telegrambot.entity.TelegramMedia;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import com.arduino.telegrambot.feature.duocards.deck.entity.TelegramMedia;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public interface TelegramRichMessageServiceInterface {
     Mono<Long> sendRichMessage(

@@ -1,9 +1,9 @@
 package com.arduino.telegrambot.feature.physik.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -29,7 +29,7 @@ public class CancelPhysTaskHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private TaskService taskService;
+    private PhysicsTaskService physicsTaskService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -44,17 +44,21 @@ public class CancelPhysTaskHandler implements UpdateHandler {
 
         if (user.isExcluded()) {
             List<Long> completedTaskIds = new ArrayList<>();
-            user.getResults().stream().map(result -> result.getTask().getId()).distinct().forEach(completedTaskIds::add);
-            randomTaskId = taskService.getRandomPhysTaskId(completedTaskIds);
+            user.getResults().stream()
+                    .map(result -> result.getPhysicsTask().getId())
+                    .distinct()
+                    .forEach(completedTaskIds::add);
+
+            randomTaskId = physicsTaskService.getRandomPhysTaskId(completedTaskIds);
 
         } else {
-            randomTaskId = taskService.getRandomPhysTaskId();
-
+            randomTaskId = physicsTaskService.getRandomPhysTaskId();
         }
+
         user.setPhysTaskId(randomTaskId);
         userService.save(user);
 
-        var physTask = taskService.findById(randomTaskId);
+        var physTask = physicsTaskService.findById(randomTaskId);
 
         var section = physTask.getSection().getRussianName();
         var title = physTask.getTitle();

@@ -1,12 +1,11 @@
 package com.arduino.telegrambot.feature.rich;
 
-import com.arduino.telegrambot.entity.TelegramMedia;
+import com.arduino.telegrambot.feature.duocards.deck.entity.TelegramMedia;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
@@ -275,8 +274,8 @@ public class TelegramRichMessageServiceImpl implements TelegramRichMessageServic
 //        String audioMediaId = "audio_1";
 //        String audioFileFieldName = "audio";
 
-        String videoMediaId = "video_1";
-        String videoFileFieldName = "video";
+//        String videoMediaId = "video_1";
+//        String videoFileFieldName = "video";
 
 
         // ============================================================
@@ -299,16 +298,16 @@ public class TelegramRichMessageServiceImpl implements TelegramRichMessageServic
         // VIDEO
         // ============================================================
 
-        Map<String, Object> inputMediaVideo = new HashMap<>();
-        inputMediaVideo.put("type", "video");
-        inputMediaVideo.put(
-                "media",
-                "attach://" + videoFileFieldName
-        );
+//        Map<String, Object> inputMediaVideo = new HashMap<>();
+//        inputMediaVideo.put("type", "video");
+//        inputMediaVideo.put(
+//                "media",
+//                "attach://" + videoFileFieldName
+//        );
 
-        Map<String, Object> richMediaVideo = new HashMap<>();
-        richMediaVideo.put("id", videoMediaId);
-        richMediaVideo.put("media", inputMediaVideo);
+//        Map<String, Object> richMediaVideo = new HashMap<>();
+//        richMediaVideo.put("id", videoMediaId);
+//        richMediaVideo.put("media", inputMediaVideo);
 
 
         // ============================================================
@@ -319,13 +318,13 @@ public class TelegramRichMessageServiceImpl implements TelegramRichMessageServic
 
         richMessage.put("html", html);
 
-        richMessage.put(
-                "media",
-                List.of(
-                        /*richMediaAudio,*/
-                        richMediaVideo
-                )
-        );
+//        richMessage.put(
+//                "media",
+//                List.of(
+//                        /*richMediaAudio,*/
+//                        richMediaVideo
+//                )
+//        );
 
 
         // ============================================================
@@ -397,18 +396,18 @@ public class TelegramRichMessageServiceImpl implements TelegramRichMessageServic
         // VIDEO FILE
         // ============================================================
 
-        multipart.part(
-                videoFileFieldName,
-                new ByteArrayResource(videoBytes) {
-
-                    @Override
-                    public String getFilename() {
-                        return "video.mp4";
-                    }
-                }
-        ).contentType(
-                MediaType.parseMediaType("video/mp4")
-        );
+//        multipart.part(
+//                videoFileFieldName,
+//                new ByteArrayResource(videoBytes) {
+//
+//                    @Override
+//                    public String getFilename() {
+//                        return "video.mp4";
+//                    }
+//                }
+//        ).contentType(
+//                MediaType.parseMediaType("video/mp4")
+//        );
 
 
         // ============================================================

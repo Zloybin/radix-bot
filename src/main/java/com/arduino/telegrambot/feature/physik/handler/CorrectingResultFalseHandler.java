@@ -1,10 +1,10 @@
 package com.arduino.telegrambot.feature.physik.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.ResultService;
-import com.arduino.telegrambot.service.TaskService;
+import com.arduino.telegrambot.feature.physik.service.ResultService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -18,7 +18,7 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
     private UserService userService;
 
     @Autowired
-    private TaskService taskService;
+    private PhysicsTaskService physicsTaskService;
 
     @Autowired
     private ResultService resultService;
@@ -41,10 +41,10 @@ public class CorrectingResultFalseHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
         var physTask = user.getPhysTaskId();
-        var task = taskService.findById(physTask);
+        var task = physicsTaskService.findById(physTask);
         var results = user.getResults();
         var actualResult = results.stream()
-                .filter(result -> result.getTask().getId().equals(task.getId()))
+                .filter(result -> result.getPhysicsTask().getId().equals(task.getId()))
                 .findFirst();
 
         boolean updatedResultValue = false;

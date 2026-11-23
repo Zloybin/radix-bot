@@ -1,9 +1,8 @@
 package com.arduino.telegrambot.feature.ai;
 
-import com.arduino.telegrambot.entity.DuoCardExample;
-import com.arduino.telegrambot.feature.duocards.model.AnswerCheckResult;
-import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
-import reactor.core.publisher.Mono;
+import com.arduino.telegrambot.feature.duocards.web.entity.DuoCardExample;
+import com.arduino.telegrambot.feature.duocards.sentence.model.AnswerCheckResult;
+import com.arduino.telegrambot.feature.duocards.sentence.model.GeneratedExample;
 
 public interface LLMService {
     String process(String taskText);

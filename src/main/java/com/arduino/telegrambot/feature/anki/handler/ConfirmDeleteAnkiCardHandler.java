@@ -50,14 +50,14 @@ public class ConfirmDeleteAnkiCardHandler implements UpdateHandler {
             userService.save(user);
         }
 
-        var currentCard = ankiService.getCurrentCard().block();
-        var deckName = currentCard.deckName();
+        var currentCard = ankiService.getCurrentCardInfo().block();
+        var deckName = currentCard.getDeckName();
 
         AnkiCurrentCard updatedCurrentCard;
 
-        if(ankiService.deleteCard(currentCard.cardId()).block()){
-            if (ankiService.startStudy(deckName).block()){
-                    updatedCurrentCard = ankiService.getCurrentCard().block();
+        if(ankiService.deleteCard(currentCard.getCardId()).block()){
+            if (ankiService.startDeckReview(deckName).block()){
+                    updatedCurrentCard = ankiService.getCurrentCardInfo().block();
             }else {
                 throw new AnkiConnectException("Не получилось показать ответ.");
             }
@@ -67,14 +67,14 @@ public class ConfirmDeleteAnkiCardHandler implements UpdateHandler {
         }
 
 
-        var stats = ankiService.getDecksStats(List.of(deckName)).block();
+        var stats = ankiService.getAnkiDecksStatisticsMap(List.of(deckName)).block();
         var ankiDeckStats = stats.get(deckName);
 
 
         String text;
         InlineKeyboardMarkup keyboard;
         if(user.isAnswerSide()){
-            keyboard = keyboardBuilder.buildAnkiAnswerKeyboard(updatedCurrentCard.buttons());
+            keyboard = keyboardBuilder.buildAnkiAnswerKeyboard(updatedCurrentCard.getButtons());
             text = templateProcessor.processBackCardTemplate(updatedCurrentCard, ankiDeckStats);
         } else{
             keyboard = keyboardBuilder.buildAnkiCardKeyboard();

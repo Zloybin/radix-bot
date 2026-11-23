@@ -7,7 +7,7 @@ import java.util.Set;
 
 
 public class AnkiUtility {
-    public static final List<String> EXCLUDED_DECKS = List.of("По умолчанию", "Completed Deck", "Deutsch", "Elektrotechnika", "SPS", "TMM");
+    public static final List<String> EXCLUDED_DECKS = List.of("По умолчанию", "Deutsch", "Elektrotechnika", "SPS", "TMM");
 
 
     public static String getFlagView(Integer flagValue) {

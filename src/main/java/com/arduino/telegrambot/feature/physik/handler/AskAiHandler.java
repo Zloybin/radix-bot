@@ -2,11 +2,10 @@ package com.arduino.telegrambot.feature.physik.handler;
 
 import com.arduino.telegrambot.feature.ai.LLMService;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.Result;
+import com.arduino.telegrambot.feature.physik.entity.Result;
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.ResultService;
-import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -22,7 +21,7 @@ public class AskAiHandler implements UpdateHandler {
     private TelegramService telegramService;
 
     @Autowired
-    private TaskService taskService;
+    private PhysicsTaskService physicsTaskService;
 
     @Autowired
     private UserService userService;
@@ -36,9 +35,6 @@ public class AskAiHandler implements UpdateHandler {
     @Autowired
     private TemplateProcessor templateProcessor;
 
-    @Autowired
-    private ResultService resultService;
-
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -48,7 +44,7 @@ public class AskAiHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
         var user = userService.findById(userRequest.getChatId());
-        var task = taskService.findById(user.getPhysTaskId());
+        var task = physicsTaskService.findById(user.getPhysTaskId());
         var taskText = task.getTaskText();
 
 
@@ -57,7 +53,7 @@ public class AskAiHandler implements UpdateHandler {
         List<Result> results = user.getResults();
         for (int i = results.size()-1; i >= 0 ; i--) {
             Result result = results.get(i);
-            if (result.getTask().getId().equals(task.getId())){
+            if (result.getPhysicsTask().getId().equals(task.getId())){
                  userAnswer = result.getUserAnswer();
                  break;
             }

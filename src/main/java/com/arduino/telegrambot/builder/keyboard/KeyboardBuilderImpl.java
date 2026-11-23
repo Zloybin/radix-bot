@@ -2,7 +2,7 @@ package com.arduino.telegrambot.builder.keyboard;
 
 import com.arduino.telegrambot.builder.button.ButtonBuilder;
 import com.arduino.telegrambot.builder.button.procesor.ButtonProcessor;
-import com.arduino.telegrambot.enummeration.AnkiAnswer;
+import com.arduino.telegrambot.feature.anki.enummeration.AnkiAnswer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -26,6 +26,7 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var physTaskButton = buttonBuilder.buildPhysTaskMenuButton();
         var ankiTaskButton = buttonBuilder.buildAnkiMenuButton();
         var duoCards = buttonBuilder.buildDuoCardsMenuButton();
+        var additionalTaskButton = buttonBuilder.buildAdditionalTaskMenuButton();
         var admin = buttonBuilder.buildAdminButton();
 
         var row1 = new ArrayList<InlineKeyboardButton>();
@@ -38,13 +39,17 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         row3.add(duoCards);
 
         var row4 = new ArrayList<InlineKeyboardButton>();
-        row4.add(admin);
+        row4.add(additionalTaskButton);
+
+        var row5 = new ArrayList<InlineKeyboardButton>();
+        row5.add(admin);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);
         rows.add(row2);
         rows.add(row3);
         rows.add(row4);
+        rows.add(row5);
         return new InlineKeyboardMarkup(rows);
     }
 
@@ -442,6 +447,29 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         return new InlineKeyboardMarkup(rows);
     }
 
+    @Override
+    public InlineKeyboardMarkup buildAdditionalTaskMenuKeyboard() {
+        var pushUpButton = buttonBuilder.buildPushUpButton();
+        var meditationButton = buttonBuilder.buildMeditationButton();
+        var mainMenuButton = buttonBuilder.buildMainMenuButton();
+        var backToMainMenu = buttonProcessor.renameButton(mainMenuButton, "Назад");
+
+        var row1 = new ArrayList<InlineKeyboardButton>();
+        row1.add(pushUpButton);
+
+        var row2 = new ArrayList<InlineKeyboardButton>();
+        row2.add(meditationButton);
+
+        var row3 = new ArrayList<InlineKeyboardButton>();
+        row3.add(backToMainMenu);
+
+        var rows = new ArrayList<List<InlineKeyboardButton>>();
+        rows.add(row1);
+        rows.add(row2);
+        rows.add(row3);
+        return new InlineKeyboardMarkup(rows);
+    }
+
     //radTask
 
     @Override
@@ -508,7 +536,8 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var newTask = buttonBuilder.buildPhysTaskStartButton();
         var setting = buttonBuilder.buildSettingButton();
         var statistics = buttonBuilder.buildStatisticsButton();
-        var main = buttonBuilder.buildBackToMainMenuButton();
+        var showDecksButton = buttonBuilder.buildMainMenuButton();
+
 
         var row1 = new ArrayList<InlineKeyboardButton>();
         row1.add(newTask);
@@ -519,8 +548,9 @@ public class KeyboardBuilderImpl implements KeyboardBuilder {
         var row3 = new ArrayList<InlineKeyboardButton>();
         row3.add(statistics);
 
+        var backToShowDeckNames = buttonProcessor.renameButton(showDecksButton, "⬅️ Назад");
         var row4 = new ArrayList<InlineKeyboardButton>();
-        row4.add(main);
+        row4.add(backToShowDeckNames);
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         rows.add(row1);

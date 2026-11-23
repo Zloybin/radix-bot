@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Builder
-@Getter
-@Setter
+@Setter @Getter
 public class DayStrikeTemplateDate {
-    private String dayName;
-    private Boolean isCompleted;
+    String dayName;
+    Boolean isCompleted;
 }

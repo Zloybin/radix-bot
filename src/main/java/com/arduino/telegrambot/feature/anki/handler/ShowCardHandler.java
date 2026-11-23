@@ -10,7 +10,6 @@ import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
@@ -46,8 +45,8 @@ public class ShowCardHandler implements UpdateHandler {
 
         try {
 
-            if (ankiService.startStudy(requestedDeckName).block()) {
-                currentCard = ankiService.getCurrentCard().block();
+            if (ankiService.startDeckReview(requestedDeckName).block()) {
+                currentCard = ankiService.getCurrentCardInfo().block();
                 System.out.println(String.format("Review-режим для колоды %s включен.", requestedDeckName));
             } else {
                 throw new AnkiConnectException(String.format("Не получилось включить Review режим для колоды: %s", requestedDeckName));
@@ -72,7 +71,7 @@ public class ShowCardHandler implements UpdateHandler {
             }
         }
 
-        var deckStats = ankiService.getDeckStats(currentCard.deckName()).block();
+        var deckStats = ankiService.getAnkiDeckStatistics(currentCard.getDeckName()).block();
         text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
         keyboard = keyboardBuilder.buildAnkiCardKeyboard();
 

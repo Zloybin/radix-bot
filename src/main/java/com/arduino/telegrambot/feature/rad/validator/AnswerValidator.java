@@ -1,13 +1,17 @@
 package com.arduino.telegrambot.feature.rad.validator;
 
+import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.feature.rad.converter.RadConverter;
-import com.arduino.telegrambot.entity.Result;
-import com.arduino.telegrambot.enummeration.NumberSystem;
+import com.arduino.telegrambot.feature.physik.entity.Result;
+import com.arduino.telegrambot.feature.rad.enummeration.NumberSystem;
 import com.arduino.telegrambot.feature.rad.model.RadTaskResult;
-import com.arduino.telegrambot.repository.TaskRepository;
+import com.arduino.telegrambot.feature.physik.repository.PhysTaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Component
 @RequiredArgsConstructor
@@ -17,7 +21,7 @@ public class AnswerValidator {
     private final RadConverter radConverter;
 
     @Autowired
-    private final TaskRepository taskRepository;
+    private final PhysTaskRepository physTaskRepository;
 
     public RadTaskResult validateAnswer(String task, String answer) {
 
@@ -60,15 +64,17 @@ public class AnswerValidator {
                 .build();
     }
 
-    public Result validatePhysAnswer(Long taskId, String answer) {
+    public Result validatePhysAnswer(User user, String answer) {
 
-        var task = taskRepository.findById(taskId).get();
+        var task = physTaskRepository.findById(user.getPhysTaskId()).get();
         var rightAnswer = task.getAnswer();
 
         return Result.builder()
                 .result(answer.equals(rightAnswer))
                 .userAnswer(answer)
-                .task(task)
+                .dueDate(LocalDate.now(ZoneId.systemDefault()))
+                .physicsTask(task)
+                .user(user)
                 .build();
     }
 }

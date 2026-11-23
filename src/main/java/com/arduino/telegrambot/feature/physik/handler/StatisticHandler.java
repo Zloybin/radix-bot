@@ -1,13 +1,13 @@
 package com.arduino.telegrambot.feature.physik.handler;
 
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.ui.ProgressBarProcessor;
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.enummeration.Section;
+import com.arduino.telegrambot.feature.physik.enummeration.Section;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.feature.physik.model.SectionProgress;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.ResultService;
-import com.arduino.telegrambot.service.TaskService;
+import com.arduino.telegrambot.feature.physik.service.ResultService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class StatisticHandler implements UpdateHandler {
     private ResultService resultService;
 
     @Autowired
-    private TaskService taskService;
+    private PhysicsTaskService physicsTaskService;
 
     @Autowired
     private KeyboardBuilder keyboardBuilder;
@@ -49,7 +49,7 @@ public class StatisticHandler implements UpdateHandler {
 
         List<SectionProgress> sectionProgresses = new ArrayList<>();
         for (Section section : Section.values()){
-            var sectionTaskCount = taskService.getSectionTaskCount(section);
+            var sectionTaskCount = physicsTaskService.getSectionTaskCount(section);
             var completedTaskCount = resultService.getCompletedTaskInSectionFromUserCount(userRequest.getChatId(), section.name());
             var failedTaskCount = resultService.getFailedTaskInSectionFromUserCount(userRequest.getChatId(), section.name());
             var progressBar = progressBarProcessor.createProgressBar(sectionTaskCount, completedTaskCount, failedTaskCount);

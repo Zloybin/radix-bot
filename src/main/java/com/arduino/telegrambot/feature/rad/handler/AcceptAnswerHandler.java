@@ -4,7 +4,7 @@ import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.TaskService;
+import com.arduino.telegrambot.feature.rad.service.RadTaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -27,7 +27,7 @@ public class AcceptAnswerHandler implements UpdateHandler {
     private UserService userService;
 
     @Autowired
-    private TaskService taskService;
+    private RadTaskService radTaskService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -40,7 +40,7 @@ public class AcceptAnswerHandler implements UpdateHandler {
         user.setState(UserState.WAIT_USER_RAD_ANSWER);
         user.setMessageId(userRequest.getMessageId());
         userService.save(user);
-        String task = user.getTask();
+        String task = user.getRadTask();
 
         if (task == null) {
             throw new RuntimeException("radTask must be != null and not ''.");

@@ -1,10 +1,8 @@
 package com.arduino.telegrambot.builder.keyboard;
 
-import com.arduino.telegrambot.feature.anki.model.AnkiDeckStats;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.List;
-import java.util.Map;
 
 
 public interface KeyboardBuilder {
@@ -65,4 +63,6 @@ public interface KeyboardBuilder {
     InlineKeyboardMarkup buildAdminMenuKeyboard();
 
     InlineKeyboardMarkup buildBackToAdminMenu();
+
+    InlineKeyboardMarkup buildAdditionalTaskMenuKeyboard();
 }

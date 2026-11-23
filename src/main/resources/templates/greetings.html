@@ -4,57 +4,91 @@
     <tr>
         <th colspan="9" align="center">Страйки</th>
     </tr>
+    <!-- Дни недели -->
     <tr>
         <td align="center"
-            th:each="strike : ${strikeListTemplateDate}"
-            th:text="${strike.dayName}">
+            th:each="strike : ${strikeInfoList}"
+            th:text="${strike.day}">
+            Пн
         </td>
         <td align="center">Тек</td>
         <td align="center">🏆</td>
     </tr>
+    <!-- Статусы -->
     <tr>
         <td align="center"
-            th:each="strike : ${strikeListTemplateDate}"
-            th:text="${strike.isCompleted == null} ? ' ' : (${strike.isCompleted} ? '🔥' : '🧊')">
+            th:each="strike : ${strikeInfoList}"
+            th:text="${strike.taskStatus.name() == 'COMPLETED'} ? '🔥' : (${strike.taskStatus.name() == 'NOT_COMPLETED'} ? '🧊' : ' ')">
         </td>
-        <td align="center">17</td>
-        <td align="center">25</td>
+        <td align="center">
+            <b th:text="${actualStrikeValue}">17</b>
+        </td>
+        <td align="center">
+            <b th:text="${bestStrikeValue}">25</b>
+        </td>
     </tr>
 </table>
 
-<summary>🗓️ Прогресс за сегодня:</summary>
-<table bordered striped compact>
-    <tr>
-        <td rowspan="2" align="left">Anki 🧠</td>
-        <td align="center" th:each="deck : ${deckListTemplateDate}" th:text="${deck.deckName}"></td>
-    </tr>
-    <tr>
-        <td align="center" th:each="deck : ${deckListTemplateDate}" th:text="${deck.isSuccesses} ? '✅' : '❌'"></td>
-    </tr>
-</table>
+<hr/>
 
-<table bordered striped compact>
-    <tr>
-        <td rowspan="2">Задачи ⚛️</td>
-        <td align="center">🆕</td>
-        <td align="center">🔄</td>
-        <td align="center"></td>
-    </tr>
-    <tr>
-        <td align="center">0</td>
-        <td align="center"><th:block th:text="${completedPhysTaskCount}">0</th:block></td>
-        <td align="center"><b th:text="${isPhysTaskCompleted} ? '✅' : '❌'">✅</b></td>
-    </tr>
-</table>
+👋 Привет,
+<b><th:block th:text="${firstname}">Имя</th:block>
+    <th:block th:text="${lastname}">Фамилия</th:block>!</b>
 
-<table bordered striped compact>
-    <tr>
-        <td rowspan="2">DuoCards 🇩🇪</td>
-        <td align="center">✏️</td>
-        <td align="center"></td>
-    </tr>
-    <tr>
-        <td align="center"><th:block th:text="${completedDuoCardsSentenceTaskCount}">10</th:block></td>
-        <td align="center"><b th:text="${isDuoCardsSentenceTaskCompleted} ? '✅' : '❌'">✅</b></td>
-    </tr>
-</table>
+<br/>
+<hr/>
+
+<br/>
+<summary>🗓️ Сегодня:</summary>
+
+<ul>
+    <li th:each="task : ${dailyTaskInfoList}">
+        <input type="checkbox"
+               th:checked="${task.taskStatus.name() == 'COMPLETED'}"/>
+        <th:block th:utext="${task.taskDescription}">
+            Задача
+        </th:block>
+    </li>
+</ul>
+
+<br/>
+
+<!--<table bordered striped compact>-->
+<!--    <tr>-->
+<!--        <th colspan="9" align="center">Anki 🧠</th>-->
+<!--    </tr>-->
+<!--    <tr th:each="deck : ${deckListTemplateDate}">-->
+<!--        <td>-->
+<!--            <b th:text="${deck.deckName}">Java</b>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--            <b th:text="${deck.reviewedCardsCount}">10</b>-->
+<!--        </td>-->
+<!--        <td>-->
+<!--            <b th:text="${deck.uncompletedCardsCount}">10</b>-->
+<!--        </td>-->
+<!--        <td align="center"-->
+<!--            th:text="${deck.isSuccesses} ? '✅' : '❌'">-->
+<!--            ✅-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--</table>-->
+
+<!--<br/>-->
+
+<!--<summary>🗓️ Прогресс за неделю:</summary>-->
+<!---->
+<!--<table bordered striped compact>-->
+<!--    <tr>-->
+<!--        <td>🆕 Добавлено за неделю</td>-->
+<!--        <td align="right">-->
+<!--            <b th:text="${actualWeekAddedNewNotesCount}">12</b>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td>🔄 Просмотрено за неделю</td>-->
+<!--        <td align="right">-->
+<!--            <b th:text="${actualWeekReviewedCardsCount}">150</b>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--</table>-->

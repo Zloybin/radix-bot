@@ -2,9 +2,9 @@ package com.arduino.telegrambot.feature.physik.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
 import com.arduino.telegrambot.enummeration.UserState;
+import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
-import com.arduino.telegrambot.service.TaskService;
 import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.service.UserService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
@@ -20,7 +20,7 @@ public class PhysTaskHandler implements UpdateHandler {
     private final String handlerCallback = "physTask";
 
     @Autowired
-    private TaskService taskService;
+    private PhysicsTaskService physicsTaskService;
 
     @Autowired
     private UserService userService;
@@ -50,11 +50,11 @@ public class PhysTaskHandler implements UpdateHandler {
         if (user.getPhysTaskId() == 0) {
             if (user.isExcluded()) {
                 List<Long> completedTaskIds = new ArrayList<>();
-                user.getResults().stream().map(result -> result.getTask().getId()).distinct().forEach(completedTaskIds::add);
-                randomTaskId = taskService.getRandomPhysTaskId(completedTaskIds);
+                user.getResults().stream().map(result -> result.getPhysicsTask().getId()).distinct().forEach(completedTaskIds::add);
+                randomTaskId = physicsTaskService.getRandomPhysTaskId(completedTaskIds);
                 user.setPhysTaskId(randomTaskId);
             } else {
-                randomTaskId = taskService.getRandomPhysTaskId();
+                randomTaskId = physicsTaskService.getRandomPhysTaskId();
                 user.setPhysTaskId(randomTaskId);
             }
 
@@ -66,7 +66,7 @@ public class PhysTaskHandler implements UpdateHandler {
         userService.save(user);
 
 
-        var physTask = taskService.findById(randomTaskId);
+        var physTask = physicsTaskService.findById(randomTaskId);
 
         var section = physTask.getSection().getRussianName();
         var title = physTask.getTitle();

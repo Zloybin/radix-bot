@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.telegram;
 
-import com.arduino.telegrambot.entity.TelegramMedia;
+import com.arduino.telegrambot.feature.duocards.deck.entity.TelegramMedia;
 import com.arduino.telegrambot.feature.rich.TelegramRichMessageServiceImpl;
 import com.arduino.telegrambot.telegram.sender.BotSender;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;

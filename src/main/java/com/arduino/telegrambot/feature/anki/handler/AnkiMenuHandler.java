@@ -1,9 +1,10 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.DeckProgress;
-import com.arduino.telegrambot.entity.DeckStrikeInfo;
+import com.arduino.telegrambot.feature.anki.model.AnkiMenuDeckInfo;
+import com.arduino.telegrambot.feature.anki.model.raw.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.service.AnkiServiceImpl;
+import com.arduino.telegrambot.feature.anki.util.AnkiUtility;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
 import com.arduino.telegrambot.service.UserService;
@@ -11,11 +12,19 @@ import com.arduino.telegrambot.telegram.TelegramService;
 import com.arduino.telegrambot.ui.template.TemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class AnkiMenuHandler implements UpdateHandler {
+
+    public static final DayOfWeek MONDAY = DayOfWeek.MONDAY;
+    public static final DayOfWeek SUNDAY = DayOfWeek.SUNDAY;
 
     @Autowired
     private TelegramService telegramService;
@@ -41,41 +50,34 @@ public class AnkiMenuHandler implements UpdateHandler {
     public void handle(UserRequest userRequest) {
 
         var user = userService.findById(userRequest.getChatId());
-        var strikes = user.getStrikes();
-        var deckProgress = user.getDeckProgress();
 
-        var decks = ankiService.getFilteredDecks().block();
-        var updatedDeckProgresses = ankiService.updateUserDeckStatus(decks, deckProgress);
+        List<String> deckNameList = ankiService.getFilteredChildDeckNames().block();
 
-        var progressTemplateData = createProgressTemplateData(updatedDeckProgresses);
+        List<AnkiMenuDeckInfo> ankiMenuDeckInfoList = new ArrayList<>();
 
-        var refreshedStrikes = strikes.isEmpty()
-                ? ankiService.initialStrikeStats(decks)
-                : ankiService.refreshStrikeStats(strikes);
+        deckNameList.forEach(deckName -> {
 
-        user.setStrikes(refreshedStrikes);
-        userService.save(user);
+            AnkiDeckStats ankiDeckStats = ankiService.getAnkiDeckStatistics(deckName).block();
+            int uncompletedCardCount = ankiDeckStats.getLearnCount() + ankiDeckStats.getReviewCount() + ankiDeckStats.getNewCount();
 
-        var strikesTemplateData = new HashMap<String, Integer>();
+            AnkiMenuDeckInfo ankiMenuDeckInfo = AnkiMenuDeckInfo.builder()
+                    .deckName(deckName)
+                    .reviewedCardCount(ankiService.getReviewedCardsCount(deckName).block())
+                    .uncompletedCardCount(uncompletedCardCount)
+                    .deckStrike(ankiService.getDeckStrikeValue(deckName).block())
+                    .build();
 
-        for (DeckStrikeInfo refreshedStrike : refreshedStrikes) {
-            strikesTemplateData.put(refreshedStrike.getDeckName(), refreshedStrike.getStrikeCount());
-        }
+            ankiMenuDeckInfoList.add(ankiMenuDeckInfo);
+        });
 
-        var keyboard = keyboardBuilder.buildAnkiMenu(decks);
+
+        var keyboard = keyboardBuilder.buildAnkiMenu(deckNameList);
 
         var numCardsReviewedToday = ankiService.getNumCardsReviewedToday().block();
-        var text = templateProcessor.processAnkiUserProfileTemplate(numCardsReviewedToday, strikesTemplateData, progressTemplateData);
+        var text = templateProcessor.processAnkiUserProfileTemplate(ankiMenuDeckInfoList);
         telegramService.editRichMessage(userRequest.getChatId(), userRequest.getMessageId(), keyboard, text);
 
     }
 
-    private HashMap<String, String> createProgressTemplateData(List<DeckProgress> updatedDeckProgresses) {
-        var progressTemplateData = new HashMap<String, String>();
 
-        for (DeckProgress updatedDeckProgress : updatedDeckProgresses) {
-            progressTemplateData.put(updatedDeckProgress.getDeckName(), updatedDeckProgress.getDeckStatus().getTitle());
-        }
-        return progressTemplateData;
-    }
 }

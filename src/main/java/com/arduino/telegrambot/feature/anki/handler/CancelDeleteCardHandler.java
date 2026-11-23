@@ -1,8 +1,6 @@
 package com.arduino.telegrambot.feature.anki.handler;
 
 import com.arduino.telegrambot.builder.keyboard.KeyboardBuilder;
-import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.feature.anki.model.AnkiCurrentCard;
 import com.arduino.telegrambot.feature.anki.service.AnkiService;
 import com.arduino.telegrambot.handler.UpdateHandler;
 import com.arduino.telegrambot.model.UserRequest;
@@ -40,8 +38,8 @@ public class CancelDeleteCardHandler implements UpdateHandler {
     @Override
     public void handle(UserRequest userRequest) {
 
-        var currentCard = ankiService.getCurrentCard().block();
-        var deckStats = ankiService.getDeckStats(currentCard.deckName()).block();
+        var currentCard = ankiService.getCurrentCardInfo().block();
+        var deckStats = ankiService.getAnkiDeckStatistics(currentCard.getDeckName()).block();
 
         var user = userService.findById(userRequest.getChatId());
 
@@ -49,7 +47,7 @@ public class CancelDeleteCardHandler implements UpdateHandler {
         InlineKeyboardMarkup keyboard;
         if(user.isAnswerSide()){
             text = templateProcessor.processBackCardTemplate(currentCard, deckStats);
-            keyboard = keyboardBuilder.buildAnkiAnswerKeyboard(currentCard.buttons());
+            keyboard = keyboardBuilder.buildAnkiAnswerKeyboard(currentCard.getButtons());
         }else{
             text = templateProcessor.processFrontCardTemplate(currentCard, deckStats);
             keyboard = keyboardBuilder.buildAnkiCardKeyboard();

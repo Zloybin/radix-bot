@@ -1,14 +1,13 @@
 package com.arduino.telegrambot.entity;
 
 import com.arduino.telegrambot.enummeration.UserState;
-import com.arduino.telegrambot.feature.duocards.model.GeneratedExample;
-import com.arduino.telegrambot.statistick.model.DayTaskCompletionInfo;
+import com.arduino.telegrambot.feature.duocards.sentence.model.GeneratedExample;
+import com.arduino.telegrambot.feature.duocards.web.entity.DuoCardExample;
+import com.arduino.telegrambot.feature.physik.entity.Result;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 
 @Entity
@@ -25,17 +24,26 @@ public class User {
     private long id;
 
     @Column
+    private String firstname;
+
+    @Column
+    private String lastname;
+
+    @Column
+    private String username;
+
+    @Column
+    private int bestStrikesCount;
+
+    @Column
     @Enumerated(value = EnumType.STRING)
     private UserState state;
 
     @Column
-    private String task;
-
-    @Column
-    private String name;
-
-    @Column
     private long physTaskId;
+
+    @Column
+    private String radTask;
 
     @Column
     private long messageId;
@@ -43,26 +51,15 @@ public class User {
     @Column
     private boolean isExcluded;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private List<Result> results;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<DeckStrikeInfo> strikes;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<DeckProgress> deckProgress;
-
+    @Column
     private boolean isAnswerSide;
 
-    @Embedded
-    private DuoCardExample duoCardExample;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Result> results;
 
     @Embedded
     private GeneratedExample generatedExample;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @MapKey(name = "day")
-    private Map<LocalDate, DayTaskCompletionInfo> dayStrikeInfoMap;
+    @Embedded
+    private DuoCardExample duoCardExample;
 }

@@ -1,7 +1,7 @@
 package com.arduino.telegrambot.builder.button;
 
 import com.arduino.telegrambot.entity.Callback;
-import com.arduino.telegrambot.enummeration.AnkiAnswer;
+import com.arduino.telegrambot.feature.anki.enummeration.AnkiAnswer;
 import com.arduino.telegrambot.service.CallbackService;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +57,15 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("physTaskMenu");
         var button = new InlineKeyboardButton();
         button.setText("Задачи по физике");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildAdditionalTaskMenuButton() {
+        var hash = getHashWithoutRequest("additionalTask");
+        var button = new InlineKeyboardButton();
+        button.setText("Доп. задания");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }
@@ -457,6 +466,24 @@ public class ButtonBuilderImpl implements ButtonBuilder {
         var hash = getHashWithoutRequest("saveMedia");
         var button = new InlineKeyboardButton();
         button.setText("Сохранить медиа");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildPushUpButton() {
+        var hash = getHashWithoutRequest("checkPullUpTask");
+        var button = new InlineKeyboardButton();
+        button.setText("Отжимания");
+        button.setCallbackData(String.valueOf(hash));
+        return button;
+    }
+
+    @Override
+    public InlineKeyboardButton buildMeditationButton() {
+        var hash = getHashWithoutRequest("checkMeditationTask");
+        var button = new InlineKeyboardButton();
+        button.setText("Медитация");
         button.setCallbackData(String.valueOf(hash));
         return button;
     }

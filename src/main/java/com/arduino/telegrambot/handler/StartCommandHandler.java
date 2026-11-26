@@ -91,7 +91,6 @@ public class StartCommandHandler implements UpdateHandler {
         var completedPhysicsTaskCount = resultService.countCompletedPhysTaskToday(user);
         int physicsTaskGoalValue = PhysicsTaskSettingValueUtil.PHYSICS_TASK_GOAL_VALUE;
         var duoCardsSentenceDailyInfo = duoCardsSentenceDailyInfoService.getCompletedDuoCardsSentenceToday(user);
-        boolean streakReceivedToday = duoCardsService.isStreakReceivedToday();
 
         if(duoCardsSentenceDailyInfo == null){
             var duoCardsSentenceDailyInfoId = DuoCardsSentenceDailyInfoId.builder()

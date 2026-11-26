@@ -2,6 +2,7 @@ package com.arduino.telegrambot.feature.duocards.web.client;
 
 import com.arduino.telegrambot.feature.duocards.web.model.DuoCard;
 import com.arduino.telegrambot.feature.duocards.web.model.DuoCardsGraphQLResponse;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -140,5 +144,69 @@ public class DuoCardsClient {
         return response.data()
                 .cardCreate()
                 .card();
+    }
+
+    public Mono<Boolean> isStreakReceivedToday() {
+
+        return getViewerProgress()
+                .map(response -> {
+
+                    JsonNode viewer = response.path("data").path("viewer");
+
+                    String timezone = viewer.path("timezone").asText("Europe/Berlin");
+
+                    LocalDate today = LocalDate.now(ZoneId.of(timezone));
+
+                    JsonNode days = viewer.path("xps").path("days");
+
+                    for (JsonNode day : days) {
+
+                        LocalDate date = LocalDate.parse(day.path("when").asText());
+
+                        if (date.equals(today)) {
+                            return day.path("streaked").asBoolean(false);
+                        }
+                    }
+
+                    return false;
+                });
+    }
+
+    public Mono<JsonNode> getViewerProgress() {
+
+        String query = """
+            query viewerQuery {
+              viewer {
+                timezone
+                xps {
+                  days {
+                    when
+                    streaked
+                  }
+                }
+              }
+            }
+            """;
+
+        Map<String, Object> body = Map.of(
+                "query", query,
+                "variables", Map.of()
+        );
+
+        return WebClient.builder()
+                .baseUrl("https://api.duocards.com")
+                .build()
+                .post()
+                .uri("/graphql?viewerQuery")
+                .header(HttpHeaders.ORIGIN, "https://app.duocards.com")
+                .header(HttpHeaders.REFERER, "https://app.duocards.com/")
+                .header(
+                        HttpHeaders.AUTHORIZATION,
+                        "Bearer " + token
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .bodyToMono(JsonNode.class);
     }
 }

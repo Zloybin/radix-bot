@@ -3301,5 +3301,6 @@ VALUES ('PULLUPS', 'Отжимания', TRUE, TRUE, 'PULLUPS'),
        ('ANKI', 'Все колоды Anki', TRUE, TRUE, 'ANKI'),
        ('DUO_CARDS_SENTENCE', 'Выполнено %d из %d предложений', TRUE, TRUE, 'DUO_CARDS_SENTENCE'),
        ('PHYSICS', 'Решено %d из %d задач', TRUE, TRUE, 'PHYSICS'),
-       ('MEDITATION', 'Медитация', TRUE, TRUE, 'MEDITATION')
+       ('MEDITATION', 'Медитация', TRUE, TRUE, 'MEDITATION'),
+       ('DUO_CARDS_WEB', 'DuoCards 🦣', TRUE, TRUE, 'DUO_CARDS_WEB')
 ON CONFLICT (code) DO NOTHING;

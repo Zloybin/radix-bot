@@ -5,7 +5,8 @@ public enum TaskType {
     ANKI("Все колоды Anki"),
     DUO_CARDS_SENTENCE("Выполнено <b>%d</b> из <b>%d</b> предложений"),
     PHYSICS("Решено <b>%d</b> из <b>%d</b> задач"),
-    MEDITATION("Медитация");
+    MEDITATION("Медитация"),
+    DUO_CARDS_WEB("DuoCards 🦣");
 
     private final String description;
 

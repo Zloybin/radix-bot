@@ -22,4 +22,10 @@ public class DuoCardsService {
                 example
         );
     }
+
+    public boolean isStreakReceivedToday() {
+        return Boolean.TRUE.equals(duoCardsClient.isStreakReceivedToday().block());
+    }
+
+
 }

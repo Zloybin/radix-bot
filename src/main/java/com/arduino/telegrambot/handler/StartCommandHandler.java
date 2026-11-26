@@ -8,6 +8,7 @@ import com.arduino.telegrambot.feature.duocards.DuoCardsSentenceUtil;
 import com.arduino.telegrambot.feature.duocards.sentence.entity.DuoCardsSentenceDailyInfo;
 import com.arduino.telegrambot.feature.duocards.sentence.entity.DuoCardsSentenceDailyInfoId;
 import com.arduino.telegrambot.feature.duocards.sentence.service.DuoCardsSentenceDailyInfoService;
+import com.arduino.telegrambot.feature.duocards.web.service.DuoCardsService;
 import com.arduino.telegrambot.feature.physik.service.PhysicsTaskService;
 import com.arduino.telegrambot.feature.physik.service.ResultService;
 import com.arduino.telegrambot.feature.physik.util.PhysicsTaskSettingValueUtil;
@@ -71,7 +72,7 @@ public class StartCommandHandler implements UpdateHandler {
     private DuoCardsSentenceDailyInfoService duoCardsSentenceDailyInfoService;
 
     @Autowired
-    private UserDailyTaskRepository userDailyTaskRepository;
+    private DuoCardsService duoCardsService;
 
     @Override
     public boolean isApplicable(UserRequest userRequest) {
@@ -90,6 +91,7 @@ public class StartCommandHandler implements UpdateHandler {
         var completedPhysicsTaskCount = resultService.countCompletedPhysTaskToday(user);
         int physicsTaskGoalValue = PhysicsTaskSettingValueUtil.PHYSICS_TASK_GOAL_VALUE;
         var duoCardsSentenceDailyInfo = duoCardsSentenceDailyInfoService.getCompletedDuoCardsSentenceToday(user);
+        boolean streakReceivedToday = duoCardsService.isStreakReceivedToday();
 
         if(duoCardsSentenceDailyInfo == null){
             var duoCardsSentenceDailyInfoId = DuoCardsSentenceDailyInfoId.builder()
@@ -136,4 +138,5 @@ public class StartCommandHandler implements UpdateHandler {
 
         return updatedBestStrikeValue;
     }
+
 }

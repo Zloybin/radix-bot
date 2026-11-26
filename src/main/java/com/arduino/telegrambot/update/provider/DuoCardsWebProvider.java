@@ -12,20 +12,19 @@ import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
-public class DuoCardsWebProvider implements TaskStatusProvider{
+public class DuoCardsWebProvider implements TaskStatusProvider {
 
     @Autowired
     private DuoCardsService duoCardsService;
-        @Override
-        public TaskType getSource() {
-            return TaskType.DUO_CARDS_WEB;
-        }
 
-        @Override
-        public TaskStatus getStatus(User user, LocalDate date) {
-            boolean streakReceivedToday = duoCardsService.isStreakReceivedToday();
-            return streakReceivedToday ? TaskStatus.COMPLETED : TaskStatus.NOT_COMPLETED;
-        }
+    @Override
+    public TaskType getSource() {
+        return TaskType.DUO_CARDS_WEB;
     }
 
+    @Override
+    public TaskStatus getStatus(User user, LocalDate date) {
+        boolean streakReceivedToday = duoCardsService.isStreakReceivedToday();
+        return streakReceivedToday ? TaskStatus.COMPLETED : TaskStatus.NOT_COMPLETED;
+    }
 }

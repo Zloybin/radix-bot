@@ -1,4 +1,4 @@
-package com.arduino.telegrambot.update.enumeration;
+package com.arduino.telegrambot.enummeration;
 
 public enum TaskStatus {
     COMPLETED,

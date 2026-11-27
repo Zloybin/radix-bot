@@ -1,8 +1,8 @@
-package com.arduino.telegrambot.update.provider;
+package com.arduino.telegrambot.provider;
 
 import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.update.enumeration.TaskType;
-import com.arduino.telegrambot.update.enumeration.TaskStatus;
+import com.arduino.telegrambot.enummeration.TaskType;
+import com.arduino.telegrambot.enummeration.TaskStatus;
 
 import java.time.LocalDate;
 

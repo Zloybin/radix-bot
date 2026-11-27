@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.model;
 
-import com.arduino.telegrambot.update.enumeration.TaskStatus;
+import com.arduino.telegrambot.enummeration.TaskStatus;
 import lombok.*;
 
 import java.time.LocalDate;

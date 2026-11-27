@@ -64,7 +64,7 @@ public class AnkiMenuHandler implements UpdateHandler {
                     .deckName(deckName)
                     .reviewedCardCount(ankiService.getReviewedCardsCount(deckName).block())
                     .uncompletedCardCount(uncompletedCardCount)
-                    .deckStrike(ankiService.getDeckStrikeValue(deckName).block())
+                    .deckStrike(ankiService.    getDeckStrikeValue(deckName).block())
                     .build();
 
             ankiMenuDeckInfoList.add(ankiMenuDeckInfo);

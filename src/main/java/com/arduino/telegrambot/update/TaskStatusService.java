@@ -1,9 +1,9 @@
 package com.arduino.telegrambot.update;
 
 import com.arduino.telegrambot.entity.User;
-import com.arduino.telegrambot.update.enumeration.TaskType;
-import com.arduino.telegrambot.update.enumeration.TaskStatus;
-import com.arduino.telegrambot.update.provider.TaskStatusProvider;
+import com.arduino.telegrambot.enummeration.TaskType;
+import com.arduino.telegrambot.enummeration.TaskStatus;
+import com.arduino.telegrambot.provider.TaskStatusProvider;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

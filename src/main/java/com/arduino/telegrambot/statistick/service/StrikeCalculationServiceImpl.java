@@ -4,7 +4,7 @@ import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.model.DailyStrikeInfo;
 import com.arduino.telegrambot.repository.UserDailyTaskRepository;
 import com.arduino.telegrambot.entity.UserDailyTask;
-import com.arduino.telegrambot.update.enumeration.TaskStatus;
+import com.arduino.telegrambot.enummeration.TaskStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

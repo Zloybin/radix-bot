@@ -1,12 +1,12 @@
-package com.arduino.telegrambot.update.provider;
+package com.arduino.telegrambot.provider;
 
 import com.arduino.telegrambot.entity.User;
 import com.arduino.telegrambot.feature.anki.entity.AnkiDeckDailyInfo;
 import com.arduino.telegrambot.feature.anki.model.raw.AnkiDeckStats;
 import com.arduino.telegrambot.feature.anki.service.AnkiService;
 import com.arduino.telegrambot.feature.anki.entity.AnkiDeckDailyInfoId;
-import com.arduino.telegrambot.update.enumeration.TaskType;
-import com.arduino.telegrambot.update.enumeration.TaskStatus;
+import com.arduino.telegrambot.enummeration.TaskType;
+import com.arduino.telegrambot.enummeration.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
@@ -38,18 +38,22 @@ public class AnkiTaskStatusProvider
 
             ankiDeckDailyInfoList = getUpdatedAnkiDeckDailyInfoList(user, date);
 
-
         } else {
             ankiDeckDailyInfoList = ankiService.findAnkiDeckDailyInfoListUserByDate(user, date);
         }
 
+//        boolean isCompleted = !ankiDeckDailyInfoList.isEmpty()
+//                && ankiDeckDailyInfoList.stream()
+//                .allMatch(ankiDeckDailyInfo ->
+//                        ankiDeckDailyInfo.getUncompletedCardsCount() == 0
+//                );
 
-        boolean isCompleted = !ankiDeckDailyInfoList.isEmpty()
-                && ankiDeckDailyInfoList.stream()
-                .allMatch(ankiDeckDailyInfo ->
-                        ankiDeckDailyInfo.getUncompletedCardsCount() == 0
-                );
-        return isCompleted ? TaskStatus.COMPLETED : TaskStatus.NOT_COMPLETED;
+        for (AnkiDeckDailyInfo ankiDeckDailyInfo : ankiDeckDailyInfoList) {
+            if("Physik".equals(ankiDeckDailyInfo.getAnkiDeckDailyInfoId().getDeckName())){
+                return ankiDeckDailyInfo.getUncompletedCardsCount() == 0 ? TaskStatus.COMPLETED : TaskStatus.NOT_COMPLETED;
+            }
+        }
+        return TaskStatus.NOT_COMPLETED;
     }
 
     private @NonNull List<AnkiDeckDailyInfo> getUpdatedAnkiDeckDailyInfoList(User user, LocalDate date) {

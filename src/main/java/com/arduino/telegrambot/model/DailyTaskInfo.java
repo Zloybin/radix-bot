@@ -1,7 +1,7 @@
 package com.arduino.telegrambot.model;
 
-import com.arduino.telegrambot.update.enumeration.TaskStatus;
-import com.arduino.telegrambot.update.enumeration.TaskType;
+import com.arduino.telegrambot.enummeration.TaskStatus;
+import com.arduino.telegrambot.enummeration.TaskType;
 import lombok.*;
 
 @Getter

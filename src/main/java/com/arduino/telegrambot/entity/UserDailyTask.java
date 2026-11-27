@@ -1,6 +1,6 @@
 package com.arduino.telegrambot.entity;
 
-import com.arduino.telegrambot.update.enumeration.TaskStatus;
+import com.arduino.telegrambot.enummeration.TaskStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

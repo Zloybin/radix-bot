@@ -4,6 +4,13 @@ services:
   # PostgreSQL
   # ==========================================
 
+
+  postgres:
+    ports:
+      - "127.0.0.1:5432:5432"      # только localhost Pi
+
+
+  # в секции volumes: удали строку "pgdata:"
   postgres:
     image: postgres:16
     container_name: postgres-demo
@@ -14,12 +21,21 @@ services:
       POSTGRES_PASSWORD: ${POSTGRESQL_DB_PASSWORD}
       POSTGRES_DB: ${POSTGRESQL_DB_NAME}
 
+#    ports:
+#      - "5432:5432"
+
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"      # только localhost Pi
+
 
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - /srv/postgres/data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRESQL_DB_USER} -d ${POSTGRESQL_DB_NAME}"]
